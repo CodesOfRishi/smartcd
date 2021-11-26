@@ -22,7 +22,14 @@ cd() {
 		if [[ ! -s $SMARTCD_DIR/smartcd.log ]]; then
 			>&2 echo "No any visited directory in record !!"
 		else
-			selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf --preview 'exa -TaF -I ".git" --icons --group-directories-first --git-ignore --colour=always {}'))
+			if [[ `which exa` == *exa ]]; then
+				selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf --preview 'exa -TaF -I ".git" --icons --group-directories-first --git-ignore --colour=always {}'))
+			elif [[ `which tree` == *tree ]]; then
+				selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf --preview 'tree -C {}'))
+			else 
+				selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf))
+			fi
+
 			[[ $selected_entry != "" ]] && cd $selected_entry
 		fi
 	fi
