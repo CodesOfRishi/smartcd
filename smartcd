@@ -4,3 +4,19 @@ export SMARTCD_DIR=$HOME/.config/.smartcd
 
 if [[ ! -d $SMARTCD_DIR ]]; then mkdir -p $SMARTCD_DIR; fi
 if [[ ! -f $SMARTCD_DIR/smartcd.log ]]; then; touch $SMARTCD_DIR/smartcd.log; fi
+
+cd() {
+	if [[ $1 != '--' ]]; then
+		builtin cd $1
+		if [[ $? -eq 0 ]]; then
+			current_path=`pwd`
+			
+			# generate log of last 20 visited paths.
+			echo $current_path > $SMARTCD_DIR/smartcd_tmp.log
+			cat $SMARTCD_DIR/smartcd.log >> $SMARTCD_DIR/smartcd_tmp.log
+			awk '!seen[$0]++' $SMARTCD_DIR/smartcd_tmp.log > $SMARTCD_DIR/smartcd.log # remove duplicates
+			rm -f $SMARTCD_DIR/smartcd_tmp.log
+			sed -i '21,$ d' $SMARTCD_DIR/smartcd.log # remove lines from line no. 21 to end.
+		fi
+	fi
+}
