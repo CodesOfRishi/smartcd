@@ -23,7 +23,7 @@ cd() {
 			>&2 echo "No any visited directory in record !!"
 		else
 			selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf --preview 'exa -TaF -I ".git" --icons --group-directories-first --git-ignore --colour=always {}'))
-			cd $selected_entry
+			[[ $selected_entry != "" ]] && cd $selected_entry
 		fi
 	fi
 }
