@@ -18,5 +18,12 @@ cd() {
 			rm -f $SMARTCD_DIR/smartcd_tmp.log
 			sed -i '21,$ d' $SMARTCD_DIR/smartcd.log # remove lines from line no. 21 to end.
 		fi
+	else
+		if [[ ! -s $SMARTCD_DIR/smartcd.log ]]; then
+			>&2 echo "No any visited directory in record !!"
+		else
+			selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf --preview 'exa -TaF -I ".git" --icons --group-directories-first --git-ignore --colour=always {}'))
+			cd $selected_entry
+		fi
 	fi
 }
