@@ -31,3 +31,7 @@ A `cd` command with an improved usability feature, which can remember last 20 un
    Where `path/to/smartcd` is the path to the `smartcd` script.
 
 3. Open a new Zsh shell.
+
+## Log File Info
+
+`Smartcd` stores logs in `$SMARTCD_DIR` location. To change location of the log file, export `SMARTCD_DIR` with your desired location of the log file.
