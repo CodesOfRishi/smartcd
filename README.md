@@ -34,7 +34,7 @@ A `cd` command with an improved usability feature, which can remember last 20 un
 
 ## Log File Info
 
-`Smartcd` stores logs in `$SMARTCD_DIR` location. To change location of the log file, export `SMARTCD_DIR` with your desired location of the log file.
+`Smartcd` stores logs in `$SMARTCD_DIR` location, which defaults to `~/.config/.smartcd`. To change location of the log file, export `SMARTCD_DIR` with your desired location of the log file.
 
 ## Inspiration
 
