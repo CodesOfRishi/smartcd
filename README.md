@@ -39,3 +39,9 @@ A `cd` command with an improved usability feature, which can remember last 20 un
 ## Inspiration
 
 [enhancd](https://github.com/b4b4r07/enhancd)
+
+## [LICENSE](https://github.com/CodesOfRishi/smartcd/blob/main/LICENSE)
+
+The MIT License (MIT)
+
+Copyright (c) 2021 Rishi K.
