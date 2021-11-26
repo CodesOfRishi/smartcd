@@ -6,7 +6,7 @@ A `cd` command with an improved usability feature, which can remember last 20 un
 
 ## Usage
 
-`cd --` will present you with a list of last 20 unique paths you visited. You will also be able to fuzzy search and go into anyone of the directory path from the list.
+`cd --` will present you with a list of last 20 unique paths you visited. You can fuzzy search the list and select anyone to change location to that path automatically.
 
 ## Requirements
 
