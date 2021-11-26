@@ -17,3 +17,17 @@ A `cd` command with an improved usability feature, which can remember last 20 un
 
 - [Exa](https://github.com/ogham/exa)
 - Tree
+
+## Installation
+
+1. Clone this repository
+
+2. Just put the below code in your `.zshrc` (Zsh configuration file) after `FZF` configurations.
+
+   ```zsh
+   source path/to/smartcd
+   ```
+
+   Where `path/to/smartcd` is the path to the `smartcd` script.
+
+3. Open a new Zsh shell.
