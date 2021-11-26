@@ -11,7 +11,7 @@ A `cd` command with an improved usability feature, which can remember last 20 un
 ## Requirements
 
 - [Zsh](https://www.zsh.org/)
-- [Fzf](https://github.com/junegunn/fzf) (you must have `fzf` already configured or at least know how to configure `fzf`)
+- [Fzf](https://github.com/junegunn/fzf) (you must have `fzf` already configured or at least know how to configure it)
 
 ### Optional requirements (anyone) but recommended
 
