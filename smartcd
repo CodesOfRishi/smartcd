@@ -30,7 +30,7 @@ cd() {
 				selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf))
 			fi
 
-			[[ $selected_entry != "" ]] && cd $selected_entry
+			[[ $selected_entry != "" ]] && builtin cd $selected_entry
 		fi
 	fi
 }
