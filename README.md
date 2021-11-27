@@ -20,6 +20,7 @@ I wanted to keep `cd` as close to its native implementation, and at the same tim
 
 - [Zsh](https://www.zsh.org/)
 - [Fzf](https://github.com/junegunn/fzf) (you must have `fzf` already configured or at least know how to configure it)
+- [Fd](https://github.com/sharkdp/fd)
 
 ### Optional requirements (anyone) but recommended
 
