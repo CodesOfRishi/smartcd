@@ -2,13 +2,19 @@
 
 ## Description
 
-A `cd` command with an improved usability feature, which can remember last 20 unique visited paths in your filesystem, and you can also fuzzy search any of these last visited paths and automatically change to that particular directory location.
+A `cd` command with an improved usability feature, which can remember your recently visited directory paths and search sub-directories all with Fuzzy searching for the user.
 
-## Usage
+### Features
 
-`cd --` will present you with a list of last 20 unique paths you visited. You can fuzzy search the list and select anyone to change location to that path automatically.
+- If the provided argument is not present in your `$CDPATH`, then `smartcd` will search all the sub-directories and will prompt you with a list containing relative paths to the sub-directories that matched the provided argument (also perform substring comparison), where you can Fuzzy search and automatically traverse to the selected one.
 
-![](smartCd.gif)
+  ![](SmartCd-sub-directory-traverse.gif)
+
+- `smartcd` can also remember the last 20 unique visited directory locations, where also you can Fuzzy search and automatically traverse to the selected one.
+
+  Use `cd --` for fzf list of last 20 unique visited paths.
+
+  ![](SmartCd-recently-traversed.gif)
 
 ## Why SmartCd
 
