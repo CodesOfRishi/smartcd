@@ -54,6 +54,7 @@ I wanted to keep `cd` as close to its native implementation, and at the same tim
 ## To Do
 
 - [ ] Users must be able to configure the number of unique last visited paths `smartcd` should remember.
+- [ ] Make `fd` optional: Find alternative to the `fd` command used in the script using the `find` command.
 
 ## Inspiration
 
