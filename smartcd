@@ -1,6 +1,7 @@
 #!/bin/zsh
 
-export SMARTCD_DIR=$HOME/.config/.smartcd
+# configure SMARTCD_DIR env
+[[ -v SMARTCD_DIR && -d $SMARTCD_DIR ]] || export SMARTCD_DIR=$HOME/.config/.smartcd
 
 if [[ ! -d $SMARTCD_DIR ]]; then mkdir -p $SMARTCD_DIR; fi
 if [[ ! -f $SMARTCD_DIR/smartcd.log ]]; then; touch $SMARTCD_DIR/smartcd.log; fi
