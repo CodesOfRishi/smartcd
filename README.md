@@ -4,7 +4,7 @@
 
 A `cd` command with improved usability features, which can remember your recently visited directory paths and search sub-directories, all with Fuzzy searching for the user.
 
-### Features
+## Features
 
 - If the provided argument is not present in your `$CDPATH`, then `smartcd` will search all the sub-directories and will prompt you with a list containing relative paths to the sub-directories that matched the provided argument (also perform substring comparison), where you can Fuzzy search and automatically traverse to the selected one.
 
