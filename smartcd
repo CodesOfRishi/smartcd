@@ -27,7 +27,7 @@ cd() {
 	if [[ $1 != '--' ]]; then
 		builtin cd $1 2> $SMARTCD_DIR/smartcd_error.log
 		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
-			fd -t d --min-depth=2 -i -H -F --max-results=1 $1 > $SMARTCD_DIR/smartcd_fd.log
+			fd -t d --min-depth=2 -i -H -F --max-results=1 --prune $1 > $SMARTCD_DIR/smartcd_fd.log
 			no_of_paths=`wc -l $SMARTCD_DIR/smartcd_fd.log | cut -d' ' -f1` # check whether fd searched at least 1 path
 			if [[ $no_of_paths -eq 0 ]]; then
 				cat $SMARTCD_DIR/smartcd_error.log
