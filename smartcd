@@ -25,13 +25,21 @@ generate_log() {
 
 cd() {
 	if [[ $1 != '--' ]]; then
-		builtin cd $1 2> /dev/null
+		builtin cd $1 2> $SMARTCD_DIR/smartcd_error.log
 		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
-			selected_entry=($(fd -t d --min-depth 2 -i -H -F $1 | fzf --preview 'exa -TaF -I ".git" --icons --group-directories-first --git-ignore --colour=always {}'))
-
-			if [[ $selected_entry != "" ]]; then
-				builtin cd $selected_entry
+			fd -t d --min-depth 2 -i -H -F $1 > $SMARTCD_DIR/smartcd_fd.log
+			no_of_paths=`wc -l $SMARTCD_DIR/smartcd_fd.log | cut -d' ' -f1` # count no. of paths searched by fd
+			if [[ $no_of_paths -eq 0 ]]; then
+				cat $SMARTCD_DIR/smartcd_error.log
+			elif [[ $no_of_paths -eq 1 ]]; then
+				builtin cd `cat $SMARTCD_DIR/smartcd_fd.log` 
 				generate_log
+			else
+				selected_entry=($(cat $SMARTCD_DIR/smartcd_fd.log | fzf --preview 'exa -TaF -I ".git" --icons --group-directories-first --git-ignore --colour=always {}'))
+				if [[ $selected_entry != "" ]]; then
+					builtin cd $selected_entry
+					generate_log
+				fi
 			fi
 		else
 			generate_log
