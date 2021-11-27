@@ -25,8 +25,17 @@ generate_log() {
 
 cd() {
 	if [[ $1 != '--' ]]; then
-		builtin cd $1
-		[[ $? -eq 0 ]] && generate_log
+		builtin cd $1 2> /dev/null
+		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
+			selected_entry=($(fd -t d --min-depth 2 -i -H -F $1 | fzf --preview 'exa -TaF -I ".git" --icons --group-directories-first --git-ignore --colour=always {}'))
+
+			if [[ $selected_entry != "" ]]; then
+				builtin cd $selected_entry
+				generate_log
+			fi
+		else
+			generate_log
+		fi
 	else
 		if [[ ! -s $SMARTCD_DIR/smartcd.log ]]; then
 			>&2 echo "No any visited directory in record !!"
