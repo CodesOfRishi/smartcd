@@ -26,9 +26,7 @@ generate_log() {
 cd() {
 	if [[ $1 != '--' ]]; then
 		builtin cd $1
-		if [[ $? -eq 0 ]]; then
-			generate_log
-		fi
+		[[ $? -eq 0 ]] && generate_log
 	else
 		if [[ ! -s $SMARTCD_DIR/smartcd.log ]]; then
 			>&2 echo "No any visited directory in record !!"
