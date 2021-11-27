@@ -38,6 +38,7 @@ cd() {
 				selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf))
 			fi
 
+			# since the selected entry is already from the log, use builtin cd
 			[[ $selected_entry != "" ]] && builtin cd $selected_entry
 		fi
 	fi
