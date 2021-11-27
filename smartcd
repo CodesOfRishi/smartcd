@@ -13,20 +13,34 @@
 if [[ ! -d $SMARTCD_DIR ]]; then mkdir -p $SMARTCD_DIR; fi
 if [[ ! -f $SMARTCD_DIR/smartcd.log ]]; then; touch $SMARTCD_DIR/smartcd.log; fi
 
-# generate log of last 20 visited paths.
+# generate log
 generate_log() { 
 	current_path=`pwd`
 	echo $current_path > $SMARTCD_DIR/smartcd_tmp.log
 	cat $SMARTCD_DIR/smartcd.log >> $SMARTCD_DIR/smartcd_tmp.log
 	awk '!seen[$0]++' $SMARTCD_DIR/smartcd_tmp.log > $SMARTCD_DIR/smartcd.log # remove duplicates
 	rm -f $SMARTCD_DIR/smartcd_tmp.log
-	sed -i '21,$ d' $SMARTCD_DIR/smartcd.log # remove lines from line no. 21 to end.
+	sed -i '21,$ d' $SMARTCD_DIR/smartcd.log # remove lines from line no. 21 to end. (keep only last 20 unique visited paths)
 }
 
 cd() {
 	if [[ $1 != '--' ]]; then
-		builtin cd $1
-		[[ $? -eq 0 ]] && generate_log
+		builtin cd $1 2> $SMARTCD_DIR/smartcd_error.log
+		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
+			fd -t d --min-depth=2 -i -H -F --max-results=1 $1 > $SMARTCD_DIR/smartcd_fd.log
+			no_of_paths=`wc -l $SMARTCD_DIR/smartcd_fd.log | cut -d' ' -f1` # check whether fd searched at least 1 path
+			if [[ $no_of_paths -eq 0 ]]; then
+				cat $SMARTCD_DIR/smartcd_error.log
+			else
+				selected_entry=($(fd -t d --min-depth=2 -i -H -F $1 | fzf --preview 'exa -TaF -I ".git" --icons --group-directories-first --git-ignore --colour=always {}'))
+				if [[ $selected_entry != "" ]]; then
+					builtin cd $selected_entry
+					generate_log
+				fi
+			fi
+		else
+			generate_log
+		fi
 	else
 		if [[ ! -s $SMARTCD_DIR/smartcd.log ]]; then
 			>&2 echo "No any visited directory in record !!"
