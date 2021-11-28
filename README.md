@@ -30,8 +30,8 @@ I wanted to keep `cd` as close to its native implementation, and at the same tim
 
 ### Optional requirements (anyone) but recommended
 
-- [Exa](https://github.com/ogham/exa)
-- Tree
+Any tool that can *recursively list directories as a tree*. `smartcd` has inbuilt support for [`exa`](https://github.com/ogham/exa) & `tree`.
+Check out `REC_LISTING_CMD` env in <a href="#configuration">Configuration</a> section.
 
 ## Installation
 
