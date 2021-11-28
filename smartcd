@@ -13,6 +13,17 @@
 if [[ ! -d $SMARTCD_DIR ]]; then mkdir -p $SMARTCD_DIR; fi
 if [[ ! -f $SMARTCD_DIR/smartcd.log ]]; then; touch $SMARTCD_DIR/smartcd.log; fi
 
+# configure REC_LISTING_CMD env
+if [[ -v REC_LISTING_CMD ]]; then 
+	export REC_LISTING_CMD
+elif [[ `which exa` == *exa ]];then 
+	export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
+elif [[ `which tree` == *tree ]]; then
+	export REC_LISTING_CMD="tree -C"
+else
+	export REC_LISTING_CMD=""
+fi
+
 # generate log
 generate_log() { 
 	current_path=`pwd`
@@ -32,7 +43,12 @@ sub_dir_hop() {
 		if [[ $no_of_paths -eq 0 ]]; then
 			cat $SMARTCD_DIR/smartcd_error.log
 		else
-			selected_entry=($(fd -t d --min-depth=2 -i -H -F $1 | fzf --preview 'exa -TaF -I ".git" --icons --group-directories-first --git-ignore --colour=always {}'))
+			if [[ $REC_LISTING_CMD == "" ]]; then
+				selected_entry=($(fd -t d --min-depth=2 -i -H -F $1 | fzf))
+			else
+				selected_entry=($(fd -t d --min-depth=2 -i -H -F $1 | fzf --preview "$REC_LISTING_CMD {}"))
+			fi
+
 			if [[ $selected_entry != "" ]]; then
 				builtin cd $selected_entry
 				generate_log
@@ -48,12 +64,10 @@ recent_visited_dirs() {
 	if [[ ! -s $SMARTCD_DIR/smartcd.log ]]; then
 		>&2 echo "No any visited directory in record !!"
 	else
-		if [[ `which exa` == *exa ]]; then
-			selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf --preview 'exa -TaF -I ".git" --icons --group-directories-first --git-ignore --colour=always {}'))
-		elif [[ `which tree` == *tree ]]; then
-			selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf --preview 'tree -C {}'))
-		else 
+		if [[ $REC_LISTING_CMD == "" ]]; then
 			selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf))
+		else 
+			selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf --preview "$REC_LISTING_CMD {}"))
 		fi
 
 		# since the selected entry is already from the log, use builtin cd
