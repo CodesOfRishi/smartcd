@@ -2,7 +2,7 @@
 
 ## Description
 
-A `cd` command with improved usability features, which can remember your recently visited directory paths and search sub-directories, all with Fuzzy searching for the user.
+A `cd` command with improved usability features, which can remember your recently visited directory paths and, search and directly traverse to sub-directories and as well as parent directories, all with Fuzzy searching.
 
 ## Features
 
