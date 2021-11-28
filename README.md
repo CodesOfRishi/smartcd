@@ -31,7 +31,7 @@ I wanted to keep `cd` as close to its native implementation, and at the same tim
 ### Optional requirements (anyone) but recommended
 
 Any tool that can *recursively list directories as a tree*. `smartcd` has inbuilt support for [`exa`](https://github.com/ogham/exa) & `tree`.
-Check out `REC_LISTING_CMD` env in <a href="#configuration">Configuration</a> section.
+Check out `REC_LISTING_CMD` env in [Configurations](#configurations) section.
 
 ## Installation
 
