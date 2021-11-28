@@ -16,6 +16,10 @@ A `cd` command with improved usability features, which can remember your recentl
 
   ![](SmartCd-recently-traversed.gif)
 
+- `smartcd` can also search parent directories based on the argument string provided. It will list all parent directories that matched the argument string (also performs sub-string comparison), where you can fuzzy search and automatically traverse to the selected path.
+
+  Syntax: `cd .. [string]`
+
 ## Why SmartCd
 
 Initially, I tried `enhancd` which is a very good alternative for the inbuilt `cd` command, but the features of `enhancd` were more than enough for me and also I had to change my familiarity and regular habit with using some of the options or arguments that are often used with the inbuilt `cd` command, just to familiarize and adapt with the tool.
