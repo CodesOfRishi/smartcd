@@ -75,8 +75,25 @@ recent_visited_dirs() {
 	fi
 }
 
+# feature
+parent_dir_hop() {
+	_path=${PWD%/*}
+	[[ -f $SMARTCD_DIR/smartcd_parent_dir.log ]] && truncate -s 0 $SMARTCD_DIR/smartcd_parent_dir.log
+
+	while [[ $_path != "" ]]; do
+		fd --search-path $_path -t d --max-depth=1 -i -H -F $1 >> $SMARTCD_DIR/smartcd_parent_dir.log
+		_path=${_path%/*}
+	done
+
+	selected_entry=($(cat $SMARTCD_DIR/smartcd_parent_dir.log | fzf --preview "$REC_LISTING_CMD {}"))
+	[[ $selected_entry != "" ]] && builtin cd $selected_entry	
+	generate_log
+}
+
 cd() {
-	if [[ $1 != '--' ]]; then
+	if [[ $# -eq 2 && $1 == '..' ]]; then
+		parent_dir_hop $2
+	elif [[ $1 != '--' ]]; then
 		sub_dir_hop $1
 	else
 		recent_visited_dirs
