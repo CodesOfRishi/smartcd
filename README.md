@@ -20,7 +20,7 @@ A `cd` command with improved usability features, which can remember your recentl
 
   Syntax: `cd .. [string]`
   
-  ![](E:\_myspace\SmartCd\smartcd_parent-dir-traveral.gif)
+  ![](smartcd_parent-dir-traveral.gif)
 
 ## Why SmartCd
 
