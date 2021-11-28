@@ -19,6 +19,8 @@ A `cd` command with improved usability features, which can remember your recentl
 - `smartcd` can also search parent directories based on the argument string provided. It will list all parent directories that matched the argument string (also performs sub-string comparison), where you can fuzzy search and automatically traverse to the selected path.
 
   Syntax: `cd .. [string]`
+  
+  ![](E:\_myspace\SmartCd\smartcd_parent-dir-traveral.gif)
 
 ## Why SmartCd
 
