@@ -48,8 +48,15 @@ I wanted to keep `cd` as close to its native implementation, and at the same tim
 3. Open a new Zsh shell.
 
 ## Configurations
-- `SMARTCD_DIR`: `smartcd` stores logs in this location, which defaults to `~/.config/.smartcd`. To change location of the log file, export `SMARTCD_DIR` with your desired location.
-- `REC_LISTING_CMD`: Command (with options) to use for recursive directory listing in tree format in `fzf` preview. If you want to use any other command export it with your desired command (with options).
+<details>
+<summary><strong><code>SMARTCD_DIR</code></strong></summary>
+<code>smartcd</code> stores logs in this location, which defaults to <code>~/.config/.smartcd</code>. To change location of the log file, export <code>SMARTCD_DIR</code> with your desired location.
+</details>
+
+<details>
+<summary><strong><code>REC_LISTING_CMD</code></strong></summary> 
+Command (with options) to use for recursive directory listing in tree format in <code>fzf</code> preview. If you want to use any other command export it with your desired command (with options).
+</details>
 
 ## To Do
 
