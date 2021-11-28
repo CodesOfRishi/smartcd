@@ -12,7 +12,7 @@ A `cd` command with improved usability features, which can remember your recentl
 
 - `smartcd` can also remember the last 20 unique visited directory locations, where also you can Fuzzy search and automatically traverse to the selected one.
 
-  Use `cd --` for fzf list of last 20 unique visited paths.
+  Syntax: `cd --`
 
   ![](SmartCd-recently-traversed.gif)
 
