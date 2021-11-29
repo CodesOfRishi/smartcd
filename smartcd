@@ -7,15 +7,6 @@
 # ███████║██║ ╚═╝ ██║██║  ██║██║  ██║   ██║   ╚██████╗██████╔╝
 # ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═════╝ Rishi K. (https://github.com/CodesOfRishi)
 
-# configure SMARTCD_CONFIG_DIR env
-[[ -v SMARTCD_CONFIG_DIR && -d $SMARTCD_CONFIG_DIR ]] || export SMARTCD_CONFIG_DIR=$HOME/.config/.smartcd
-[[ -d $SMARTCD_CONFIG_DIR ]] || mkdir -p $SMARTCD_CONFIG_DIR
-
-local smartcd_config_file="$SMARTCD_CONFIG_DIR/smartcd.log" # configure smartcd_config_file variable
-local smartcd_tmp_config_file="$SMARTCD_CONFIG_DIR/smartcd_tmp.log" # temporary file to reorder & restrict the log file
-
-[[ -f $smartcd_config_file ]] || touch $smartcd_config_file
-
 # configure & validate REC_LISTING_CMD env
 validate_rec_listing_cmd() {
 	if [[ -v REC_LISTING_CMD ]]; then
@@ -103,6 +94,17 @@ parent_dir_hop() {
 }
 
 cd() {
+	# configure SMARTCD_CONFIG_DIR env
+	[[ -v SMARTCD_CONFIG_DIR && -d $SMARTCD_CONFIG_DIR ]] || export SMARTCD_CONFIG_DIR=$HOME/.config/.smartcd
+	[[ -d $SMARTCD_CONFIG_DIR ]] || mkdir -p $SMARTCD_CONFIG_DIR
+
+	local smartcd_config_file="$SMARTCD_CONFIG_DIR/smartcd.log" # configure smartcd_config_file variable
+	local smartcd_tmp_config_file="$SMARTCD_CONFIG_DIR/smartcd_tmp.log" # temporary file to reorder & restrict the log file
+
+	[[ -f $smartcd_config_file ]] || touch $smartcd_config_file
+
+	# ---------------------------------------------------------------------------------------------------------------------
+
 	if [[ $# -eq 2 && $1 == '..' ]]; then
 		parent_dir_hop $2
 	elif [[ $1 != '--' ]]; then
