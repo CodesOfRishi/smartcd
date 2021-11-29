@@ -10,7 +10,7 @@ A `cd` command with improved usability features, which can remember your recentl
 
   **NOTE:** 
 
-  > I will PROBABLY remove this feature (currently I'm not sure). Since `smartcd` uses `fzf` behind the scenes, `fzf` already has a similar feature to directly traverse to a sub-directory using `Alt-C`. Also among all the 3 features, this feature is the least fast.
+  > I will PROBABLY remove this feature (currently I'm not sure). Since `smartcd` uses `fzf` behind the scenes, `fzf` already has a similar feature to directly traverse to a sub-directory using `Alt-C`.
 
   ![](SmartCd-sub-directory-traverse.gif)
 
