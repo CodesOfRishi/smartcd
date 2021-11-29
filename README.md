@@ -64,11 +64,6 @@ code>smartcd</code> stores logs in this location, which defaults to <code>~/.con
 </details>
 
 <details>
-<summary><strong><code>SMARTCD_CONFIG_FILE</code></strong></summary> 
-Use a custom name for the log file. Defaults to <code>smartcd.log</code>.
-</details>
-
-<details>
 <summary><strong><code>REC_LISTING_CMD</code></strong></summary> 
 Command (with options) to use for recursive directory listing in tree format in <code>fzf</code> preview. If you want to use any other command export it with your desired command (with options).
 </details>
