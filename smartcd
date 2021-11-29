@@ -20,7 +20,7 @@ __smartcd__() {
 	fi
 
 	local smartcd_config_file="$SMARTCD_CONFIG_DIR/smartcd.log" # configure smartcd_config_file variable
-	local smartcd_tmp_config_file="" # temporary file to reorder & restrict the log file
+	local tmp_config_file="" # temporary file to reorder & restrict the log file
 
 	[[ -f $smartcd_config_file ]] || touch $smartcd_config_file
 
@@ -49,11 +49,11 @@ __smartcd__() {
 
 	# generate log
 	generate_log() { 
-		smartcd_tmp_config_file=$( mktemp )
-		echo $PWD > $smartcd_tmp_config_file
-		cat $smartcd_config_file >> $smartcd_tmp_config_file
-		awk '!seen[$0]++' $smartcd_tmp_config_file > $smartcd_config_file # remove duplicates
-		rm -f $smartcd_tmp_config_file
+		tmp_config_file=$( mktemp )
+		echo $PWD > $tmp_config_file
+		cat $smartcd_config_file >> $tmp_config_file
+		awk '!seen[$0]++' $tmp_config_file > $smartcd_config_file # remove duplicates
+		rm -f $tmp_config_file
 		sed -i '21,$ d' $smartcd_config_file # remove lines from line no. 21 to end. (keep only last 20 unique visited paths)
 	}
 
