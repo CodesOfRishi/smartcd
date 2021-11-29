@@ -26,7 +26,7 @@ fi
 
 # generate log
 generate_log() { 
-	current_path=`pwd`
+	current_path=$PWD
 	echo $current_path > $SMARTCD_DIR/smartcd_tmp.log
 	cat $SMARTCD_DIR/smartcd.log >> $SMARTCD_DIR/smartcd_tmp.log
 	awk '!seen[$0]++' $SMARTCD_DIR/smartcd_tmp.log > $SMARTCD_DIR/smartcd.log # remove duplicates
