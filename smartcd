@@ -31,13 +31,15 @@ else
 	export REC_LISTING_CMD=""
 fi
 
+local smartcd_tmp_config_file="$SMARTCD_CONFIG_DIR/smartcd_tmp.log" # temporary file to reorder & restrict the log file
+
 # generate log
 generate_log() { 
 	current_path=$PWD
-	echo $current_path > $SMARTCD_CONFIG_DIR/smartcd_tmp.log
-	cat $SMARTCD_CONFIG_FILE >> $SMARTCD_CONFIG_DIR/smartcd_tmp.log
-	awk '!seen[$0]++' $SMARTCD_CONFIG_DIR/smartcd_tmp.log > $SMARTCD_CONFIG_FILE # remove duplicates
-	rm -f $SMARTCD_CONFIG_DIR/smartcd_tmp.log
+	echo $current_path > $smartcd_tmp_config_file
+	cat $SMARTCD_CONFIG_FILE >> $smartcd_tmp_config_file
+	awk '!seen[$0]++' $smartcd_tmp_config_file > $SMARTCD_CONFIG_FILE # remove duplicates
+	rm -f $smartcd_tmp_config_file
 	sed -i '21,$ d' $SMARTCD_CONFIG_FILE # remove lines from line no. 21 to end. (keep only last 20 unique visited paths)
 }
 
