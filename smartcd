@@ -32,17 +32,17 @@ __smartcd__() {
 			if [[ $REC_LISTING_CMD != exa* && $REC_LISTING_CMD != tree* ]]; then
 				export REC_LISTING_CMD
 			elif [[ $REC_LISTING_CMD = exa* ]]; then
-				if [[ `which exa` = *exa ]]; then export REC_LISTING_CMD;
-				elif [[ `which tree` = *tree ]]; then export REC_LISTING_CMD="tree -C";
+				if [[ $( which exa ) = *exa ]]; then export REC_LISTING_CMD;
+				elif [[ $( which tree ) = *tree ]]; then export REC_LISTING_CMD="tree -C";
 				else export REC_LISTING_CMD=""; fi
 			elif [[ $REC_LISTING_CMD = tree* ]]; then
-				if [[ `which tree` = *tree ]]; then export REC_LISTING_CMD
-				elif [[ `which exa` = *exa ]]; then export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
+				if [[ $( which tree ) = *tree ]]; then export REC_LISTING_CMD
+				elif [[ $( which exa ) = *exa ]]; then export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
 				else export REC_LISTING_CMD=""; fi
 			fi
 		else
-			if [[ `which exa` = *exa ]]; then export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
-			elif [[ `which tree` = *tree ]]; then export REC_LISTING_CMD="tree -C";
+			if [[ $( which exa ) = *exa ]]; then export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
+			elif [[ $( which tree ) = *tree ]]; then export REC_LISTING_CMD="tree -C";
 			else export REC_LISTING_CMD=""; fi
 		fi
 	}
@@ -62,7 +62,7 @@ __smartcd__() {
 		builtin cd $1 2> $SMARTCD_CONFIG_DIR/smartcd_error.log
 		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
 			fd --exclude .git/ -t d --min-depth=2 -i --hidden -F --max-results=1 --prune $1 > $SMARTCD_CONFIG_DIR/smartcd_fd.log
-			no_of_paths=`wc -l $SMARTCD_CONFIG_DIR/smartcd_fd.log | cut -d' ' -f1` # check whether fd searched at least 1 path
+			no_of_paths=$( wc -l $SMARTCD_CONFIG_DIR/smartcd_fd.log | cut -d' ' -f1 ) # check whether fd searched at least 1 path
 			if [[ $no_of_paths -eq 0 ]]; then
 				cat $SMARTCD_CONFIG_DIR/smartcd_error.log
 			else
