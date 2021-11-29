@@ -122,3 +122,5 @@ __smartcd__() {
 		recent_visited_dirs
 	fi
 }
+
+alias cd=__smartcd__
