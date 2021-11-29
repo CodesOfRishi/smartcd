@@ -95,8 +95,15 @@ parent_dir_hop() {
 
 cd() {
 	# configure SMARTCD_CONFIG_DIR env
-	[[ -v SMARTCD_CONFIG_DIR && -d $SMARTCD_CONFIG_DIR ]] || export SMARTCD_CONFIG_DIR=$HOME/.config/.smartcd
-	[[ -d $SMARTCD_CONFIG_DIR ]] || mkdir -p $SMARTCD_CONFIG_DIR
+	if [[ -v SMARTCD_CONFIG_DIR ]]; then
+		if [[ ! -d $SMARTCD_CONFIG_DIR ]]; then
+			echo "The $SMARTCD_CONFIG_DIR doesn't exist!!"
+			exit 1
+		fi
+	else 
+		export SMARTCD_CONFIG_DIR=$HOME/.config/.smartcd
+		[[ -d $SMARTCD_CONFIG_DIR ]] || mkdir -p $SMARTCD_CONFIG_DIR
+	fi
 
 	local smartcd_config_file="$SMARTCD_CONFIG_DIR/smartcd.log" # configure smartcd_config_file variable
 	local smartcd_tmp_config_file="$SMARTCD_CONFIG_DIR/smartcd_tmp.log" # temporary file to reorder & restrict the log file
