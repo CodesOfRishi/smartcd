@@ -49,10 +49,7 @@ sub_dir_hop() {
 				selected_entry=($(fd -t d --min-depth=2 -i -H -F $1 | fzf --preview "$REC_LISTING_CMD {}"))
 			fi
 
-			if [[ $selected_entry != "" ]]; then
-				builtin cd $selected_entry
-				generate_log
-			fi
+			[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
 		fi
 	else
 		generate_log
@@ -86,8 +83,7 @@ parent_dir_hop() {
 	done
 
 	selected_entry=($(cat $SMARTCD_DIR/smartcd_parent_dir.log | fzf --preview "$REC_LISTING_CMD {}"))
-	[[ $selected_entry != "" ]] && builtin cd $selected_entry	
-	generate_log
+	[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
 }
 
 cd() {
