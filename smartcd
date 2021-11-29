@@ -58,7 +58,7 @@ __smartcd__() {
 		cat $smartcd_config_file >> $tmp_config_file
 		awk '!seen[$0]++' $tmp_config_file > $smartcd_config_file # remove duplicates
 		rm -f $tmp_config_file
-		sed -i '21,$ d' $smartcd_config_file # remove lines from line no. 21 to end. (keep only last 20 unique visited paths)
+		sed -i '51,$ d' $smartcd_config_file # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
 	}
 
 	# feature
