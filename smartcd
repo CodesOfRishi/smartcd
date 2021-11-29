@@ -7,7 +7,7 @@
 # ███████║██║ ╚═╝ ██║██║  ██║██║  ██║   ██║   ╚██████╗██████╔╝
 # ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═════╝ Rishi K. (https://github.com/CodesOfRishi)
 
-cd() {
+__smartcd__() {
 	# configure SMARTCD_CONFIG_DIR env
 	if [[ -v SMARTCD_CONFIG_DIR ]]; then
 		if [[ ! -d $SMARTCD_CONFIG_DIR ]]; then
