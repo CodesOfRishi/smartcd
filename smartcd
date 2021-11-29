@@ -7,92 +7,6 @@
 # ███████║██║ ╚═╝ ██║██║  ██║██║  ██║   ██║   ╚██████╗██████╔╝
 # ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═════╝ Rishi K. (https://github.com/CodesOfRishi)
 
-# configure & validate REC_LISTING_CMD env
-validate_rec_listing_cmd() {
-	if [[ -v REC_LISTING_CMD ]]; then
-		if [[ $REC_LISTING_CMD != exa* && $REC_LISTING_CMD != tree* ]]; then
-			export REC_LISTING_CMD
-		elif [[ $REC_LISTING_CMD = exa* ]]; then
-			if [[ `which exa` = *exa ]]; then; export REC_LISTING_CMD; 
-			elif [[ `which tree` = *tree ]]; then; export REC_LISTING_CMD="tree -C";
-			else export REC_LISTING_CMD=""; fi
-		elif [[ $REC_LISTING_CMD = tree* ]]; then
-			if [[ `which tree` = *tree ]]; then; export REC_LISTING_CMD; 
-			elif [[ `which exa` = *exa ]]; then; export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
-			else export REC_LISTING_CMD=""; fi
-		fi
-	else
-		if [[ `which exa` = *exa ]]; then; export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
-		elif [[ `which tree` = *tree ]]; then; export REC_LISTING_CMD="tree -C";
-		else export REC_LISTING_CMD=""; fi
-	fi
-}
-
-# generate log
-generate_log() { 
-	current_path=$PWD
-	echo $current_path > $smartcd_tmp_config_file
-	cat $smartcd_config_file >> $smartcd_tmp_config_file
-	awk '!seen[$0]++' $smartcd_tmp_config_file > $smartcd_config_file # remove duplicates
-	rm -f $smartcd_tmp_config_file
-	sed -i '21,$ d' $smartcd_config_file # remove lines from line no. 21 to end. (keep only last 20 unique visited paths)
-}
-
-# feature
-sub_dir_hop() {
-	builtin cd $1 2> $SMARTCD_CONFIG_DIR/smartcd_error.log
-	if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
-		fd --exclude .git/ -t d --min-depth=2 -i --hidden -F --max-results=1 --prune $1 > $SMARTCD_CONFIG_DIR/smartcd_fd.log
-		no_of_paths=`wc -l $SMARTCD_CONFIG_DIR/smartcd_fd.log | cut -d' ' -f1` # check whether fd searched at least 1 path
-		if [[ $no_of_paths -eq 0 ]]; then
-			cat $SMARTCD_CONFIG_DIR/smartcd_error.log
-		else
-			validate_rec_listing_cmd
-			if [[ $REC_LISTING_CMD == "" ]]; then
-				selected_entry=($(fd --hidden --exclude .git/ --type d --min-depth=2 -i -F $1 | fzf))
-			else
-				selected_entry=($(fd --hidden --exclude .git/ --type d --min-depth=2 -i -F $1 | fzf --preview "$REC_LISTING_CMD {}"))
-			fi
-
-			[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
-		fi
-	else
-		generate_log
-	fi
-}
-
-# feature
-recent_visited_dirs() {
-	if [[ ! -s $smartcd_config_file ]]; then
-		>&2 echo "No any visited directory in record !!"
-	else
-		validate_rec_listing_cmd
-		if [[ $REC_LISTING_CMD == "" ]]; then
-			selected_entry=($(cat $smartcd_config_file | fzf))
-		else 
-			selected_entry=($(cat $smartcd_config_file | fzf --preview "$REC_LISTING_CMD {}"))
-		fi
-
-		# since the selected entry is already from the log, use builtin cd
-		[[ $selected_entry != "" ]] && builtin cd $selected_entry
-	fi
-}
-
-# feature
-parent_dir_hop() {
-	_path=${PWD%/*}
-	[[ -f $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log ]] && truncate -s 0 $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log
-
-	while [[ $_path != "" ]]; do
-		fd --search-path $_path -t d --max-depth=1 -i -H -F $1 >> $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log
-		_path=${_path%/*}
-	done
-
-	validate_rec_listing_cmd
-	selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log | fzf --preview "$REC_LISTING_CMD {}"))
-	[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
-}
-
 cd() {
 	# configure SMARTCD_CONFIG_DIR env
 	if [[ -v SMARTCD_CONFIG_DIR ]]; then
@@ -112,6 +26,94 @@ cd() {
 
 	# ---------------------------------------------------------------------------------------------------------------------
 
+	# configure & validate REC_LISTING_CMD env
+	validate_rec_listing_cmd() {
+		if [[ -v REC_LISTING_CMD ]]; then
+			if [[ $REC_LISTING_CMD != exa* && $REC_LISTING_CMD != tree* ]]; then
+				export REC_LISTING_CMD
+			elif [[ $REC_LISTING_CMD = exa* ]]; then
+				if [[ `which exa` = *exa ]]; then; export REC_LISTING_CMD; 
+				elif [[ `which tree` = *tree ]]; then; export REC_LISTING_CMD="tree -C";
+				else export REC_LISTING_CMD=""; fi
+			elif [[ $REC_LISTING_CMD = tree* ]]; then
+				if [[ `which tree` = *tree ]]; then; export REC_LISTING_CMD; 
+				elif [[ `which exa` = *exa ]]; then; export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
+				else export REC_LISTING_CMD=""; fi
+			fi
+		else
+			if [[ `which exa` = *exa ]]; then; export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
+			elif [[ `which tree` = *tree ]]; then; export REC_LISTING_CMD="tree -C";
+			else export REC_LISTING_CMD=""; fi
+		fi
+	}
+
+	# generate log
+	generate_log() { 
+		current_path=$PWD
+		echo $current_path > $smartcd_tmp_config_file
+		cat $smartcd_config_file >> $smartcd_tmp_config_file
+		awk '!seen[$0]++' $smartcd_tmp_config_file > $smartcd_config_file # remove duplicates
+		rm -f $smartcd_tmp_config_file
+		sed -i '21,$ d' $smartcd_config_file # remove lines from line no. 21 to end. (keep only last 20 unique visited paths)
+	}
+
+	# feature
+	sub_dir_hop() {
+		builtin cd $1 2> $SMARTCD_CONFIG_DIR/smartcd_error.log
+		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
+			fd --exclude .git/ -t d --min-depth=2 -i --hidden -F --max-results=1 --prune $1 > $SMARTCD_CONFIG_DIR/smartcd_fd.log
+			no_of_paths=`wc -l $SMARTCD_CONFIG_DIR/smartcd_fd.log | cut -d' ' -f1` # check whether fd searched at least 1 path
+			if [[ $no_of_paths -eq 0 ]]; then
+				cat $SMARTCD_CONFIG_DIR/smartcd_error.log
+			else
+				validate_rec_listing_cmd
+				if [[ $REC_LISTING_CMD == "" ]]; then
+					selected_entry=($(fd --hidden --exclude .git/ --type d --min-depth=2 -i -F $1 | fzf))
+				else
+					selected_entry=($(fd --hidden --exclude .git/ --type d --min-depth=2 -i -F $1 | fzf --preview "$REC_LISTING_CMD {}"))
+				fi
+
+				[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
+			fi
+		else
+			generate_log
+		fi
+	}
+
+	# feature
+	recent_visited_dirs() {
+		if [[ ! -s $smartcd_config_file ]]; then
+			>&2 echo "No any visited directory in record !!"
+		else
+			validate_rec_listing_cmd
+			if [[ $REC_LISTING_CMD == "" ]]; then
+				selected_entry=($(cat $smartcd_config_file | fzf))
+			else 
+				selected_entry=($(cat $smartcd_config_file | fzf --preview "$REC_LISTING_CMD {}"))
+			fi
+
+			# since the selected entry is already from the log, use builtin cd
+			[[ $selected_entry != "" ]] && builtin cd $selected_entry
+		fi
+	}
+
+	# feature
+	parent_dir_hop() {
+		_path=${PWD%/*}
+		[[ -f $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log ]] && truncate -s 0 $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log
+
+		while [[ $_path != "" ]]; do
+			fd --search-path $_path -t d --max-depth=1 -i -H -F $1 >> $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log
+			_path=${_path%/*}
+		done
+
+		validate_rec_listing_cmd
+		selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log | fzf --preview "$REC_LISTING_CMD {}"))
+		[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
+	}
+
+	# ---------------------------------------------------------------------------------------------------------------------
+	
 	if [[ $# -eq 2 && $1 == '..' ]]; then
 		parent_dir_hop $2
 	elif [[ $1 != '--' ]]; then
