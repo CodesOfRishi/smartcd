@@ -10,8 +10,15 @@
 # configure SMARTCD_CONFIG_DIR env
 [[ -v SMARTCD_CONFIG_DIR && -d $SMARTCD_CONFIG_DIR ]] || export SMARTCD_CONFIG_DIR=$HOME/.config/.smartcd
 
-if [[ ! -d $SMARTCD_CONFIG_DIR ]]; then mkdir -p $SMARTCD_CONFIG_DIR; fi
-if [[ ! -f $SMARTCD_CONFIG_DIR/smartcd.log ]]; then; touch $SMARTCD_CONFIG_DIR/smartcd.log; fi
+# configure SMARTCD_CONFIG_FILE env
+if [[ -v SMARTCD_CONFIG_FILE ]]; then 
+	export SMARTCD_CONFIG_FILE=$SMARTCD_CONFIG_DIR/$SMARTCD_CONFIG_FILE
+else
+	export SMARTCD_CONFIG_FILE=$SMARTCD_CONFIG_DIR/smartcd.log
+fi
+
+[[ -d $SMARTCD_CONFIG_DIR ]] || mkdir -p $SMARTCD_CONFIG_DIR
+[[ -f $SMARTCD_CONFIG_FILE ]] || touch $SMARTCD_CONFIG_FILE
 
 # configure REC_LISTING_CMD env
 if [[ -v REC_LISTING_CMD ]]; then 
@@ -28,10 +35,10 @@ fi
 generate_log() { 
 	current_path=$PWD
 	echo $current_path > $SMARTCD_CONFIG_DIR/smartcd_tmp.log
-	cat $SMARTCD_CONFIG_DIR/smartcd.log >> $SMARTCD_CONFIG_DIR/smartcd_tmp.log
-	awk '!seen[$0]++' $SMARTCD_CONFIG_DIR/smartcd_tmp.log > $SMARTCD_CONFIG_DIR/smartcd.log # remove duplicates
+	cat $SMARTCD_CONFIG_FILE >> $SMARTCD_CONFIG_DIR/smartcd_tmp.log
+	awk '!seen[$0]++' $SMARTCD_CONFIG_DIR/smartcd_tmp.log > $SMARTCD_CONFIG_FILE # remove duplicates
 	rm -f $SMARTCD_CONFIG_DIR/smartcd_tmp.log
-	sed -i '21,$ d' $SMARTCD_CONFIG_DIR/smartcd.log # remove lines from line no. 21 to end. (keep only last 20 unique visited paths)
+	sed -i '21,$ d' $SMARTCD_CONFIG_FILE # remove lines from line no. 21 to end. (keep only last 20 unique visited paths)
 }
 
 # feature
@@ -58,13 +65,13 @@ sub_dir_hop() {
 
 # feature
 recent_visited_dirs() {
-	if [[ ! -s $SMARTCD_CONFIG_DIR/smartcd.log ]]; then
+	if [[ ! -s $SMARTCD_CONFIG_FILE ]]; then
 		>&2 echo "No any visited directory in record !!"
 	else
 		if [[ $REC_LISTING_CMD == "" ]]; then
-			selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd.log | fzf))
+			selected_entry=($(cat $SMARTCD_CONFIG_FILE | fzf))
 		else 
-			selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd.log | fzf --preview "$REC_LISTING_CMD {}"))
+			selected_entry=($(cat $SMARTCD_CONFIG_FILE | fzf --preview "$REC_LISTING_CMD {}"))
 		fi
 
 		# since the selected entry is already from the log, use builtin cd
