@@ -24,6 +24,7 @@ __smartcd__() {
 
 	local smartcd_config_file="$SMARTCD_CONFIG_DIR/smartcd.log" # configure smartcd_config_file variable
 	local tmp_config_file="" # temporary file to reorder & restrict the log file
+	local selected_entry=""
 
 	[[ -f $smartcd_config_file ]] || touch $smartcd_config_file
 
