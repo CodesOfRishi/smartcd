@@ -20,16 +20,26 @@ fi
 [[ -d $SMARTCD_CONFIG_DIR ]] || mkdir -p $SMARTCD_CONFIG_DIR
 [[ -f $SMARTCD_CONFIG_FILE ]] || touch $SMARTCD_CONFIG_FILE
 
-# configure REC_LISTING_CMD env
-if [[ -v REC_LISTING_CMD ]]; then 
-	export REC_LISTING_CMD
-elif [[ `which exa` == *exa ]]; then 
-	export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
-elif [[ `which tree` == *tree ]]; then
-	export REC_LISTING_CMD="tree -C"
-else
-	export REC_LISTING_CMD=""
-fi
+# configure & validate REC_LISTING_CMD env
+validate_rec_listing_cmd() {
+	if [[ -v REC_LISTING_CMD ]]; then
+		if [[ $REC_LISTING_CMD != exa* && $REC_LISTING_CMD != tree* ]]; then
+			export REC_LISTING_CMD
+		elif [[ $REC_LISTING_CMD = exa* ]]; then
+			if [[ `which exa` = *exa ]]; then; export REC_LISTING_CMD; 
+			elif [[ `which tree` = *tree ]]; then; export REC_LISTING_CMD="tree -C";
+			else export REC_LISTING_CMD=""; fi
+		elif [[ $REC_LISTING_CMD = tree* ]]; then
+			if [[ `which tree` = *tree ]]; then; export REC_LISTING_CMD; 
+			elif [[ `which exa` = *exa ]]; then; export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
+			else export REC_LISTING_CMD=""; fi
+		fi
+	else
+		if [[ `which exa` = *exa ]]; then; export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
+		elif [[ `which tree` = *tree ]]; then; export REC_LISTING_CMD="tree -C";
+		else export REC_LISTING_CMD=""; fi
+	fi
+}
 
 local smartcd_tmp_config_file="$SMARTCD_CONFIG_DIR/smartcd_tmp.log" # temporary file to reorder & restrict the log file
 
@@ -52,6 +62,7 @@ sub_dir_hop() {
 		if [[ $no_of_paths -eq 0 ]]; then
 			cat $SMARTCD_CONFIG_DIR/smartcd_error.log
 		else
+			validate_rec_listing_cmd
 			if [[ $REC_LISTING_CMD == "" ]]; then
 				selected_entry=($(fd --hidden --exclude .git/ --type d --min-depth=2 -i -F $1 | fzf))
 			else
@@ -70,6 +81,7 @@ recent_visited_dirs() {
 	if [[ ! -s $SMARTCD_CONFIG_FILE ]]; then
 		>&2 echo "No any visited directory in record !!"
 	else
+		validate_rec_listing_cmd
 		if [[ $REC_LISTING_CMD == "" ]]; then
 			selected_entry=($(cat $SMARTCD_CONFIG_FILE | fzf))
 		else 
@@ -91,6 +103,7 @@ parent_dir_hop() {
 		_path=${_path%/*}
 	done
 
+	validate_rec_listing_cmd
 	selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log | fzf --preview "$REC_LISTING_CMD {}"))
 	[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
 }
