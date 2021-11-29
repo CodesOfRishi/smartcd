@@ -8,6 +8,10 @@ A `cd` command with improved usability features, which can remember your recentl
 
 - If the provided argument is not present in your `$CDPATH`, then `smartcd` will search all the sub-directories and will prompt you with a list containing relative paths to the sub-directories that matched the provided argument (also perform substring comparison), where you can Fuzzy search and automatically traverse to the selected one.
 
+  **NOTE:** 
+
+  > I will PROBABLY remove this feature (currently I'm not sure). Since `smartcd` uses `fzf` behind the scenes, `fzf` already has a similar feature to directly traverse to a sub-directory using `Alt-C`. Also among all the 3 features, this feature is the least fast.
+
   ![](SmartCd-sub-directory-traverse.gif)
 
 - `smartcd` can also remember the last 20 unique visited directory locations, where also you can Fuzzy search and automatically traverse to the selected one.
@@ -19,7 +23,7 @@ A `cd` command with improved usability features, which can remember your recentl
 - `smartcd` can also search parent directories based on the argument string provided. It will list all parent directories that matched the argument string (also performs sub-string comparison), where you can fuzzy search and automatically traverse to the selected path.
 
   Syntax: `cd .. [string]`
-  
+
   ![](smartcd_parent-dir-traveral.gif)
 
 ## Why SmartCd
