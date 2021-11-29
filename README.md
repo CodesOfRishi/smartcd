@@ -34,9 +34,10 @@ I started by making `smartcd` remember the last 20 unique visited paths using th
 
 ## Requirements
 
-- [Zsh](https://www.zsh.org/)
 - [Fzf](https://github.com/junegunn/fzf)
 - [Fd](https://github.com/sharkdp/fd)
+
+Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash/).
 
 ### Optional requirement but recommended
 
