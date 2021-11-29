@@ -38,15 +38,15 @@ generate_log() {
 sub_dir_hop() {
 	builtin cd $1 2> $SMARTCD_DIR/smartcd_error.log
 	if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
-		fd -t d --min-depth=2 -i -H -F --max-results=1 --prune $1 > $SMARTCD_DIR/smartcd_fd.log
+		fd --exclude .git/ -t d --min-depth=2 -i --hidden -F --max-results=1 --prune $1 > $SMARTCD_DIR/smartcd_fd.log
 		no_of_paths=`wc -l $SMARTCD_DIR/smartcd_fd.log | cut -d' ' -f1` # check whether fd searched at least 1 path
 		if [[ $no_of_paths -eq 0 ]]; then
 			cat $SMARTCD_DIR/smartcd_error.log
 		else
 			if [[ $REC_LISTING_CMD == "" ]]; then
-				selected_entry=($(fd -t d --min-depth=2 -i -H -F $1 | fzf))
+				selected_entry=($(fd --hidden --exclude .git/ --type d --min-depth=2 -i -F $1 | fzf))
 			else
-				selected_entry=($(fd -t d --min-depth=2 -i -H -F $1 | fzf --preview "$REC_LISTING_CMD {}"))
+				selected_entry=($(fd --hidden --exclude .git/ --type d --min-depth=2 -i -F $1 | fzf --preview "$REC_LISTING_CMD {}"))
 			fi
 
 			[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
