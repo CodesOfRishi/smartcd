@@ -97,7 +97,7 @@ __smartcd__() {
 			fi
 
 			# since the selected entry is already from the log, use builtin cd
-			[[ $selected_entry != "" ]] && builtin cd $selected_entry
+			[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
 		fi
 	}
 
