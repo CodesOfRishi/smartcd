@@ -14,7 +14,7 @@ A `cd` command with improved usability features, which can remember your recentl
 
   ![](SmartCd-sub-directory-traverse.gif)
 
-- `smartcd` can also remember the last 20 unique visited directory locations, where also you can Fuzzy search and automatically traverse to the selected one.
+- `smartcd` can also remember the last 50 unique visited directory locations, where also you can Fuzzy search and automatically traverse to the selected one.
 
   Syntax: `cd --`
 
@@ -34,9 +34,10 @@ I started by making `smartcd` remember the last 20 unique visited paths using th
 
 ## Requirements
 
-- [Zsh](https://www.zsh.org/)
 - [Fzf](https://github.com/junegunn/fzf)
 - [Fd](https://github.com/sharkdp/fd)
+
+Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash/).
 
 ### Optional requirement but recommended
 
@@ -59,8 +60,8 @@ Any tool that can *recursively list directories as a tree*.
 
 ## Configurations
 <details>
-<summary><strong><code>SMARTCD_DIR</code></strong></summary>
-<code>smartcd</code> stores logs in this location, which defaults to <code>~/.config/.smartcd</code>. To change location of the log file, export <code>SMARTCD_DIR</code> with your desired location.
+<summary><strong><code>SMARTCD_CONFIG_DIR</code></strong></summary>
+code>smartcd</code> stores logs in this location, which defaults to <code>~/.config/.smartcd</code>. To change location of the log file, export <code>SMARTCD_CONFIG_DIR</code> with your desired location.
 </details>
 
 <details>
