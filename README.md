@@ -59,8 +59,8 @@ Any tool that can *recursively list directories as a tree*.
 
 ## Configurations
 <details>
-<summary><strong><code>SMARTCD_DIR</code></strong></summary>
-<code>smartcd</code> stores logs in this location, which defaults to <code>~/.config/.smartcd</code>. To change location of the log file, export <code>SMARTCD_DIR</code> with your desired location.
+<summary><strong><code>SMARTCD_CONFIG_DIR</code></strong></summary>
+code>smartcd</code> stores logs in this location, which defaults to <code>~/.config/.smartcd</code>. To change location of the log file, export <code>SMARTCD_CONFIG_DIR</code> with your desired location.
 </details>
 
 <details>
