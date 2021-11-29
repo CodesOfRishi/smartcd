@@ -11,8 +11,11 @@ __smartcd__() {
 	# configure SMARTCD_CONFIG_DIR env
 	if [[ -v SMARTCD_CONFIG_DIR ]]; then
 		if [[ ! -d $SMARTCD_CONFIG_DIR ]]; then
-			echo "The $SMARTCD_CONFIG_DIR doesn't exist!!"
-			exit 1
+			>&2 echo "The $SMARTCD_CONFIG_DIR doesn't exist!!"
+			echo "Configuring SMARTCD_CONFIG_DIR to $HOME/.config/.smartcd"
+
+			export SMARTCD_CONFIG_DIR=$HOME/.config/.smartcd
+			[[ -d $SMARTCD_CONFIG_DIR ]] || mkdir -p $SMARTCD_CONFIG_DIR
 		fi
 	else 
 		export SMARTCD_CONFIG_DIR=$HOME/.config/.smartcd
