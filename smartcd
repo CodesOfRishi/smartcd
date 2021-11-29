@@ -7,11 +7,11 @@
 # ███████║██║ ╚═╝ ██║██║  ██║██║  ██║   ██║   ╚██████╗██████╔╝
 # ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═════╝ Rishi K. (https://github.com/CodesOfRishi)
 
-# configure SMARTCD_DIR env
-[[ -v SMARTCD_DIR && -d $SMARTCD_DIR ]] || export SMARTCD_DIR=$HOME/.config/.smartcd
+# configure SMARTCD_CONFIG_DIR env
+[[ -v SMARTCD_CONFIG_DIR && -d $SMARTCD_CONFIG_DIR ]] || export SMARTCD_CONFIG_DIR=$HOME/.config/.smartcd
 
-if [[ ! -d $SMARTCD_DIR ]]; then mkdir -p $SMARTCD_DIR; fi
-if [[ ! -f $SMARTCD_DIR/smartcd.log ]]; then; touch $SMARTCD_DIR/smartcd.log; fi
+if [[ ! -d $SMARTCD_CONFIG_DIR ]]; then mkdir -p $SMARTCD_CONFIG_DIR; fi
+if [[ ! -f $SMARTCD_CONFIG_DIR/smartcd.log ]]; then; touch $SMARTCD_CONFIG_DIR/smartcd.log; fi
 
 # configure REC_LISTING_CMD env
 if [[ -v REC_LISTING_CMD ]]; then 
@@ -27,21 +27,21 @@ fi
 # generate log
 generate_log() { 
 	current_path=$PWD
-	echo $current_path > $SMARTCD_DIR/smartcd_tmp.log
-	cat $SMARTCD_DIR/smartcd.log >> $SMARTCD_DIR/smartcd_tmp.log
-	awk '!seen[$0]++' $SMARTCD_DIR/smartcd_tmp.log > $SMARTCD_DIR/smartcd.log # remove duplicates
-	rm -f $SMARTCD_DIR/smartcd_tmp.log
-	sed -i '21,$ d' $SMARTCD_DIR/smartcd.log # remove lines from line no. 21 to end. (keep only last 20 unique visited paths)
+	echo $current_path > $SMARTCD_CONFIG_DIR/smartcd_tmp.log
+	cat $SMARTCD_CONFIG_DIR/smartcd.log >> $SMARTCD_CONFIG_DIR/smartcd_tmp.log
+	awk '!seen[$0]++' $SMARTCD_CONFIG_DIR/smartcd_tmp.log > $SMARTCD_CONFIG_DIR/smartcd.log # remove duplicates
+	rm -f $SMARTCD_CONFIG_DIR/smartcd_tmp.log
+	sed -i '21,$ d' $SMARTCD_CONFIG_DIR/smartcd.log # remove lines from line no. 21 to end. (keep only last 20 unique visited paths)
 }
 
 # feature
 sub_dir_hop() {
-	builtin cd $1 2> $SMARTCD_DIR/smartcd_error.log
+	builtin cd $1 2> $SMARTCD_CONFIG_DIR/smartcd_error.log
 	if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
-		fd --exclude .git/ -t d --min-depth=2 -i --hidden -F --max-results=1 --prune $1 > $SMARTCD_DIR/smartcd_fd.log
-		no_of_paths=`wc -l $SMARTCD_DIR/smartcd_fd.log | cut -d' ' -f1` # check whether fd searched at least 1 path
+		fd --exclude .git/ -t d --min-depth=2 -i --hidden -F --max-results=1 --prune $1 > $SMARTCD_CONFIG_DIR/smartcd_fd.log
+		no_of_paths=`wc -l $SMARTCD_CONFIG_DIR/smartcd_fd.log | cut -d' ' -f1` # check whether fd searched at least 1 path
 		if [[ $no_of_paths -eq 0 ]]; then
-			cat $SMARTCD_DIR/smartcd_error.log
+			cat $SMARTCD_CONFIG_DIR/smartcd_error.log
 		else
 			if [[ $REC_LISTING_CMD == "" ]]; then
 				selected_entry=($(fd --hidden --exclude .git/ --type d --min-depth=2 -i -F $1 | fzf))
@@ -58,13 +58,13 @@ sub_dir_hop() {
 
 # feature
 recent_visited_dirs() {
-	if [[ ! -s $SMARTCD_DIR/smartcd.log ]]; then
+	if [[ ! -s $SMARTCD_CONFIG_DIR/smartcd.log ]]; then
 		>&2 echo "No any visited directory in record !!"
 	else
 		if [[ $REC_LISTING_CMD == "" ]]; then
-			selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf))
+			selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd.log | fzf))
 		else 
-			selected_entry=($(cat $SMARTCD_DIR/smartcd.log | fzf --preview "$REC_LISTING_CMD {}"))
+			selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd.log | fzf --preview "$REC_LISTING_CMD {}"))
 		fi
 
 		# since the selected entry is already from the log, use builtin cd
@@ -75,14 +75,14 @@ recent_visited_dirs() {
 # feature
 parent_dir_hop() {
 	_path=${PWD%/*}
-	[[ -f $SMARTCD_DIR/smartcd_parent_dir.log ]] && truncate -s 0 $SMARTCD_DIR/smartcd_parent_dir.log
+	[[ -f $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log ]] && truncate -s 0 $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log
 
 	while [[ $_path != "" ]]; do
-		fd --search-path $_path -t d --max-depth=1 -i -H -F $1 >> $SMARTCD_DIR/smartcd_parent_dir.log
+		fd --search-path $_path -t d --max-depth=1 -i -H -F $1 >> $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log
 		_path=${_path%/*}
 	done
 
-	selected_entry=($(cat $SMARTCD_DIR/smartcd_parent_dir.log | fzf --preview "$REC_LISTING_CMD {}"))
+	selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log | fzf --preview "$REC_LISTING_CMD {}"))
 	[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
 }
 
