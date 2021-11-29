@@ -16,7 +16,7 @@ if [[ ! -f $SMARTCD_DIR/smartcd.log ]]; then; touch $SMARTCD_DIR/smartcd.log; fi
 # configure REC_LISTING_CMD env
 if [[ -v REC_LISTING_CMD ]]; then 
 	export REC_LISTING_CMD
-elif [[ `which exa` == *exa ]];then 
+elif [[ `which exa` == *exa ]]; then 
 	export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
 elif [[ `which tree` == *tree ]]; then
 	export REC_LISTING_CMD="tree -C"
