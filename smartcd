@@ -112,7 +112,11 @@ __smartcd__() {
 		done
 
 		validate_rec_listing_cmd
-		selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log | fzf --preview "$REC_LISTING_CMD {}"))
+		if [[ $REC_LISTING_CMD = "" ]]; then
+			selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log | fzf))
+		else
+			selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log | fzf --preview "$REC_LISTING_CMD {}"))
+		fi
 		[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
 	}
 
