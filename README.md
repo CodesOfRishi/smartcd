@@ -48,15 +48,15 @@ Any tool that can *recursively list directories as a tree*.
 
 1. Clone this repository
 
-2. Just put the below code in your `.zshrc` (Zsh configuration file) after `FZF` configurations.
+2. Just put the below code in your shell configuration file after `FZF` configurations.
 
-   ```zsh
+   ```bash
    source path/to/smartcd
    ```
 
    Where `path/to/smartcd` is the path to the `smartcd` script.
 
-3. Open a new Zsh shell.
+3. Open a new shell.
 
 ## Configurations
 <details>
