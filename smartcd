@@ -128,8 +128,8 @@ __smartcd__() {
 }
 
 # validate if both fzf & fd are available or not
-if [[ $( whereis -b fzf | awk '{print $2}' ) != *fzf && $( whereis -b fd | awk '{print $2}' ) != *fd ]]; then
-	>&2 echo "Can't use SmartCd: either fzf or fd not found, or both!"
-else
+if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf && $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then
 	alias cd="__smartcd__"
+else
+	>&2 echo "Can't use SmartCd: either fzf or fd not found, or both!"
 fi
