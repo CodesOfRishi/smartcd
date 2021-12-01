@@ -42,13 +42,25 @@ Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash
 ### Optional requirement but recommended
 
 Any tool that can *recursively list directories as a tree*.
-`smartcd` has inbuilt support for [`exa`](https://github.com/ogham/exa) & `tree`, i.e., just install either `exa` or `tree`, and `smartcd` will handle the rest. Otherwise, if you want to use any other tool, you need to export `REC_LISTING_CMD` env with your desired command (with options).
+
+`smartcd` has inbuilt support for [`exa`](https://github.com/ogham/exa) & `tree`, i.e., just install either `exa` or `tree`, and `smartcd` will handle the rest.
+
+Otherwise, if you want to use any other tool, you need to export `REC_LISTING_CMD` env with your desired command (with options). 
+
+Even if you want to use `exa` or `tree` with different options other than the default ones that `smartcd` is using, you can export `REC_LISTING_CMD` env specifying the command with your desired options.
 
 ## Installation
 
-1. Clone this repository
+1. Download the `smartcd` script.
 
-2. Just put the below code in your shell configuration file after `FZF` configurations.
+   ```bash
+   # using curl
+   curl -O https://raw.githubusercontent.com/CodesOfRishi/smartcd/main/smartcd
+   # OR using wget
+   wget https://raw.githubusercontent.com/CodesOfRishi/smartcd/main/smartcd
+   ```
+
+2. Just put the below code in your shell configuration file (`.bashrc` and/or `.zshrc`).
 
    ```bash
    source path/to/smartcd
@@ -56,7 +68,7 @@ Any tool that can *recursively list directories as a tree*.
 
    Where `path/to/smartcd` is the path to the `smartcd` script.
 
-3. Open a new shell.
+3. Open a new shell or reload your shell configuration file.
 
 ## Configurations
 <details>
