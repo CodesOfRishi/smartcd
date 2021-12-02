@@ -89,9 +89,9 @@ __smartcd__() {
 		else
 			validate_rec_listing_cmd
 			if [[ $REC_LISTING_CMD == "" ]]; then
-				selected_entry=($(cat $smartcd_config_file | fzf))
+				selected_entry=($(cat $smartcd_config_file | fzf --query=$1))
 			else 
-				selected_entry=($(cat $smartcd_config_file | fzf --preview "$REC_LISTING_CMD {}"))
+				selected_entry=($(cat $smartcd_config_file | fzf --query=$1 --preview "$REC_LISTING_CMD {}"))
 			fi
 
 			# since the selected entry is already from the log, use builtin cd
@@ -129,7 +129,7 @@ __smartcd__() {
 	elif [[ $1 != '--' ]]; then
 		sub_dir_hop $1
 	else
-		recent_visited_dirs
+		recent_visited_dirs $2
 	fi
 }
 
