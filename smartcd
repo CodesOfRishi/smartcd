@@ -22,9 +22,10 @@ __smartcd__() {
 		[[ -d $SMARTCD_CONFIG_DIR ]] || mkdir -p $SMARTCD_CONFIG_DIR
 	fi
 
-	local recent_dir_log="$SMARTCD_CONFIG_DIR/smartcd.log" # configure recent_dir_log variable
-	local error_log="$SMARTCD_CONFIG_DIR/smartcd_error.log"
-	local parent_dir_log="$SMARTCD_CONFIG_DIR/smartcd_parent_dir.log"
+	# log files
+	local recent_dir_log="$SMARTCD_CONFIG_DIR/smartcd.log" # stores last 50 unique visited absolute paths
+	local error_log="$SMARTCD_CONFIG_DIR/smartcd_error.log" # stores error log
+	local parent_dir_log="$SMARTCD_CONFIG_DIR/smartcd_parent_dir.log" # stores parent directories's absolute paths
 
 	# ---------------------------------------------------------------------------------------------------------------------
 
@@ -96,7 +97,6 @@ __smartcd__() {
 				selected_entry=($(cat $recent_dir_log | fzf --query=$1 --preview "$REC_LISTING_CMD {}"))
 			fi
 
-			# since the selected entry is already from the log, use builtin cd
 			[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
 		fi
 	}
