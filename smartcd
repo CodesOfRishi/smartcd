@@ -23,6 +23,8 @@ __smartcd__() {
 	fi
 
 	local recent_dir_log="$SMARTCD_CONFIG_DIR/smartcd.log" # configure recent_dir_log variable
+	local error_log="$SMARTCD_CONFIG_DIR/smartcd_error.log"
+	local parent_dir_log="$SMARTCD_CONFIG_DIR/smartcd_parent_dir.log"
 
 	[[ -f $recent_dir_log ]] || touch $recent_dir_log
 
@@ -61,7 +63,7 @@ __smartcd__() {
 
 	# feature
 	sub_dir_hop() {
-		builtin cd $1 2> $SMARTCD_CONFIG_DIR/smartcd_error.log
+		builtin cd $1 2> $error_log
 		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
 			local selected_entry=""
 			validate_rec_listing_cmd
@@ -102,22 +104,22 @@ __smartcd__() {
 	# feature
 	parent_dir_hop() {
 		_path=${PWD%/*}
-		[[ -f $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log ]] && truncate -s 0 $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log
+		[[ -f $parent_dir_log ]] && truncate -s 0 $parent_dir_log
 
 		while [[ $_path != "" ]]; do
-			fd --search-path $_path -t d --max-depth=1 -i -H -F $1 >> $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log
+			fd --search-path $_path -t d --max-depth=1 -i -H -F $1 >> $parent_dir_log
 			_path=${_path%/*}
 		done
 
-		if [[ ! -s $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log ]]; then
+		if [[ ! -s $parent_dir_log ]]; then
 			>&2 echo "No matching parent-directory found!"
 		else
 			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ $REC_LISTING_CMD = "" ]]; then
-				selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log | fzf))
+				selected_entry=($(cat $parent_dir_log | fzf))
 			else
-				selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log | fzf --preview "$REC_LISTING_CMD {}"))
+				selected_entry=($(cat $parent_dir_log | fzf --preview "$REC_LISTING_CMD {}"))
 			fi
 			[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
 		fi
