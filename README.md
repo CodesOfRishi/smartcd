@@ -6,17 +6,19 @@ A `cd` command with improved usability features, which can remember your recentl
 
 ## Features
 
-- If the provided argument is not in your `$CDPATH`, then `smartcd` will present you with a list of all the sub-directories that matched the argument (also performs substring comparison), where you can Fuzzy search & directly traverse to the selected path.
-
-  ![](SmartCd-sub-directory-traverse.gif)
-
-- `smartcd` can also remember the last 50 unique visited directory locations, where also you can Fuzzy search and automatically traverse to the selected one.
+- `smartcd` can remember the last 50 unique visited directory locations, where also you can Fuzzy search and automatically traverse to the selected one.
 
   Syntax: `cd --`
 
   ![](SmartCd-recently-traversed.gif)
 
-- `smartcd` can also search parent directories based on the argument string provided. It will list all parent directories that matched the argument string (also performs sub-string comparison), where you can fuzzy search and automatically traverse to the selected path.
+- If the provided argument is not in your `$CDPATH`, then `smartcd` will present you with a list of all the *sub-directories* that matched the argument (performs sub-string comparison), where you can Fuzzy search & directly traverse to the selected path.
+
+  Syntax: `cd [string]`
+
+  ![](SmartCd-sub-directory-traverse.gif)
+
+- `smartcd` can also search *parent-directories* based on the argument string provided. It will list all parent directories that matched the argument string (performs sub-string comparison), where you can fuzzy search and automatically traverse to the selected path.
 
   Syntax: `cd .. [string]`
 
