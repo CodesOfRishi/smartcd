@@ -24,7 +24,6 @@ __smartcd__() {
 
 	local smartcd_config_file="$SMARTCD_CONFIG_DIR/smartcd.log" # configure smartcd_config_file variable
 	local tmp_config_file="" # temporary file to reorder & restrict the log file
-	local selected_entry=""
 
 	[[ -f $smartcd_config_file ]] || touch $smartcd_config_file
 
@@ -65,6 +64,7 @@ __smartcd__() {
 	sub_dir_hop() {
 		builtin cd $1 2> $SMARTCD_CONFIG_DIR/smartcd_error.log
 		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
+			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ $REC_LISTING_CMD == "" ]]; then
 				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F $1 | fzf --exit-0))
@@ -87,6 +87,7 @@ __smartcd__() {
 		if [[ ! -s $smartcd_config_file ]]; then
 			>&2 echo "No any visited directory in record !!"
 		else
+			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ $REC_LISTING_CMD == "" ]]; then
 				selected_entry=($(cat $smartcd_config_file | fzf --query=$1))
@@ -112,6 +113,7 @@ __smartcd__() {
 		if [[ ! -s $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log ]]; then
 			>&2 echo "No matching parent-directory found!"
 		else
+			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ $REC_LISTING_CMD = "" ]]; then
 				selected_entry=($(cat $SMARTCD_CONFIG_DIR/smartcd_parent_dir.log | fzf))
