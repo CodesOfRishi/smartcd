@@ -8,10 +8,6 @@ A `cd` command with improved usability features, which can remember your recentl
 
 - If the provided argument is not in your `$CDPATH`, then `smartcd` will present you with a list of all the sub-directories that matched the argument (also performs substring comparison), where you can Fuzzy search & directly traverse to the selected path.
 
-  **NOTE:** 
-
-  > I will PROBABLY remove this feature (currently I'm not sure). Since `smartcd` uses `fzf` behind the scenes, `fzf` already has a similar feature to directly traverse to a sub-directory using `Alt-C`.
-
   ![](SmartCd-sub-directory-traverse.gif)
 
 - `smartcd` can also remember the last 50 unique visited directory locations, where also you can Fuzzy search and automatically traverse to the selected one.
