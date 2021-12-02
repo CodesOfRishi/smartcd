@@ -22,10 +22,10 @@ __smartcd__() {
 		[[ -d $SMARTCD_CONFIG_DIR ]] || mkdir -p $SMARTCD_CONFIG_DIR
 	fi
 
-	local smartcd_config_file="$SMARTCD_CONFIG_DIR/smartcd.log" # configure smartcd_config_file variable
+	local recent_dir_log="$SMARTCD_CONFIG_DIR/smartcd.log" # configure recent_dir_log variable
 	local tmp_config_file="" # temporary file to reorder & restrict the log file
 
-	[[ -f $smartcd_config_file ]] || touch $smartcd_config_file
+	[[ -f $recent_dir_log ]] || touch $recent_dir_log
 
 	# ---------------------------------------------------------------------------------------------------------------------
 
@@ -54,10 +54,10 @@ __smartcd__() {
 	generate_log() { 
 		tmp_config_file=$( mktemp )
 		echo $PWD > $tmp_config_file
-		cat $smartcd_config_file >> $tmp_config_file
-		awk '!seen[$0]++' $tmp_config_file > $smartcd_config_file # remove duplicates
+		cat $recent_dir_log >> $tmp_config_file
+		awk '!seen[$0]++' $tmp_config_file > $recent_dir_log # remove duplicates
 		rm -f $tmp_config_file
-		sed -i '51,$ d' $smartcd_config_file # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
+		sed -i '51,$ d' $recent_dir_log # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
 	}
 
 	# feature
@@ -84,15 +84,15 @@ __smartcd__() {
 
 	# feature
 	recent_visited_dirs() {
-		if [[ ! -s $smartcd_config_file ]]; then
+		if [[ ! -s $recent_dir_log ]]; then
 			>&2 echo "No any visited directory in record !!"
 		else
 			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ $REC_LISTING_CMD == "" ]]; then
-				selected_entry=($(cat $smartcd_config_file | fzf --query=$1))
+				selected_entry=($(cat $recent_dir_log | fzf --query=$1))
 			else 
-				selected_entry=($(cat $smartcd_config_file | fzf --query=$1 --preview "$REC_LISTING_CMD {}"))
+				selected_entry=($(cat $recent_dir_log | fzf --query=$1 --preview "$REC_LISTING_CMD {}"))
 			fi
 
 			# since the selected entry is already from the log, use builtin cd
