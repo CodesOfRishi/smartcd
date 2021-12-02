@@ -26,8 +26,6 @@ __smartcd__() {
 	local error_log="$SMARTCD_CONFIG_DIR/smartcd_error.log"
 	local parent_dir_log="$SMARTCD_CONFIG_DIR/smartcd_parent_dir.log"
 
-	[[ -f $recent_dir_log ]] || touch $recent_dir_log
-
 	# ---------------------------------------------------------------------------------------------------------------------
 
 	# configure & validate REC_LISTING_CMD env
@@ -53,6 +51,8 @@ __smartcd__() {
 
 	# generate log
 	generate_log() { 
+		[[ -f $recent_dir_log ]] || touch $recent_dir_log
+
 		local tmp_log=$( mktemp ) # temporary file
 		echo $PWD > $tmp_log
 		cat $recent_dir_log >> $tmp_log
