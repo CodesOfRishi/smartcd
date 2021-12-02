@@ -23,7 +23,6 @@ __smartcd__() {
 	fi
 
 	local recent_dir_log="$SMARTCD_CONFIG_DIR/smartcd.log" # configure recent_dir_log variable
-	local tmp_config_file="" # temporary file to reorder & restrict the log file
 
 	[[ -f $recent_dir_log ]] || touch $recent_dir_log
 
@@ -52,7 +51,7 @@ __smartcd__() {
 
 	# generate log
 	generate_log() { 
-		tmp_config_file=$( mktemp )
+		local tmp_config_file=$( mktemp ) # temporary file
 		echo $PWD > $tmp_config_file
 		cat $recent_dir_log >> $tmp_config_file
 		awk '!seen[$0]++' $tmp_config_file > $recent_dir_log # remove duplicates
