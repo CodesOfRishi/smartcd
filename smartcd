@@ -65,19 +65,17 @@ __smartcd__() {
 	sub_dir_hop() {
 		builtin cd $1 2> $SMARTCD_CONFIG_DIR/smartcd_error.log
 		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
-			fd --exclude .git/ -t d --min-depth=2 -i --hidden -F --max-results=1 --prune $1 > $SMARTCD_CONFIG_DIR/smartcd_fd.log
-			no_of_paths=$( wc -l $SMARTCD_CONFIG_DIR/smartcd_fd.log | cut -d' ' -f1 ) # check whether fd searched at least 1 path
-			if [[ $no_of_paths -eq 0 ]]; then
-				cat $SMARTCD_CONFIG_DIR/smartcd_error.log
+			validate_rec_listing_cmd
+			if [[ $REC_LISTING_CMD == "" ]]; then
+				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F $1 | fzf --exit-0))
 			else
-				validate_rec_listing_cmd
-				if [[ $REC_LISTING_CMD == "" ]]; then
-					selected_entry=($(fd --hidden --exclude .git/ --type d --min-depth=2 -i -F $1 | fzf))
-				else
-					selected_entry=($(fd --hidden --exclude .git/ --type d --min-depth=2 -i -F $1 | fzf --preview "$REC_LISTING_CMD {}"))
-				fi
+				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F $1 | fzf --exit-0 --preview "$REC_LISTING_CMD {}"))
+			fi
 
-				[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
+			if [[ $selected_entry = "" ]]; then
+				>&2 echo "No directory found or selected!"
+			else
+				builtin cd $selected_entry && generate_log
 			fi
 		else
 			generate_log
