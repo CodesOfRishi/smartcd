@@ -51,11 +51,11 @@ __smartcd__() {
 
 	# generate log
 	generate_log() { 
-		local tmp_config_file=$( mktemp ) # temporary file
-		echo $PWD > $tmp_config_file
-		cat $recent_dir_log >> $tmp_config_file
-		awk '!seen[$0]++' $tmp_config_file > $recent_dir_log # remove duplicates
-		rm -f $tmp_config_file
+		local tmp_log=$( mktemp ) # temporary file
+		echo $PWD > $tmp_log
+		cat $recent_dir_log >> $tmp_log
+		awk '!seen[$0]++' $tmp_log > $recent_dir_log # remove duplicates
+		rm -f $tmp_log
 		sed -i '51,$ d' $recent_dir_log # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
 	}
 
