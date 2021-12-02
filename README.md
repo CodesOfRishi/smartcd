@@ -14,13 +14,13 @@ A `cd` command with improved usability features, which can remember your recentl
 
 - If the provided argument is not in your `$CDPATH`, then `smartcd` will present you with a list of all the *sub-directories* that matched the argument (performs sub-string comparison), where you can Fuzzy search & directly traverse to the selected path.
 
-  Syntax: `cd [string]`
+  Syntax: `cd string`
 
   ![](SmartCd-sub-directory-traverse.gif)
 
 - `smartcd` can also search *parent-directories* based on the argument string provided. It will list all parent directories that matched the argument string (performs sub-string comparison), where you can fuzzy search and automatically traverse to the selected path.
 
-  Syntax: `cd .. [string]`
+  Syntax: `cd .. string`
 
   ![](smartcd_parent-dir-traveral.gif)
 
