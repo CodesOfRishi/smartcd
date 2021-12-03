@@ -50,8 +50,8 @@ __smartcd__() {
 		fi
 	}
 
-	# generate log
-	generate_log() { 
+	# generate logs of recently visited dirs
+	generate_recent_dir_log() { 
 		[[ -f $recent_dir_log ]] || touch $recent_dir_log
 
 		local tmp_log=$( mktemp ) # temporary file
@@ -77,10 +77,10 @@ __smartcd__() {
 			if [[ $selected_entry = "" ]]; then
 				>&2 echo "No directory found or selected!"
 			else
-				builtin cd $selected_entry && generate_log
+				builtin cd $selected_entry && generate_recent_dir_log
 			fi
 		else
-			generate_log
+			generate_recent_dir_log
 		fi
 	}
 
@@ -97,7 +97,7 @@ __smartcd__() {
 				selected_entry=($(cat $recent_dir_log | fzf --query=$1 --preview "$REC_LISTING_CMD {}"))
 			fi
 
-			[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
+			[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_recent_dir_log
 		fi
 	}
 
@@ -121,7 +121,7 @@ __smartcd__() {
 			else
 				selected_entry=($(cat $parent_dir_log | fzf --preview "$REC_LISTING_CMD {}"))
 			fi
-			[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_log
+			[[ $selected_entry != "" ]] && builtin cd $selected_entry && generate_recent_dir_log
 		fi
 	}
 
