@@ -6,7 +6,7 @@ A `cd` command with improved usability features, which can remember your recentl
 
 ## Features
 
-- `smartcd` can remember the last 50 unique visited directory locations, where you can Fuzzy search and automatically traverse to the selected one.
+- By default `smartcd` can remember the last 50 unique visited directory locations, where you can Fuzzy search and automatically traverse to the selected one.
 
   Syntax: `cd -- [string]`
 
