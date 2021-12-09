@@ -79,6 +79,11 @@ Even if you want to use `exa` or `tree` with different options other than the de
 Command (with options) to use for recursive directory listing in tree format in <code>fzf</code> preview. If you want to use any other command export it with your desired command (with options).
 </details>
 
+<details>
+<summary><strong><code>SMARTCD_HIST_SIZE</code></strong></summary> 
+Set number of unique recently visited directory paths <code>smartcd</code> should remember. This defaults to 50.
+</details>
+
 ## To Do
 
 - [ ] Users must be able to configure the number of unique last visited paths `smartcd` should remember.
