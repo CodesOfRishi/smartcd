@@ -49,22 +49,22 @@ Even if you want to use `exa` or `tree` with different options other than the de
 
 ## Installation
 
-1. Download the `smartcd` script.
+1. Download the `smartcd.sh` script.
 
    ```bash
    # using curl
-   curl -O https://raw.githubusercontent.com/CodesOfRishi/smartcd/main/smartcd
+   curl -O https://raw.githubusercontent.com/CodesOfRishi/smartcd/main/smartcd.sh
    # OR using wget
-   wget https://raw.githubusercontent.com/CodesOfRishi/smartcd/main/smartcd
+   wget https://raw.githubusercontent.com/CodesOfRishi/smartcd/main/smartcd.sh
    ```
 
 2. Just put the below code in your shell configuration file (`.bashrc` and/or `.zshrc`).
 
    ```bash
-   source path/to/smartcd
+   source path/to/smartcd.sh
    ```
 
-   Where `path/to/smartcd` is the path to the `smartcd` script.
+   Where `path/to/smartcd.sh` is the path to the `smartcd.sh` script.
 
 3. Open a new shell or reload your shell configuration file.
 
