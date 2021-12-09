@@ -43,9 +43,9 @@ Any tool that can *recursively list directories as a tree*.
 
 `smartcd` has inbuilt support for [`exa`](https://github.com/ogham/exa) & `tree`, i.e., just install either `exa` or `tree`, and `smartcd` will handle the rest.
 
-Otherwise, if you want to use any other tool, you need to export `REC_LISTING_CMD` env with your desired command (with options). 
+Otherwise, if you want to use any other tool, you need to export `SMARTCD_REC_LISTING_CMD` env with your desired command (with options). 
 
-Even if you want to use `exa` or `tree` with different options other than the default ones that `smartcd` is using, you can export `REC_LISTING_CMD` env specifying the command with your desired options.
+Even if you want to use `exa` or `tree` with different options other than the default ones that `smartcd` is using, you can export `SMARTCD_REC_LISTING_CMD` env specifying the command with your desired options.
 
 ## Installation
 
@@ -75,7 +75,7 @@ Even if you want to use `exa` or `tree` with different options other than the de
 </details>
 
 <details>
-<summary><strong><code>REC_LISTING_CMD</code></strong></summary> 
+<summary><strong><code>SMARTCD_REC_LISTING_CMD</code></strong></summary> 
 Command (with options) to use for recursive directory listing in tree format in <code>fzf</code> preview. If you want to use any other command export it with your desired command (with options).
 </details>
 
