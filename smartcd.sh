@@ -86,7 +86,7 @@ __smartcd__() {
 		[[ -f ${parent_dir_log} ]] && truncate -s 0 ${parent_dir_log}
 
 		while [[ ${_path} != "" ]]; do
-			fd --search-path ${_path} -t d --max-depth=1 -i -H -F $1 >> ${parent_dir_log}
+			fd --exclude .git/ --search-path ${_path} -t d --max-depth=1 -i -H -F $1 >> ${parent_dir_log}
 			_path=${_path%/*}
 		done
 
