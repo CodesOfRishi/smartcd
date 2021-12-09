@@ -16,7 +16,7 @@ A `cd` command with improved usability features, which can remember your recentl
 
   Syntax: `cd string`
 
-  ![](SmartCd-sub-directory-traverse.gif)
+  ![](SS/SmartCd-SubDir.gif)
 
 - `smartcd` can also search *parent-directories* based on the argument string provided. It will list all parent directories that matched the argument string (performs sub-string comparison), where you can fuzzy search and automatically traverse to the selected path.
 
