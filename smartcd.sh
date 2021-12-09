@@ -21,23 +21,11 @@ __smartcd__() {
 
 	# configure & validate REC_LISTING_CMD env
 	validate_rec_listing_cmd() {
-		if [[ -v REC_LISTING_CMD ]]; then
-			if [[ ${REC_LISTING_CMD} != exa* && ${REC_LISTING_CMD} != tree* ]]; then
-				export REC_LISTING_CMD
-			elif [[ ${REC_LISTING_CMD} = exa* ]]; then
-				if [[ $( whereis -b exa | awk '{print $2}' ) = *exa ]]; then export REC_LISTING_CMD;
-				elif [[ $( whereis -b tree | awk '{print $2}' ) = *tree ]]; then export REC_LISTING_CMD="tree -C";
-				else export REC_LISTING_CMD=""; fi
-			elif [[ ${REC_LISTING_CMD} = tree* ]]; then
-				if [[ $( whereis -b tree | awk '{print $2}' ) = *tree ]]; then export REC_LISTING_CMD
-				elif [[ $( whereis -b exa | awk '{print $2}') = *exa ]]; then export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
-				else export REC_LISTING_CMD=""; fi
-			fi
-		else
-			if [[ $( whereis -b exa | awk '{print $2}' ) = *exa ]]; then export REC_LISTING_CMD="exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"
-			elif [[ $( whereis -b tree | awk '{print $2}' ) = *tree ]]; then export REC_LISTING_CMD="tree -C";
-			else export REC_LISTING_CMD=""; fi
-		fi
+		if [[ $( whereis -b exa | awk '{print $2}' ) = *exa ]]; then
+			export REC_LISTING_CMD=${REC_LISTING_CMD:-"exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"}
+		elif [[ $( whereis -b tree | awk '{print $2}' ) = *tree ]]; then
+			export REC_LISTING_CMD=${REC_LISTING_CMD:-"tree -C"}
+		else export REC_LISTING_CMD=${REC_LISTING_CMD:-""}; fi
 	}
 
 	# generate logs of recently visited dirs
