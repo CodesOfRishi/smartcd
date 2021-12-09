@@ -10,7 +10,7 @@ A `cd` command with improved usability features, which can remember your recentl
 
   Syntax: `cd -- [string]`
 
-  ![](SmartCd-recently-traversed.gif)
+  ![](SS/SmartCd-History.gif)
 
 - If the provided argument is not in your `$CDPATH`, then `smartcd` will present you with a list of all the *sub-directories* that matched the argument (performs sub-string comparison), where you can Fuzzy search & directly traverse to the selected path.
 
