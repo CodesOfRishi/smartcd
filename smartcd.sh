@@ -19,13 +19,13 @@ __smartcd__() {
 
 	# ---------------------------------------------------------------------------------------------------------------------
 
-	# configure & validate REC_LISTING_CMD env
+	# configure & validate SMARTCD_REC_LISTING_CMD env
 	validate_rec_listing_cmd() {
 		if [[ $( whereis -b exa | awk '{print $2}' ) = *exa ]]; then
-			export REC_LISTING_CMD=${REC_LISTING_CMD:-"exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"}
+			export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-"exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"}
 		elif [[ $( whereis -b tree | awk '{print $2}' ) = *tree ]]; then
-			export REC_LISTING_CMD=${REC_LISTING_CMD:-"tree -C"}
-		else export REC_LISTING_CMD=${REC_LISTING_CMD:-""}; fi
+			export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-"tree -C"}
+		else export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-""}; fi
 	}
 
 	# generate logs of recently visited dirs
@@ -47,10 +47,10 @@ __smartcd__() {
 		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
 			local selected_entry=""
 			validate_rec_listing_cmd
-			if [[ ${REC_LISTING_CMD} == "" ]]; then
+			if [[ ${SMARTCD_REC_LISTING_CMD} == "" ]]; then
 				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F $1 | fzf --exit-0))
 			else
-				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F $1 | fzf --exit-0 --preview "${REC_LISTING_CMD} {}"))
+				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F $1 | fzf --exit-0 --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
 
 			if [[ ${selected_entry} = "" ]]; then
@@ -70,10 +70,10 @@ __smartcd__() {
 		else
 			local selected_entry=""
 			validate_rec_listing_cmd
-			if [[ ${REC_LISTING_CMD} == "" ]]; then
+			if [[ ${SMARTCD_REC_LISTING_CMD} == "" ]]; then
 				selected_entry=($(cat ${recent_dir_log} | fzf --query=$1))
 			else 
-				selected_entry=($(cat ${recent_dir_log} | fzf --query=$1 --preview "${REC_LISTING_CMD} {}"))
+				selected_entry=($(cat ${recent_dir_log} | fzf --query=$1 --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
 
 			[[ ${selected_entry} != "" ]] && builtin cd ${selected_entry} && generate_recent_dir_log
@@ -95,10 +95,10 @@ __smartcd__() {
 		else
 			local selected_entry=""
 			validate_rec_listing_cmd
-			if [[ ${REC_LISTING_CMD} = "" ]]; then
+			if [[ ${SMARTCD_REC_LISTING_CMD} = "" ]]; then
 				selected_entry=($(cat ${parent_dir_log} | fzf))
 			else
-				selected_entry=($(cat ${parent_dir_log} | fzf --preview "${REC_LISTING_CMD} {}"))
+				selected_entry=($(cat ${parent_dir_log} | fzf --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
 			[[ ${selected_entry} != "" ]] && builtin cd ${selected_entry} && generate_recent_dir_log
 		fi
