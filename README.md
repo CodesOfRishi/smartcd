@@ -86,7 +86,7 @@ Set number of unique recently visited directory paths <code>smartcd</code> shoul
 
 ## To Do
 
-- [ ] Users must be able to configure the number of unique last visited paths `smartcd` should remember.
+- [x] Users must be able to configure the number of unique last visited paths `smartcd` should remember.
 - [ ] Make `fd` optional: Find alternative to the `fd` command used in the script using the `find` command.
 
 ## Inspiration
