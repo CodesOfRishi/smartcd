@@ -30,6 +30,7 @@ __smartcd__() {
 
 	# generate logs of recently visited dirs
 	generate_recent_dir_log() { 
+		export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 		[[ -f ${recent_dir_log} ]] || touch ${recent_dir_log}
 
 		local tmp_log=$( mktemp ) # temporary file
@@ -37,7 +38,7 @@ __smartcd__() {
 		cat ${recent_dir_log} >> ${tmp_log}
 		awk '!seen[$0]++' ${tmp_log} > ${recent_dir_log} # remove duplicates
 		rm -f ${tmp_log}
-		sed -i '51,$ d' ${recent_dir_log} # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
+		sed -i $(( ${SMARTCD_HIST_SIZE} + 1 ))',$ d' ${recent_dir_log} # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
 	}
 
 	# feature
