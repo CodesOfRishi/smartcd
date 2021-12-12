@@ -84,6 +84,11 @@ Command (with options) to use for recursive directory listing in tree format in 
 Set number of unique recently visited directory paths <code>smartcd</code> should remember. This defaults to 50.
 </details>
 
+<details>
+<summary><strong><code>SMARTCD_COMMAND</code></strong></summary> 
+To use a custom command name for using smartcd, export <code>SMARTCD_COMMAND</code> env with your desired command name. This defaults to <code>cd</code>.
+</details>
+
 ## To Do
 
 - [x] Users must be able to configure the number of unique last visited paths `smartcd` should remember.
