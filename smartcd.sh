@@ -117,7 +117,8 @@ __smartcd__() {
 
 # validate if both fzf & fd are available or not
 if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf && $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then
-	alias cd="__smartcd__"
+	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"}
+	alias $SMARTCD_COMMAND="__smartcd__"
 else
 	[[ $( whereis -b fzf | awk '{print $2}' ) != *fzf ]] && >&2 echo "Can't use SmartCd: fzf not found !"
 	[[ $( whereis -b fd | awk '{print $2}' ) != *fd ]] && >&2 echo "Can't use SmartCd: fd not found !"
