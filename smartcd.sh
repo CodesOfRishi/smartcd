@@ -55,7 +55,7 @@ __smartcd__() {
 			if [[ ${selected_entry} = "" ]]; then
 				>&2 echo "No directory found or selected!"
 			else
-				builtin cd ${selected_entry} && generate_recent_dir_log
+				builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
 			fi
 		else
 			generate_recent_dir_log
@@ -75,7 +75,7 @@ __smartcd__() {
 				selected_entry=($(cat ${recent_dir_log} | fzf --query=$1 --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
 
-			[[ ${selected_entry} != "" ]] && builtin cd ${selected_entry} && generate_recent_dir_log
+			[[ ${selected_entry} != "" ]] && builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
 		fi
 	}
 
@@ -99,7 +99,7 @@ __smartcd__() {
 			else
 				selected_entry=($(cat ${parent_dir_log} | fzf --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
-			[[ ${selected_entry} != "" ]] && builtin cd ${selected_entry} && generate_recent_dir_log
+			[[ ${selected_entry} != "" ]] && builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
 		fi
 	}
 
