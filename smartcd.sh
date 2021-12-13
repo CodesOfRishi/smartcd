@@ -108,10 +108,10 @@ __smartcd__() {
 	
 	if [[ $# -eq 2 && $1 == '..' ]]; then
 		parent_dir_hop $2
-	elif [[ $1 != '--' ]]; then
-		sub_dir_hop $1
-	else
+	elif [[ $1 == '--' ]]; then
 		recent_visited_dirs $2
+	else
+		sub_dir_hop $1
 	fi
 }
 
