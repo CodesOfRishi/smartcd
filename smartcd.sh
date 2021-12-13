@@ -104,12 +104,23 @@ __smartcd__() {
 		fi
 	}
 
+	# feature
+	goto_git_repo_root() {
+		local git_repo_root_dir=$( git rev-parse --show-toplevel )
+		if [[ $? -eq 0 ]]; then 
+			builtin cd ${git_repo_root_dir} && generate_recent_dir_log
+			[[ ! $? -eq 0 ]] && exit 1
+		fi
+	}
+
 	# ---------------------------------------------------------------------------------------------------------------------
 	
 	if [[ $# -eq 2 && $1 == '..' ]]; then
 		parent_dir_hop $2
 	elif [[ $1 == '--' ]]; then
 		recent_visited_dirs $2
+	elif [[ $1 == '-root' ]]; then
+		goto_git_repo_root
 	else
 		sub_dir_hop $1
 	fi
