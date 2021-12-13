@@ -119,7 +119,7 @@ __smartcd__() {
 		parent_dir_hop $2
 	elif [[ $1 == '--' ]]; then
 		recent_visited_dirs $2
-	elif [[ $1 == '-root' ]]; then
+	elif [[ $1 == '.' ]]; then
 		goto_git_repo_root
 	else
 		sub_dir_hop $1
