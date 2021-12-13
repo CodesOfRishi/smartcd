@@ -13,7 +13,7 @@ __smartcd__() {
 	[[ -d ${SMARTCD_CONFIG_DIR} ]] || mkdir -p ${SMARTCD_CONFIG_DIR}
 
 	# log files
-	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd.log" # stores last 50 unique visited absolute paths
+	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
 	local parent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_parent_dir.log" # stores parent directories's absolute paths
 
 	# ---------------------------------------------------------------------------------------------------------------------
