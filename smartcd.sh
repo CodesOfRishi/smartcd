@@ -107,8 +107,7 @@ __smartcd__() {
 	goto_git_repo_root() {
 		local git_repo_root_dir=$( git rev-parse --show-toplevel )
 		if [[ ${git_repo_root_dir} != "" ]]; then 
-			builtin cd ${git_repo_root_dir} && generate_recent_dir_log
-			[[ ! $? -eq 0 ]] && exit 1
+			builtin cd ${git_repo_root_dir} && generate_recent_dir_log && echo ${PWD}
 		fi
 	}
 
