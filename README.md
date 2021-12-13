@@ -6,7 +6,7 @@ A `cd` command with improved usability features, which can remember your recentl
 
 ## Features
 
-- If you're in a git repository and suppose deeply embedded within directories, you can directly traverse to the root of the git repository. NOTE: This won't work if you're in `.git/` of a git repository.
+- If you're in a git repository and deeply embedded within directories, you can directly traverse to the root of the git repository. NOTE: This won't work if you're in `.git/` of a git repository.
 
   **Syntax:** `cd .`
 
