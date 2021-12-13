@@ -13,8 +13,7 @@ __smartcd__() {
 	[[ -d ${SMARTCD_CONFIG_DIR} ]] || mkdir -p ${SMARTCD_CONFIG_DIR}
 
 	# log files
-	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd.log" # stores last 50 unique visited absolute paths
-	local error_log="${SMARTCD_CONFIG_DIR}/smartcd_error.log" # stores error log
+	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
 	local parent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_parent_dir.log" # stores parent directories's absolute paths
 
 	# ---------------------------------------------------------------------------------------------------------------------
@@ -43,7 +42,7 @@ __smartcd__() {
 
 	# feature
 	sub_dir_hop() {
-		builtin cd $1 2> ${error_log}
+		builtin cd $1 2> /dev/null
 		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
 			local selected_entry=""
 			validate_rec_listing_cmd
