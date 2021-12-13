@@ -8,7 +8,7 @@ A `cd` command with improved usability features, which can remember your recentl
 
 - If you're in a git repository and suppose deeply embedded within directories, you can directly traverse to the root of the git repository. NOTE: This won't work if you're in `.git/` of a git repository.
 
-  **Syntax:** `cd -root`
+  **Syntax:** `cd .`
 
 - By default `smartcd` can remember the last 50 unique visited directory locations, where you can Fuzzy search and automatically traverse to the selected one.
 
