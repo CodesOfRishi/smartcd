@@ -2,9 +2,13 @@
 
 ## Description
 
-A `cd` command with improved usability features, which can remember your recently visited directory paths and, search and directly traverse to sub-directories and as well as parent directories, all with Fuzzy searching.
+A `cd` command with improved usability features, which can remember your recently visited directory paths, search, directly traverse to sub-directories and as well as parent directories, all with Fuzzy searching, and also directly traverse to the root of a git repository.
 
 ## Features
+
+- If you're in a git repository and suppose deeply embedded within directories, you can directly traverse to the root of the git repository. NOTE: This won't work if you're in `.git/` of a git repository.
+
+  Syntax: `cd -root`
 
 - By default `smartcd` can remember the last 50 unique visited directory locations, where you can Fuzzy search and automatically traverse to the selected one.
 
