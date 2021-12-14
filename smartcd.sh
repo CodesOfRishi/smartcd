@@ -41,14 +41,15 @@ __smartcd__() {
 
 	# feature
 	sub_dir_hop() {
-		builtin cd $1 2> /dev/null
+		local path_argument=$@
+		builtin cd ${path_argument} 2> /dev/null
 		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
 			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ ${SMARTCD_REC_LISTING_CMD} == "" ]]; then
-				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F | fzf --exit-0 --query=$1))
+				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F | fzf --exit-0 --query="${path_argument}"))
 			else
-				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F | fzf --exit-0 --query=$1 --preview "${SMARTCD_REC_LISTING_CMD} {}"))
+				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F | fzf --exit-0 --query="${path_argument}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
 
 			if [[ ${selected_entry} = "" ]]; then
@@ -120,7 +121,7 @@ __smartcd__() {
 	elif [[ $1 == '.' ]]; then
 		goto_git_repo_root
 	else
-		sub_dir_hop $1
+		sub_dir_hop $@
 	fi
 }
 
