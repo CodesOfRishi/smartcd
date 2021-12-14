@@ -37,10 +37,6 @@ A `cd` command with improved usability features to quickly navigate your Linux f
       <img src="SS/SmartCd-ParentDir.gif">
   </details>
 
-## Known Caveats
-
-- `cd .` won't work if you're in `.git/` directory of a git repository.
-- `cd .` will follow up any symbolic links. For e.g., if you're in `~/my-proj/foo/bar` and `~/my-proj` is symbolic linked to `~/src/my-proj`, then `cd .` command will move you to `~/src/my-proj`.
 
 ## Why SmartCd
 
@@ -112,6 +108,11 @@ Set number of unique recently visited directory paths <code>smartcd</code> shoul
 <summary><strong><code>SMARTCD_COMMAND</code></strong></summary> 
 To use a custom command name for using smartcd, export <code>SMARTCD_COMMAND</code> env with your desired command name. This defaults to <code>cd</code>.
 </details>
+
+## Known Caveats
+
+- `cd .` won't work if you're in `.git/` directory of a git repository.
+- `cd .` will follow up any symbolic links. For e.g., if you're in `~/my-proj/foo/bar` and `~/my-proj` is symbolic linked to `~/src/my-proj`, then `cd .` command will move you to `~/src/my-proj`.
 
 ## To Do
 
