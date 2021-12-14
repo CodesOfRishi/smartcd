@@ -80,13 +80,14 @@ Even if you want to use `exa` or `tree` with different options other than the de
 
    Where `path/to/smartcd.sh` is the path to the `smartcd.sh` script.
 
-3. Open a new shell or reload your shell configuration file.
-
    Or you can also source it using a plugin manager. For E.g., if using [sheldon](https://github.com/rossmacarthur/sheldon) shell plugin manager, you can run,
 
    ```bash
    sheldon add smartcd --github CodesOfRishi/smartcd
    ```
+
+3. Open a new shell or reload your shell configuration file.
+
 
 ## Configurations
 <details>
