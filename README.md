@@ -16,19 +16,28 @@ A `cd` command with improved usability features, which can remember your recentl
 
   **Syntax:** `cd -- [string ...]`
 
-  ![](SS/SmartCd-History.gif)
+  <details>
+  <summary>Screenshot</summary>
+      <img src="SS/SmartCd-History.gif">
+  </details>
 
 - If the provided argument is not in your `$CDPATH`, then `smartcd` will present you with a list of all the *sub-directories* that matched the argument (performs sub-string comparison), where you can Fuzzy search & directly traverse to the selected path.
 
   **Syntax:** `cd [string ...]`
 
-  ![](SS/SmartCd-SubDir.gif)
+  <details>
+  <summary>Screenshot</summary>
+      <img src="SS/SmartCd-SubDir.gif">
+  </details>
 
 - `smartcd` can also search *parent-directories* based on the argument string provided. It will list all parent directories that matched the argument string (performs sub-string comparison), where you can fuzzy search and automatically traverse to the selected path.
 
   **Syntax:** `cd .. [string ...]`
 
-  ![](SS/SmartCd-ParentDir.gif)
+  <details>
+  <summary>Screenshot</summary>
+      <img src="SS/SmartCd-ParentDir.gif">
+  </details>
 
 ## Why SmartCd
 
