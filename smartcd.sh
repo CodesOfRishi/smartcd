@@ -46,9 +46,9 @@ __smartcd__() {
 			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ ${SMARTCD_REC_LISTING_CMD} == "" ]]; then
-				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F $1 | fzf --exit-0))
+				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F | fzf --exit-0 --query=$1))
 			else
-				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F $1 | fzf --exit-0 --preview "${SMARTCD_REC_LISTING_CMD} {}"))
+				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F | fzf --exit-0 --query=$1 --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
 
 			if [[ ${selected_entry} = "" ]]; then
