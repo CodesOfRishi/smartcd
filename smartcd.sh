@@ -86,19 +86,20 @@ __smartcd__() {
 
 		_path=${PWD%/*}
 		while [[ ${_path} != "" ]]; do
-			fd --exclude .git/ --search-path ${_path} -t d --max-depth=1 -i -H -F $1 >> ${parent_dir_log}
+			fd --exclude .git/ --search-path ${_path} -t d --max-depth=1 -i -H -F >> ${parent_dir_log}
 			_path=${_path%/*}
 		done
 
 		if [[ ! -s ${parent_dir_log} ]]; then
 			>&2 echo "No matching parent-directory found!"
 		else
+			local query=$@
 			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ ${SMARTCD_REC_LISTING_CMD} = "" ]]; then
-				selected_entry=($(cat ${parent_dir_log} | fzf))
+				selected_entry=($(cat ${parent_dir_log} | fzf --exit-0 --query="${query}"))
 			else
-				selected_entry=($(cat ${parent_dir_log} | fzf --preview "${SMARTCD_REC_LISTING_CMD} {}"))
+				selected_entry=($(cat ${parent_dir_log} | fzf --exit-0 --query="${query}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
 			[[ ${selected_entry} != "" ]] && builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
 		fi
@@ -115,8 +116,8 @@ __smartcd__() {
 
 	# ---------------------------------------------------------------------------------------------------------------------
 	
-	if [[ $# -eq 2 && $1 == '..' ]]; then
-		parent_dir_hop $2
+	if [[ $1 == '..' ]]; then
+		parent_dir_hop ${@:2}
 	elif [[ $1 == '--' ]]; then
 		recent_visited_dirs ${@:2}
 	elif [[ $1 == '.' ]]; then
