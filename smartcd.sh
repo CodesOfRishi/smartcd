@@ -71,9 +71,9 @@ __smartcd__() {
 			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ ${SMARTCD_REC_LISTING_CMD} == "" ]]; then
-				selected_entry=($(cat ${recent_dir_log} | fzf --query="${query}"))
+				selected_entry=($(cat ${recent_dir_log} | fzf --exit-0 --query="${query}"))
 			else 
-				selected_entry=($(cat ${recent_dir_log} | fzf --query="${query}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
+				selected_entry=($(cat ${recent_dir_log} | fzf --exit-0 --query="${query}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
 
 			[[ ${selected_entry} != "" ]] && builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
