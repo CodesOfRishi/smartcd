@@ -2,7 +2,7 @@
 
 ## Description
 
-A `cd` command with improved usability features to quickly navigate your Linux filesystem.
+A `cd` command with improved and extended usability features to quickly navigate your Linux filesystem.
 
 ## Features
 
