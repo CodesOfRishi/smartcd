@@ -1,4 +1,4 @@
-# SmartCd - Expedite your navigation of Linux filesystem.
+# SmartCd - A Mnemonist `cd` Command
 
 ## Description
 
