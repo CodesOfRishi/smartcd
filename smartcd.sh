@@ -86,6 +86,11 @@ __smartcd__() {
 
 	# feature
 	parent_dir_hop() {
+		if [[ $1 = "" ]]; then
+			builtin cd .. && generate_recent_dir_log
+			return
+		fi
+
 		local parent_dir_log=$( mktemp ) # temporary file to store parent directories's absolute paths
 
 		_path=${PWD%/*}
