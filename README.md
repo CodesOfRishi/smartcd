@@ -19,7 +19,7 @@ A `cd` command with improved usability features to quickly navigate your Linux f
       <img src="ss/smartcd-history.gif">
   </details>
 
-- If the provided argument is not in your `$CDPATH`, then `smartcd` will present you with a list of all the *sub-directories* that matched the argument (performs sub-string comparison), where you can Fuzzy search & directly traverse to the selected path.
+- If the provided argument is not in your `$CDPATH`, then `smartcd` will present you with a list of all the *sub-directories* that matched the argument, where you can Fuzzy search & directly traverse to the selected path.
 
   **Syntax:** `cd [string ...]`
 
@@ -28,7 +28,7 @@ A `cd` command with improved usability features to quickly navigate your Linux f
       <img src="ss/smartcd-subdir.gif">
   </details>
 
-- `smartcd` can also search *parent-directories* based on the argument string provided. It will list all parent directories that matched the argument string (performs sub-string comparison), where you can fuzzy search and automatically traverse to the selected path.
+- `smartcd` can also search *parent-directories* based on the argument string provided. It will list all parent directories that matched the argument string, where you can fuzzy search and automatically traverse to the selected path.
 
   **Syntax:** `cd .. [string ...]`
 
