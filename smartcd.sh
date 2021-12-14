@@ -67,12 +67,13 @@ __smartcd__() {
 		if [[ ! -s ${recent_dir_log} ]]; then
 			>&2 echo "No any visited directory in record !!"
 		else
+			local query=$@
 			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ ${SMARTCD_REC_LISTING_CMD} == "" ]]; then
-				selected_entry=($(cat ${recent_dir_log} | fzf --query=$1))
+				selected_entry=($(cat ${recent_dir_log} | fzf --query="${query}"))
 			else 
-				selected_entry=($(cat ${recent_dir_log} | fzf --query=$1 --preview "${SMARTCD_REC_LISTING_CMD} {}"))
+				selected_entry=($(cat ${recent_dir_log} | fzf --query="${query}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
 
 			[[ ${selected_entry} != "" ]] && builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
@@ -117,7 +118,7 @@ __smartcd__() {
 	if [[ $# -eq 2 && $1 == '..' ]]; then
 		parent_dir_hop $2
 	elif [[ $1 == '--' ]]; then
-		recent_visited_dirs $2
+		recent_visited_dirs ${@:2}
 	elif [[ $1 == '.' ]]; then
 		goto_git_repo_root
 	else
