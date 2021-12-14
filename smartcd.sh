@@ -14,7 +14,6 @@ __smartcd__() {
 
 	# log files
 	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
-	local parent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_parent_dir.log" # stores parent directories's absolute paths
 
 	# ---------------------------------------------------------------------------------------------------------------------
 
@@ -81,9 +80,9 @@ __smartcd__() {
 
 	# feature
 	parent_dir_hop() {
-		_path=${PWD%/*}
-		[[ -f ${parent_dir_log} ]] && truncate -s 0 ${parent_dir_log}
+		local parent_dir_log=$( mktemp ) # temporary file to store parent directories's absolute paths
 
+		_path=${PWD%/*}
 		while [[ ${_path} != "" ]]; do
 			fd --exclude .git/ --search-path ${_path} -t d --max-depth=1 -i -H -F $1 >> ${parent_dir_log}
 			_path=${_path%/*}
@@ -101,6 +100,7 @@ __smartcd__() {
 			fi
 			[[ ${selected_entry} != "" ]] && builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
 		fi
+		rm -f ${parent_dir_log}
 	}
 
 	# feature
