@@ -19,16 +19,16 @@ __smartcd__() {
 	# ---------------------------------------------------------------------------------------------------------------------
 
 	# configure & validate SMARTCD_REC_LISTING_CMD env
-	validate_rec_listing_cmd() {#{{{
+	validate_rec_listing_cmd() {
 		if [[ $( whereis -b exa | awk '{print $2}' ) = *exa ]]; then
 			export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-"exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"}
 		elif [[ $( whereis -b tree | awk '{print $2}' ) = *tree ]]; then
 			export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-"tree -C"}
 		else export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-""}; fi
-	}#}}}
+	}
 
 	# generate logs of recently visited dirs
-	generate_recent_dir_log() { #{{{
+	generate_recent_dir_log() { 
 		export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 		[[ -f ${recent_dir_log} ]] || touch ${recent_dir_log}
 
@@ -38,10 +38,10 @@ __smartcd__() {
 		awk '!seen[$0]++' ${tmp_log} > ${recent_dir_log} # remove duplicates
 		rm -f ${tmp_log}
 		sed -i $(( ${SMARTCD_HIST_SIZE} + 1 ))',$ d' ${recent_dir_log} # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
-	}#}}}
+	}
 
 	# feature
-	sub_dir_hop() {#{{{
+	sub_dir_hop() {
 		builtin cd $1 2> /dev/null
 		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
 			local selected_entry=""
@@ -60,10 +60,10 @@ __smartcd__() {
 		else
 			generate_recent_dir_log
 		fi
-	}#}}}
+	}
 
 	# feature
-	recent_visited_dirs() {#{{{
+	recent_visited_dirs() {
 		if [[ ! -s ${recent_dir_log} ]]; then
 			>&2 echo "No any visited directory in record !!"
 		else
@@ -77,10 +77,10 @@ __smartcd__() {
 
 			[[ ${selected_entry} != "" ]] && builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
 		fi
-	}#}}}
+	}
 
 	# feature
-	parent_dir_hop() {#{{{
+	parent_dir_hop() {
 		_path=${PWD%/*}
 		[[ -f ${parent_dir_log} ]] && truncate -s 0 ${parent_dir_log}
 
@@ -101,15 +101,15 @@ __smartcd__() {
 			fi
 			[[ ${selected_entry} != "" ]] && builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
 		fi
-	}#}}}
+	}
 
 	# feature
-	goto_git_repo_root() {#{{{
+	goto_git_repo_root() {
 		local git_repo_root_dir=$( git rev-parse --show-toplevel )
 		if [[ ${git_repo_root_dir} != "" ]]; then 
 			builtin cd ${git_repo_root_dir} && generate_recent_dir_log && echo ${PWD}
 		fi
-	}#}}}
+	}
 
 	# ---------------------------------------------------------------------------------------------------------------------
 	
