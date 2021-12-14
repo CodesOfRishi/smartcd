@@ -2,7 +2,7 @@
 
 ## Description
 
-A `cd` command with improved usability features, which can remember your recently visited directory paths, search, directly traverse to sub-directories and as well as parent directories, all with Fuzzy searching, and also directly traverse to the root of a git repository.
+A `cd` command with improved usability features for the user.
 
 ## Features
 
