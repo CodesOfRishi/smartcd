@@ -91,33 +91,28 @@ __smartcd__() {
 			return
 		fi
 
-		local parent_dir_log=$( mktemp ) # temporary file to store parent directories's absolute paths
+		find_parent_dir_paths() {
+			_path=${PWD%/*}
+			while [[ ${_path} != "" ]]; do
+				fd --exclude .git/ --search-path ${_path} -t d --max-depth=1 -i -H -F
+				_path=${_path%/*}
+			done
+		}
 
-		_path=${PWD%/*}
-		while [[ ${_path} != "" ]]; do
-			fd --exclude .git/ --search-path ${_path} -t d --max-depth=1 -i -H -F >> ${parent_dir_log}
-			_path=${_path%/*}
-		done
-
-		if [[ ! -s ${parent_dir_log} ]]; then
-			>&2 echo "No matching parent-directory found!"
+		local query=$@
+		local selected_entry=""
+		validate_rec_listing_cmd
+		if [[ ${SMARTCD_REC_LISTING_CMD} = "" ]]; then
+			selected_entry=($(find_parent_dir_paths | fzf --exit-0 --query="${query}"))
 		else
-			local query=$@
-			local selected_entry=""
-			validate_rec_listing_cmd
-			if [[ ${SMARTCD_REC_LISTING_CMD} = "" ]]; then
-				selected_entry=($(cat ${parent_dir_log} | fzf --exit-0 --query="${query}"))
-			else
-				selected_entry=($(cat ${parent_dir_log} | fzf --exit-0 --query="${query}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
-			fi
-
-			if [[ ${selected_entry} = "" ]]; then
-				>&2 echo "No directory found or selected!"
-			else
-				builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
-			fi
+			selected_entry=($(find_parent_dir_paths | fzf --exit-0 --query="${query}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 		fi
-		rm -f ${parent_dir_log}
+
+		if [[ ${selected_entry} = "" ]]; then
+			>&2 echo "No directory found or selected!"
+		else
+			builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
+		fi
 	}
 
 	# feature
