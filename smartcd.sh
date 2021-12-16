@@ -8,9 +8,12 @@
 # ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═════╝ Rishi K. (https://github.com/CodesOfRishi)
 
 __smartcd__() {
-	# configure SMARTCD_CONFIG_DIR env
+	# location for smartcd to store log
 	export SMARTCD_CONFIG_DIR=${SMARTCD_CONFIG_DIR:-"$HOME/.config/.smartcd"}
 	[[ -d ${SMARTCD_CONFIG_DIR} ]] || mkdir -p ${SMARTCD_CONFIG_DIR}
+
+	# no. of unique recently visited directories smartcd to remember
+	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 
 	# log files
 	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
@@ -28,7 +31,6 @@ __smartcd__() {
 
 	# generate logs of recently visited dirs
 	generate_recent_dir_log() { 
-		export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 		[[ -f ${recent_dir_log} ]] || touch ${recent_dir_log}
 
 		local tmp_log=$( mktemp ) # temporary file
@@ -138,7 +140,7 @@ __smartcd__() {
 
 # validate if both fzf & fd are available or not
 if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf && $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then
-	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"}
+	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
 	alias $SMARTCD_COMMAND="__smartcd__"
 else
 	[[ $( whereis -b fzf | awk '{print $2}' ) != *fzf ]] && >&2 echo "Can't use SmartCd: fzf not found !"
