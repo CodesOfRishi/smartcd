@@ -37,6 +37,13 @@ A `cd` command with improved and extended usability features to quickly navigate
       <img src="ss/smartcd-parentdir.gif">
   </details>
 
+### Other Features
+- Remove invalid paths from log using `--cleanup` option.
+
+  ```bash
+  cd --cleanup
+  ```
+
 
 ## Why SmartCd
 
@@ -108,6 +115,11 @@ Set number of unique recently visited directory paths <code>smartcd</code> shoul
 <details>
 <summary><strong><code>SMARTCD_COMMAND</code></strong></summary> 
 To use a custom command name for using smartcd, export <code>SMARTCD_COMMAND</code> env with your desired command name. This defaults to <code>cd</code>.
+</details>
+
+<details>
+<summary><strong><code>SMARTCD_CLEANUP_OPT</code></strong></summary> 
+To use any other option name for removing invalid paths from log, export <code>SMARTCD_CLEANUP_OPT</code> with your desired option name. This defaults to <code>--cleanup</code>.
 </details>
 
 ## Known Caveats
