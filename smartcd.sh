@@ -57,9 +57,9 @@ __smartcd__() {
 			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ ${SMARTCD_REC_LISTING_CMD} == "" ]]; then
-				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F | fzf --exit-0 --query="${path_argument}"))
+				selected_entry=($("${FD_COMMAND}" --hidden --exclude .git/ --type d -i -F | fzf --exit-0 --query="${path_argument}"))
 			else
-				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F | fzf --exit-0 --query="${path_argument}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
+				selected_entry=($("${FD_COMMAND}" --hidden --exclude .git/ --type d -i -F | fzf --exit-0 --query="${path_argument}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
 
 			if [[ ${selected_entry} = "" ]]; then
@@ -104,7 +104,7 @@ __smartcd__() {
 		find_parent_dir_paths() {
 			_path=${PWD%/*}
 			while [[ ${_path} != "" ]]; do
-				fd --exclude .git/ --search-path ${_path} -t d --max-depth=1 -i -H -F
+				"${FD_COMMAND}" --exclude .git/ --search-path ${_path} -t d --max-depth=1 -i -H -F
 				_path=${_path%/*}
 			done
 		}
@@ -167,11 +167,17 @@ __smartcd__() {
 	fi
 }
 
+if [[ $(grep -qE 'Debian|Ubuntu' <(lsb_release -si))$? == 0 ]]; then
+  FD_COMMAND='fdfind'
+else
+  FD_COMMAND='fd'
+fi
+
 # validate if both fzf & fd are available or not
-if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf && $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then
+if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf && $( whereis -b "${FD_COMMAND}" | awk '{print $2}' ) = *"${FD_COMMAND}" ]]; then
 	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
 	alias $SMARTCD_COMMAND="__smartcd__"
 else
 	[[ $( whereis -b fzf | awk '{print $2}' ) != *fzf ]] && >&2 echo "Can't use SmartCd: fzf not found !"
-	[[ $( whereis -b fd | awk '{print $2}' ) != *fd ]] && >&2 echo "Can't use SmartCd: fd not found !"
+	[[ $( whereis -b "${FD_COMMAND}" | awk '{print $2}' ) != *"${FD_COMMAND}" ]] && >&2 echo "Can't use SmartCd: \"${FD_COMMAND}\" not found !"
 fi
