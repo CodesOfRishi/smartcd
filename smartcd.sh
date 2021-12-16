@@ -15,8 +15,11 @@ __smartcd__() {
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 
-	# option for cleanup of log file
-	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--cleanup"}
+	# options customizations
+	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--cleanup"} # option for cleanup of log file
+	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT:-".."} # option for searching & traversing to parent-directories
+	export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT:-"--"} # option for searching & traversing to recently visited directories
+	export SMARTCD_GIT_ROOT_OPT=${SMARTCD_GIT_ROOT_OPT:-"."} # option for traversing to root of the git repo
 
 	# log files
 	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
@@ -145,11 +148,11 @@ __smartcd__() {
 
 	# ---------------------------------------------------------------------------------------------------------------------
 	
-	if [[ $1 == '..' ]]; then
+	if [[ $1 == "${SMARTCD_PARENT_DIR_OPT}" ]]; then
 		parent_dir_hop ${@:2}
-	elif [[ $1 == '--' ]]; then
+	elif [[ $1 == "${SMARTCD_HIST_OPT}" ]]; then
 		recent_visited_dirs ${@:2}
-	elif [[ $1 == '.' ]]; then
+	elif [[ $1 == "${SMARTCD_GIT_ROOT_OPT}" ]]; then
 		goto_git_repo_root
 	elif [[ $1 == "${SMARTCD_CLEANUP_OPT}" ]]; then
 		cleanup_log
