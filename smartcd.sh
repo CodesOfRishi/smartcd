@@ -15,6 +15,9 @@ __smartcd__() {
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 
+	# option for cleanup of log file
+	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--cleanup"}
+
 	# log files
 	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
 
@@ -125,6 +128,21 @@ __smartcd__() {
 		fi
 	}
 
+	# cleanup
+	cleanup_log() {
+		local line_no="1"
+		local tmp_log=$( mktemp )
+
+		while [[ ${line_no} -le ${SMARTCD_HIST_SIZE} ]]; do
+			_path=$( sed -n $line_no'p' ${recent_dir_log} )
+
+			[[ -d ${_path} ]] && echo ${_path} >> ${tmp_log}
+			line_no=$(( ${line_no} + 1 ))
+		done
+		cp -i ${tmp_log} ${recent_dir_log}
+		rm -rf ${tmp_log}
+	}
+
 	# ---------------------------------------------------------------------------------------------------------------------
 	
 	if [[ $1 == '..' ]]; then
@@ -133,6 +151,8 @@ __smartcd__() {
 		recent_visited_dirs ${@:2}
 	elif [[ $1 == '.' ]]; then
 		goto_git_repo_root
+	elif [[ $1 == "${SMARTCD_CLEANUP_OPT}" ]]; then
+		cleanup_log
 	else
 		sub_dir_hop $@
 	fi
