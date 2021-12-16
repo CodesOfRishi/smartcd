@@ -14,12 +14,14 @@ __smartcd__() {
 
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
+	export SMARTCD_VERSION="v1.3.0"
 
 	# options customizations
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--cleanup"} # option for cleanup of log file
 	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT:-".."} # option for searching & traversing to parent-directories
 	export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT:-"--"} # option for searching & traversing to recently visited directories
 	export SMARTCD_GIT_ROOT_OPT=${SMARTCD_GIT_ROOT_OPT:-"."} # option for traversing to root of the git repo
+	export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT:-"--version"} # option for printing version information
 
 	# log files
 	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
@@ -156,6 +158,10 @@ __smartcd__() {
 		goto_git_repo_root
 	elif [[ $1 == "${SMARTCD_CLEANUP_OPT}" ]]; then
 		cleanup_log
+	elif [[ $1 == "${SMARTCD_VERSION_OPT}" ]]; then
+		echo "SmartCd by Rishi K. - ${SMARTCD_VERSION}"
+		echo "The MIT License (MIT)"
+		echo "Copyright (c) 2021 Rishi K."
 	else
 		sub_dir_hop $@
 	fi
