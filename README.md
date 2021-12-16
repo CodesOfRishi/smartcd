@@ -118,8 +118,23 @@ To use a custom command name for using smartcd, export <code>SMARTCD_COMMAND</co
 </details>
 
 <details>
+<summary><strong><code>SMARTCD_PARENT_DIR_OPT</code></strong></summary> 
+To use a different option name for searching & traversing to parent-directories, export <code>SMARTCD_PARENT_DIR_OPT</code> with your desired name for the option. This defaults to <code>..</code>.
+</details>
+
+<details>
+<summary><strong><code>SMARTCD_HIST_OPT</code></strong></summary> 
+To use a different option name for searching & traversing to recently visited directories, export <code>SMARTCD_HIST_OPT</code> with your desired name for the option. This defaults to <code>--</code>.
+</details>
+
+<details>
+<summary><strong><code>SMARTCD_GIT_ROOT_OPT</code></strong></summary> 
+To use a different option name for traversing to root of a git repository, export <code>SMARTCD_GIT_ROOT_OPT</code> with your desired name for the option. This defaults to <code>.</code>.
+</details>
+
+<details>
 <summary><strong><code>SMARTCD_CLEANUP_OPT</code></strong></summary> 
-To use any other option name for removing invalid paths from log, export <code>SMARTCD_CLEANUP_OPT</code> with your desired option name. This defaults to <code>--cleanup</code>.
+To use a different option name for removing invalid paths from log, export <code>SMARTCD_CLEANUP_OPT</code> with your desired option name. This defaults to <code>--cleanup</code>.
 </details>
 
 ## Known Caveats
