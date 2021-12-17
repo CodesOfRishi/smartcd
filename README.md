@@ -48,6 +48,8 @@ A `cd` command with improved and extended usability features to quickly navigate
 
   ```bash
   cd --version
+  # or
+  echo $SMARTCD_VERSION
   ```
 
 
