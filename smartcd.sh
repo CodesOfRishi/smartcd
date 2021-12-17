@@ -14,7 +14,7 @@ __smartcd__() {
 
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
-	export SMARTCD_VERSION="v1.3.0"
+	export SMARTCD_VERSION="v1.3.1"
 
 	# options customizations
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--cleanup"} # option for cleanup of log file
@@ -57,9 +57,9 @@ __smartcd__() {
 			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ ${SMARTCD_REC_LISTING_CMD} == "" ]]; then
-				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F | fzf --exit-0 --query="${path_argument}"))
+				selected_entry=($(fd --hidden --exclude .git/ --type d | fzf --exit-0 --query="${path_argument}"))
 			else
-				selected_entry=($(fd --hidden --exclude .git/ --type d -i -F | fzf --exit-0 --query="${path_argument}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
+				selected_entry=($(fd --hidden --exclude .git/ --type d | fzf --exit-0 --query="${path_argument}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
 
 			if [[ ${selected_entry} = "" ]]; then
@@ -104,7 +104,7 @@ __smartcd__() {
 		find_parent_dir_paths() {
 			_path=${PWD%/*}
 			while [[ ${_path} != "" ]]; do
-				fd --exclude .git/ --search-path ${_path} -t d --max-depth=1 -i -H -F
+				fd --exclude .git/ --search-path ${_path} -t d --max-depth=1 -H
 				_path=${_path%/*}
 			done
 		}
