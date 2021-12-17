@@ -14,7 +14,7 @@ __smartcd__() {
 
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
-	export SMARTCD_VERSION="v1.3.1"
+	export SMARTCD_VERSION="v1.3.2"
 
 	# options customizations
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--cleanup"} # option for cleanup of log file
@@ -57,9 +57,9 @@ __smartcd__() {
 			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ ${SMARTCD_REC_LISTING_CMD} == "" ]]; then
-				selected_entry=($(fd --hidden --exclude .git/ --type d | fzf --exit-0 --query="${path_argument}"))
+				selected_entry=($(${find_command} --hidden --exclude .git/ --type d | fzf --exit-0 --query="${path_argument}"))
 			else
-				selected_entry=($(fd --hidden --exclude .git/ --type d | fzf --exit-0 --query="${path_argument}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
+				selected_entry=($(${find_command} --hidden --exclude .git/ --type d | fzf --exit-0 --query="${path_argument}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
 
 			if [[ ${selected_entry} = "" ]]; then
@@ -104,7 +104,7 @@ __smartcd__() {
 		find_parent_dir_paths() {
 			_path=${PWD%/*}
 			while [[ ${_path} != "" ]]; do
-				fd --exclude .git/ --search-path ${_path} -t d --max-depth=1 -H
+				${find_command} --exclude .git/ --search-path ${_path} -t d --max-depth=1 -H
 				_path=${_path%/*}
 			done
 		}
@@ -167,11 +167,14 @@ __smartcd__() {
 	fi
 }
 
-# validate if both fzf & fd are available or not
-if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf && $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then
+# validate if both fzf & fd or fdfind are available or not
+if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf ]] && [[ $( whereis -b fdfind | awk '{print $2}' ) = *fdfind || $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then
+	if [[ $( whereis -b fdfind | awk '{print $2}' ) = *fdfind ]]; then find_command="fdfind"
+	elif [[ $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then find_command="fd"; fi
+
 	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
 	alias $SMARTCD_COMMAND="__smartcd__"
 else
 	[[ $( whereis -b fzf | awk '{print $2}' ) != *fzf ]] && >&2 echo "Can't use SmartCd: fzf not found !"
-	[[ $( whereis -b fd | awk '{print $2}' ) != *fd ]] && >&2 echo "Can't use SmartCd: fd not found !"
+	[[ $( whereis -b fdfind | awk '{print $2}' ) != *fdfind && $( whereis -b fd | awk '{print $2}' ) != *fd ]] && >&2 echo "Can't use SmartCd: fd or fdfind not found !"
 fi
