@@ -38,10 +38,10 @@ A `cd` command with improved and extended usability features to quickly navigate
   </details>
 
 ### Other Features
-- Remove invalid paths from log using `--cleanup` option.
+- Remove invalid paths from log using `--clean` option.
 
   ```bash
-  cd --cleanup
+  cd --clean
   ```
 
 - Use `--version` option to print version information.

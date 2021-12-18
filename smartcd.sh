@@ -14,10 +14,10 @@ __smartcd__() {
 
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
-	export SMARTCD_VERSION="v1.5.0"
+	export SMARTCD_VERSION="v2.0.0"
 
 	# options customizations
-	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--cleanup"} # option for cleanup of log file
+	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--clean"} # option for cleanup of log file
 	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT:-".."} # option for searching & traversing to parent-directories
 	export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT:-"--"} # option for searching & traversing to recently visited directories
 	export SMARTCD_GIT_ROOT_OPT=${SMARTCD_GIT_ROOT_OPT:-"."} # option for traversing to root of the git repo
