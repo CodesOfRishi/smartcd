@@ -153,7 +153,7 @@ To use a different option name to print version information, export <code>SMARTC
 
 ## Other Info
 
-`smartcd` also search results from directories that would otherwise be ignored by
+`smartcd` will now search results from directories that would otherwise be ignored by
 
 - `.gitignore`
 - `.git/info/exclude`
