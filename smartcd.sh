@@ -14,7 +14,7 @@ __smartcd__() {
 
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
-	export SMARTCD_VERSION="v1.3.3"
+	export SMARTCD_VERSION="v1.4.0"
 
 	# options customizations
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--cleanup"} # option for cleanup of log file
@@ -25,6 +25,17 @@ __smartcd__() {
 
 	# log files
 	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
+
+	# arguments for find or fd/fdfind command
+	if [[ ${find_command} = *fdfind || ${find_command} = *fd ]]; then
+		find_sub_dir_cmd_args="${find_command} --hidden --exclude .git/ --type d -I"
+		find_parent_dir_cmd_args="${find_command} --exclude .git/ --search-path \${_path} -t d --max-depth=1 -H -I"
+		find_parent_dir_root_cmd_args="${find_command} --exclude .git/ --search-path / -t d --max-depth=1 -H -I"
+	else 
+		find_sub_dir_cmd_args="${find_command} . -type d ! -path '*/\.git/*' | grep -v '\.git$'"
+		find_parent_dir_cmd_args="${find_command} \${_path} -maxdepth 1 -type d ! -path '*/\.git/*'"
+		find_parent_dir_root_cmd_args="${find_command} / -maxdepth 1 -type d ! -path '*/\.git/*'"
+	fi
 
 	# ---------------------------------------------------------------------------------------------------------------------
 
@@ -57,9 +68,9 @@ __smartcd__() {
 			local selected_entry=""
 			validate_rec_listing_cmd
 			if [[ ${SMARTCD_REC_LISTING_CMD} == "" ]]; then
-				selected_entry=($(${find_command} --hidden --exclude .git/ --type d | fzf --exit-0 --query="${path_argument}"))
+				selected_entry=($(eval ${find_sub_dir_cmd_args} | fzf --exit-0 --query="${path_argument}"))
 			else
-				selected_entry=($(${find_command} --hidden --exclude .git/ --type d | fzf --exit-0 --query="${path_argument}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
+				selected_entry=($(eval ${find_sub_dir_cmd_args} | fzf --exit-0 --query="${path_argument}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
 			fi
 
 			if [[ ${selected_entry} = "" ]]; then
@@ -104,10 +115,10 @@ __smartcd__() {
 		find_parent_dir_paths() {
 			_path=${PWD%/*}
 			while [[ ${_path} != "" ]]; do
-				${find_command} --exclude .git/ --search-path ${_path} -t d --max-depth=1 -H
+				eval ${find_parent_dir_cmd_args}
 				_path=${_path%/*}
 			done
-			[[ ${PWD} != "/" ]] && fd --exclude .git/ --search-path / -t d --max-depth=1 -H
+			[[ ${PWD} != "/" ]] && eval ${find_parent_dir_root_cmd_args}
 		}
 
 		local query=$@
@@ -168,14 +179,16 @@ __smartcd__() {
 	fi
 }
 
-# validate if both fzf & fd/fdfind are available or not
+# validate if both fzf & fd/fdfind & find are available or not
 if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf ]]; then
 	if [[ $( whereis -b fdfind | awk '{print $2}' ) = *fdfind ]]; then
 		find_command="fdfind"
 	elif [[ $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then
 		find_command="fd"
+	elif [[ $( whereis -b find | awk '{print $2}' ) = *find ]]; then
+		find_command="find"
 	else
-		>&2 echo "Can't use SmartCd: fd/fdfind not found !"
+		>&2 echo "Can't use SmartCd: fd/fdfind or find not found !"
 	fi
 
 	if [[ find_command != "" ]]; then
