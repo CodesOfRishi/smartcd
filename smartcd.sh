@@ -140,16 +140,22 @@ __smartcd__() {
 	# cleanup
 	cleanup_log() {
 		local line_no="1"
-		local tmp_log=$( mktemp )
+		local valid_paths=$( mktemp )
+		local invalid_paths=$( mktemp )
 
 		while [[ ${line_no} -le ${SMARTCD_HIST_SIZE} ]]; do
 			_path=$( sed -n $line_no'p' ${recent_dir_log} )
 
-			[[ -d ${_path} ]] && echo ${_path} >> ${tmp_log}
+			if [[ -d ${_path} ]]; then echo ${_path} >> ${valid_paths}
+			else echo ${_path} >> ${invalid_paths}; fi
 			line_no=$(( ${line_no} + 1 ))
 		done
-		cp -i ${tmp_log} ${recent_dir_log}
-		rm -rf ${tmp_log}
+		cp -i ${valid_paths} ${recent_dir_log}
+		rm -rf ${valid_paths}
+
+		sed -i '/^$/d' ${invalid_paths} # remove empty/blank lines
+		[[ -s ${invalid_paths} ]] && echo "\nThe following directories got deleted from log:" && cat ${invalid_paths}
+		rm -rf ${invalid_paths}
 	}
 
 	# ---------------------------------------------------------------------------------------------------------------------
