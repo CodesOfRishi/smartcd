@@ -14,7 +14,7 @@ __smartcd__() {
 
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
-	export SMARTCD_VERSION="v1.4.0"
+	export SMARTCD_VERSION="v1.4.1"
 
 	# options customizations
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--cleanup"} # option for cleanup of log file
@@ -28,13 +28,13 @@ __smartcd__() {
 
 	# arguments for find or fd/fdfind command
 	if [[ ${find_command} = *fdfind || ${find_command} = *fd ]]; then
-		find_sub_dir_cmd_args="${find_command} --hidden --exclude .git/ --type d -I"
-		find_parent_dir_cmd_args="${find_command} --exclude .git/ --search-path \${_path} -t d --max-depth=1 -H -I"
-		find_parent_dir_root_cmd_args="${find_command} --exclude .git/ --search-path / -t d --max-depth=1 -H -I"
+		local find_sub_dir_cmd_args="${find_command} --hidden --exclude .git/ --type d -I"
+		local find_parent_dir_cmd_args="${find_command} --exclude .git/ --search-path \${_path} -t d --max-depth=1 -H -I"
+		local find_parent_dir_root_cmd_args="${find_command} --exclude .git/ --search-path / -t d --max-depth=1 -H -I"
 	else 
-		find_sub_dir_cmd_args="${find_command} . -type d ! -path '*/\.git/*' | grep -v '\.git$'"
-		find_parent_dir_cmd_args="${find_command} \${_path} -maxdepth 1 -type d ! -path '*/\.git/*'"
-		find_parent_dir_root_cmd_args="${find_command} / -maxdepth 1 -type d ! -path '*/\.git/*'"
+		local find_sub_dir_cmd_args="${find_command} . -type d ! -path '*/\.git/*' | grep -v '\.git$'"
+		local find_parent_dir_cmd_args="${find_command} \${_path} -maxdepth 1 -type d ! -path '*/\.git/*'"
+		local find_parent_dir_root_cmd_args="${find_command} / -maxdepth 1 -type d ! -path '*/\.git/*'"
 	fi
 
 	# ---------------------------------------------------------------------------------------------------------------------
