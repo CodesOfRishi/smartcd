@@ -62,19 +62,20 @@ I started by making `smartcd` remember the last 20 unique visited paths using th
 ## Requirements
 
 - [Fzf](https://github.com/junegunn/fzf)
-- [Fd](https://github.com/sharkdp/fd)
 
 Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash/).
 
 ### Optional requirement but recommended
 
-Any tool that can *recursively list directories as a tree*.
+- [Fd](https://github.com/sharkdp/fd)
 
-`smartcd` has inbuilt support for [`exa`](https://github.com/ogham/exa) & `tree`, i.e., just install either `exa` or `tree`, and `smartcd` will handle the rest.
+- Any tool that can *recursively list directories as a tree*.
 
-Otherwise, if you want to use any other tool, you need to export `SMARTCD_REC_LISTING_CMD` env with your desired command (with options). 
+  `smartcd` has inbuilt support for [`exa`](https://github.com/ogham/exa) & `tree`, i.e., just install either `exa` or `tree`, and `smartcd` will handle the rest.
 
-Even if you want to use `exa` or `tree` with different options other than the default ones that `smartcd` is using, you can export `SMARTCD_REC_LISTING_CMD` env specifying the command with your desired options.
+  Otherwise, if you want to use any other tool, you need to export `SMARTCD_REC_LISTING_CMD` env with your desired command (with options). 
+
+  Even if you want to use `exa` or `tree` with different options other than the default ones that `smartcd` is using, you can export `SMARTCD_REC_LISTING_CMD` env specifying the command with your desired options.
 
 ## Installation
 
@@ -150,6 +151,17 @@ To use a different option name for removing invalid paths from log, export <code
 To use a different option name to print version information, export <code>SMARTCD_VERSION_OPT</code> with your desired option name. This defaults to <code>--version</code>.
 </details>
 
+## Other Info
+
+`smartcd` also search results from directories that would otherwise be ignored by
+
+- `.gitignore`
+- `.git/info/exclude`
+- The global gitignore configuration (by default `$HOME/.config/git/ignore`)
+- `.ignore`
+- [`.fdignore`](https://github.com/sharkdp/fd#excluding-specific-files-or-directories) (if using `fd`)
+- The global [fd ignore file](https://github.com/sharkdp/fd#excluding-specific-files-or-directories) (usually `$HOME/.config/fd/ignore`) (if using `fd`)
+
 ## Known Caveats
 
 - `cd .` won't work if you're in `.git/` directory of a git repository.
@@ -158,7 +170,7 @@ To use a different option name to print version information, export <code>SMARTC
 ## To Do
 
 - [x] Users must be able to configure the number of unique last visited paths `smartcd` should remember.
-- [ ] Make `fd` optional: Find alternative to the `fd` command used in the script using the `find` command.
+- [x] Make `fd` optional: Find alternative to the `fd` command used in the script using the `find` command.
 
 ## Inspiration
 
