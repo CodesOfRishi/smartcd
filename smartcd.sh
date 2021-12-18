@@ -168,14 +168,20 @@ __smartcd__() {
 	fi
 }
 
-# validate if both fzf & fd or fdfind are available or not
-if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf ]] && [[ $( whereis -b fdfind | awk '{print $2}' ) = *fdfind || $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then
-	if [[ $( whereis -b fdfind | awk '{print $2}' ) = *fdfind ]]; then find_command="fdfind"
-	elif [[ $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then find_command="fd"; fi
+# validate if both fzf & fd/fdfind are available or not
+if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf ]]; then
+	if [[ $( whereis -b fdfind | awk '{print $2}' ) = *fdfind ]]; then
+		find_command="fdfind"
+	elif [[ $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then
+		find_command="fd"
+	else
+		>&2 echo "Can't use SmartCd: fd/fdfind not found !"
+	fi
 
-	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
-	alias $SMARTCD_COMMAND="__smartcd__"
-else
-	[[ $( whereis -b fzf | awk '{print $2}' ) != *fzf ]] && >&2 echo "Can't use SmartCd: fzf not found !"
-	[[ $( whereis -b fdfind | awk '{print $2}' ) != *fdfind && $( whereis -b fd | awk '{print $2}' ) != *fd ]] && >&2 echo "Can't use SmartCd: fd or fdfind not found !"
+	if [[ find_command != "" ]]; then
+		export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
+		alias $SMARTCD_COMMAND="__smartcd__"
+	fi
+else 
+	>&2 echo "Can't use SmartCd: fzf not found !"
 fi
