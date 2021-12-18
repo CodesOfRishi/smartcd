@@ -27,14 +27,14 @@ __smartcd__() {
 	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
 
 	# arguments for find or fd/fdfind command
-	if [[ ${find_command} = *fdfind || ${find_command} = *fd ]]; then
-		local find_sub_dir_cmd_args="${find_command} --hidden --exclude .git/ --type d -I"
-		local find_parent_dir_cmd_args="${find_command} --exclude .git/ --search-path \${_path} -t d --max-depth=1 -H -I"
-		local find_parent_dir_root_cmd_args="${find_command} --exclude .git/ --search-path / -t d --max-depth=1 -H -I"
+	if [[ ${smartcd_finder} = *fdfind || ${smartcd_finder} = *fd ]]; then
+		local find_sub_dir_cmd_args="${smartcd_finder} --hidden --exclude .git/ --type d -I"
+		local find_parent_dir_cmd_args="${smartcd_finder} --exclude .git/ --search-path \${_path} -t d --max-depth=1 -H -I"
+		local find_parent_dir_root_cmd_args="${smartcd_finder} --exclude .git/ --search-path / -t d --max-depth=1 -H -I"
 	else 
-		local find_sub_dir_cmd_args="${find_command} . -type d ! -path '*/\.git/*' | grep -v '\.git$'"
-		local find_parent_dir_cmd_args="${find_command} \${_path} -maxdepth 1 -type d ! -path '*/\.git/*'"
-		local find_parent_dir_root_cmd_args="${find_command} / -maxdepth 1 -type d ! -path '*/\.git/*'"
+		local find_sub_dir_cmd_args="${smartcd_finder} . -type d ! -path '*/\.git/*' | grep -v '\.git$'"
+		local find_parent_dir_cmd_args="${smartcd_finder} \${_path} -maxdepth 1 -type d ! -path '*/\.git/*'"
+		local find_parent_dir_root_cmd_args="${smartcd_finder} / -maxdepth 1 -type d ! -path '*/\.git/*'"
 	fi
 
 	# ---------------------------------------------------------------------------------------------------------------------
@@ -174,16 +174,16 @@ __smartcd__() {
 # validate if both fzf & fd/fdfind & find are available or not
 if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf ]]; then
 	if [[ $( whereis -b fdfind | awk '{print $2}' ) = *fdfind ]]; then
-		find_command="fdfind"
+		smartcd_finder="fdfind"
 	elif [[ $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then
-		find_command="fd"
+		smartcd_finder="fd"
 	elif [[ $( whereis -b find | awk '{print $2}' ) = *find ]]; then
-		find_command="find"
+		smartcd_finder="find"
 	else
 		>&2 echo "Can't use SmartCd: fd/fdfind or find not found !"
 	fi
 
-	if [[ find_command != "" ]]; then
+	if [[ smartcd_finder != "" ]]; then
 		export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
 		alias $SMARTCD_COMMAND="__smartcd__"
 	fi
