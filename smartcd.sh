@@ -14,7 +14,7 @@ __smartcd__() {
 
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
-	export SMARTCD_VERSION="v1.3.2"
+	export SMARTCD_VERSION="v1.3.3"
 
 	# options customizations
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--cleanup"} # option for cleanup of log file
@@ -107,6 +107,7 @@ __smartcd__() {
 				${find_command} --exclude .git/ --search-path ${_path} -t d --max-depth=1 -H
 				_path=${_path%/*}
 			done
+			[[ ${PWD} != "/" ]] && fd --exclude .git/ --search-path / -t d --max-depth=1 -H
 		}
 
 		local query=$@
