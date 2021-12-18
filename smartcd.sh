@@ -14,7 +14,7 @@ __smartcd__() {
 
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
-	export SMARTCD_VERSION="v2.0.0"
+	export SMARTCD_VERSION="v2.0.1"
 
 	# options customizations
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--clean"} # option for cleanup of log file
@@ -154,7 +154,7 @@ __smartcd__() {
 		rm -rf ${valid_paths}
 
 		sed -i '/^$/d' ${invalid_paths} # remove empty/blank lines
-		[[ -s ${invalid_paths} ]] && echo "\nThe following directories got deleted from log:" && cat ${invalid_paths}
+		[[ -s ${invalid_paths} ]] && echo "\nDeleted directory path(s):" && cat ${invalid_paths}
 		rm -rf ${invalid_paths}
 	}
 
