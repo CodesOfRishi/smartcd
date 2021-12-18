@@ -48,6 +48,16 @@ __smartcd__() {
 		else export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-""}; fi
 	}
 
+	run_fzf_command() {
+		local query=$@
+		validate_rec_listing_cmd
+		if [[ ${SMARTCD_REC_LISTING_CMD} = "" ]]; then
+			fzf --exit-0 --query="${query}"
+		else
+			fzf --exit-0 --query="${query}" --preview "${SMARTCD_REC_LISTING_CMD} {}"
+		fi
+	}
+
 	# generate logs of recently visited dirs
 	generate_recent_dir_log() { 
 		[[ -f ${recent_dir_log} ]] || touch ${recent_dir_log}
@@ -65,13 +75,7 @@ __smartcd__() {
 		local path_argument=$@
 		builtin cd ${path_argument} 2> /dev/null
 		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
-			local selected_entry=""
-			validate_rec_listing_cmd
-			if [[ ${SMARTCD_REC_LISTING_CMD} == "" ]]; then
-				selected_entry=($(eval ${find_sub_dir_cmd_args} | fzf --exit-0 --query="${path_argument}"))
-			else
-				selected_entry=($(eval ${find_sub_dir_cmd_args} | fzf --exit-0 --query="${path_argument}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
-			fi
+			local selected_entry=($( eval ${find_sub_dir_cmd_args} | run_fzf_command ${path_argument} ))
 
 			if [[ ${selected_entry} = "" ]]; then
 				>&2 echo "No directory found or selected!"
@@ -89,13 +93,7 @@ __smartcd__() {
 			>&2 echo "No any visited directory in record !!"
 		else
 			local query=$@
-			local selected_entry=""
-			validate_rec_listing_cmd
-			if [[ ${SMARTCD_REC_LISTING_CMD} == "" ]]; then
-				selected_entry=($(cat ${recent_dir_log} | fzf --exit-0 --query="${query}"))
-			else 
-				selected_entry=($(cat ${recent_dir_log} | fzf --exit-0 --query="${query}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
-			fi
+			local selected_entry=($( cat ${recent_dir_log} | run_fzf_command ${query} ))
 
 			if [[ ${selected_entry} = "" ]]; then
 				>&2 echo "No directory found or selected!"
@@ -122,13 +120,7 @@ __smartcd__() {
 		}
 
 		local query=$@
-		local selected_entry=""
-		validate_rec_listing_cmd
-		if [[ ${SMARTCD_REC_LISTING_CMD} = "" ]]; then
-			selected_entry=($(find_parent_dir_paths | fzf --exit-0 --query="${query}"))
-		else
-			selected_entry=($(find_parent_dir_paths | fzf --exit-0 --query="${query}" --preview "${SMARTCD_REC_LISTING_CMD} {}"))
-		fi
+		local selected_entry=($( find_parent_dir_paths | run_fzf_command ${query} ))
 
 		if [[ ${selected_entry} = "" ]]; then
 			>&2 echo "No directory found or selected!"
