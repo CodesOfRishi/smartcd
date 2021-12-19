@@ -81,6 +81,8 @@ Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash
 
 ## Installation
 
+### Manual Installation
+
 1. Download the `smartcd.sh` script.
 
    ```bash
