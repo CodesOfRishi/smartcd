@@ -14,7 +14,7 @@ __smartcd__() {
 
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
-	export SMARTCD_VERSION="v2.0.1"
+	export SMARTCD_VERSION="v2.1.0"
 
 	# options customizations
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--clean"} # option for cleanup of log file
@@ -32,7 +32,7 @@ __smartcd__() {
 		local find_parent_dir_cmd_args="${smartcd_finder} --exclude .git/ --search-path \${_path} -t d --max-depth=1 -H -I"
 		local find_parent_dir_root_cmd_args="${smartcd_finder} --exclude .git/ --search-path / -t d --max-depth=1 -H -I"
 	else 
-		local find_sub_dir_cmd_args="${smartcd_finder} . -type d ! -path '*/\.git/*' | grep -v '\.git$'"
+		local find_sub_dir_cmd_args="${smartcd_finder} . -type d ! -path '*/\.git/*' | ${smartcd_grep} -v '\.git$'"
 		local find_parent_dir_cmd_args="${smartcd_finder} \${_path} -maxdepth 1 -type d ! -path '*/\.git/*'"
 		local find_parent_dir_root_cmd_args="${smartcd_finder} / -maxdepth 1 -type d ! -path '*/\.git/*'"
 	fi
@@ -179,6 +179,7 @@ __smartcd__() {
 
 # validate if both fzf & fd/fdfind & find are available or not
 if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf ]]; then
+	# validate fd/fdfind & find
 	if [[ $( whereis -b fdfind | awk '{print $2}' ) = *fdfind ]]; then
 		smartcd_finder="fdfind"
 	elif [[ $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then
@@ -189,7 +190,16 @@ if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf ]]; then
 		>&2 echo "Can't use SmartCd: fd/fdfind or find not found !"
 	fi
 
-	if [[ smartcd_finder != "" ]]; then
+	# validate rg and grep
+	if [[ $( whereis -b rg | awk '{print $2}' ) = *rg ]]; then
+		smartcd_grep="rg"
+	elif [[ $( whereis -b grep | awk '{print $2}' ) = *grep ]]; then
+		smartcd_grep="grep"
+	else
+		>&2 echo "Can't use SmartCd: rg or grep not found !"
+	fi
+
+	if [[ smartcd_finder != "" && smartcd_grep != "" ]]; then
 		export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
 		alias $SMARTCD_COMMAND="__smartcd__"
 	fi
