@@ -104,6 +104,22 @@ Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash
 
 3. Open a new shell or reload your shell configuration file.
 
+### Using Homebrew
+
+Currently has `v2.0.1`.
+
+```bash
+brew tap CodesOfRishi/smartcd
+brew install smartcd
+echo "source \$( whereis -b smartcd.sh | awk '{print \$2}' )" >> $HOME/.bashrc # or $HOME/.zshrc if using Zsh
+```
+
+This will also install the required dependencies, but you may have to install the optional dependencies yourself.
+
+```bash
+brew upgrade smartcd # to upgrade smartcd
+```
+
 
 ## Configurations
 <details>
