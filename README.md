@@ -65,9 +65,11 @@ I started by making `smartcd` remember the last 20 unique visited paths using th
 
 Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash/).
 
-### Optional requirement but recommended
+### Optional requirements but recommended
 
 - [Fd](https://github.com/sharkdp/fd)
+
+- [Ripgrep](https://github.com/BurntSushi/ripgrep)
 
 - Any tool that can *recursively list directories as a tree*.
 
