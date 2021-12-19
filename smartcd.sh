@@ -88,7 +88,7 @@ __smartcd__() {
 	}
 
 	# feature
-	recent_visited_dirs() {
+	recent_dir_hop() {
 		if [[ ! -s ${recent_dir_log} ]]; then
 			>&2 echo "No any visited directory in record !!"
 		else
@@ -130,7 +130,7 @@ __smartcd__() {
 	}
 
 	# feature
-	goto_git_repo_root() {
+	git_root_dir_hop() {
 		local git_repo_root_dir=$( git rev-parse --show-toplevel )
 		if [[ ${git_repo_root_dir} != "" && ${git_repo_root_dir} != ${PWD} ]]; then 
 			builtin cd ${git_repo_root_dir} && generate_recent_dir_log && echo ${PWD}
@@ -163,9 +163,9 @@ __smartcd__() {
 	if [[ $1 == "${SMARTCD_PARENT_DIR_OPT}" ]]; then
 		parent_dir_hop ${@:2}
 	elif [[ $1 == "${SMARTCD_HIST_OPT}" ]]; then
-		recent_visited_dirs ${@:2}
+		recent_dir_hop ${@:2}
 	elif [[ $1 == "${SMARTCD_GIT_ROOT_OPT}" ]]; then
-		goto_git_repo_root
+		git_root_dir_hop
 	elif [[ $1 == "${SMARTCD_CLEANUP_OPT}" ]]; then
 		cleanup_log
 	elif [[ $1 == "${SMARTCD_VERSION_OPT}" ]]; then
