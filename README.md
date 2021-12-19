@@ -163,7 +163,7 @@ To use a different option name for traversing to root of a git repository, expor
 
 <details>
 <summary><strong><code>SMARTCD_CLEANUP_OPT</code></strong></summary> 
-To use a different option name for removing invalid paths from log, export <code>SMARTCD_CLEANUP_OPT</code> with your desired option name. This defaults to <code>--cleanup</code>.
+To use a different option name for removing invalid paths from log, export <code>SMARTCD_CLEANUP_OPT</code> with your desired option name. This defaults to <code>--clean</code>.
 </details>
 
 <details>
