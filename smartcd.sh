@@ -44,7 +44,7 @@ __smartcd__() {
 		if [[ $( whereis -b exa | awk '{print $2}' ) = *exa ]]; then
 			export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-"exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"}
 		elif [[ $( whereis -b tree | awk '{print $2}' ) = *tree ]]; then
-			export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-"tree -C"}
+			export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-"tree -I '.git' -C -a"}
 		else export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-""}; fi
 	}
 
