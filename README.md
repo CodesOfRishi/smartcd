@@ -16,7 +16,7 @@ A `cd` command with improved and extended usability features to quickly navigate
 
   <details>
   <summary>Screenshot</summary>
-      <img src="ss/smartcd-history.gif">
+      <img src="https://i.imgur.com/YlvKqNI.gif">
   </details>
 
 - If the provided argument is not in your `$CDPATH`, then `smartcd` will present you with a list of all the *sub-directories* that matched the argument, where you can Fuzzy search & directly traverse to the selected path.
@@ -25,7 +25,7 @@ A `cd` command with improved and extended usability features to quickly navigate
 
   <details>
   <summary>Screenshot</summary>
-      <img src="ss/smartcd-subdir.gif">
+      <img src="https://i.imgur.com/Ig6Dczy.gif">
   </details>
 
 - `smartcd` can also search *parent-directories* based on the argument string provided. It will list all parent directories that matched the argument string, where you can fuzzy search and automatically traverse to the selected path.
@@ -34,7 +34,7 @@ A `cd` command with improved and extended usability features to quickly navigate
 
   <details>
   <summary>Screenshot</summary>
-      <img src="ss/smartcd-parentdir.gif">
+      <img src="https://i.imgur.com/7bjKbZV.gif">
   </details>
 
 ### Other Features
