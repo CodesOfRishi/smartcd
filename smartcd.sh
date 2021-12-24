@@ -159,22 +159,27 @@ __smartcd__() {
 	}
 
 	# ---------------------------------------------------------------------------------------------------------------------
-	
-	if [[ $1 == "${SMARTCD_PARENT_DIR_OPT}" ]]; then
-		parent_dir_hop ${@:2}
-	elif [[ $1 == "${SMARTCD_HIST_OPT}" ]]; then
-		recent_dir_hop ${@:2}
-	elif [[ $1 == "${SMARTCD_GIT_ROOT_OPT}" ]]; then
-		git_root_dir_hop
-	elif [[ $1 == "${SMARTCD_CLEANUP_OPT}" ]]; then
-		cleanup_log
-	elif [[ $1 == "${SMARTCD_VERSION_OPT}" ]]; then
-		echo "SmartCd by Rishi K. - ${SMARTCD_VERSION}"
-		echo "The MIT License (MIT)"
-		echo "Copyright (c) 2021 Rishi K."
-	else
-		sub_dir_hop $@
-	fi
+
+	validate_parameters() {
+		local parameters=$@
+		if [[ $1 == "${SMARTCD_PARENT_DIR_OPT}" ]]; then
+			parent_dir_hop ${@:2}
+		elif [[ $1 == "${SMARTCD_HIST_OPT}" ]]; then
+			recent_dir_hop ${@:2}
+		elif [[ $1 == "${SMARTCD_GIT_ROOT_OPT}" ]]; then
+			git_root_dir_hop
+		elif [[ $1 == "${SMARTCD_CLEANUP_OPT}" ]]; then
+			cleanup_log
+		elif [[ $1 == "${SMARTCD_VERSION_OPT}" ]]; then
+			echo "SmartCd by Rishi K. - ${SMARTCD_VERSION}"
+			echo "The MIT License (MIT)"
+			echo "Copyright (c) 2021 Rishi K."
+		else
+			sub_dir_hop $@
+		fi
+	}
+
+	validate_parameters $@
 }
 
 # validate if both fzf & fd/fdfind & find are available or not
