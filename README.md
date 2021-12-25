@@ -193,6 +193,7 @@ To use a different option name to print version information, export <code>SMARTC
 
 - `cd .` won't work if you're in `.git/` directory of a git repository.
 - `cd .` will follow up any symbolic links. For e.g., if you're in `~/my-proj/foo/bar` and `~/my-proj` is symbolic linked to `~/src/my-proj`, then `cd .` command will move you to `~/src/my-proj`.
+- The piping feature only works with `Zsh`, because in `Bash` every command in a pipeline is executed as a separate process (i.e., in a subshell).
 
 ## To Do
 
