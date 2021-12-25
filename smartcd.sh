@@ -80,7 +80,7 @@ __smartcd__() {
 			if [[ ${selected_entry} = "" ]]; then
 				>&2 echo "No directory found or selected!"
 			else
-				builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
+				builtin cd ${selected_entry} && generate_recent_dir_log && [[ ${piped_value} = "" ]] && echo ${PWD}
 			fi
 		else
 			generate_recent_dir_log
@@ -98,7 +98,7 @@ __smartcd__() {
 			if [[ ${selected_entry} = "" ]]; then
 				>&2 echo "No directory found or selected!"
 			else
-				builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
+				builtin cd ${selected_entry} && generate_recent_dir_log && [[ ${piped_value} = "" ]] && echo ${PWD}
 			fi
 		fi
 	}
@@ -125,7 +125,7 @@ __smartcd__() {
 		if [[ ${selected_entry} = "" ]]; then
 			>&2 echo "No directory found or selected!"
 		else
-			builtin cd ${selected_entry} && generate_recent_dir_log && echo ${PWD}
+			builtin cd ${selected_entry} && generate_recent_dir_log && [[ ${piped_value} = "" ]] && echo ${PWD}
 		fi
 	}
 
@@ -133,7 +133,7 @@ __smartcd__() {
 	git_root_dir_hop() {
 		local git_repo_root_dir=$( git rev-parse --show-toplevel )
 		if [[ ${git_repo_root_dir} != "" && ${git_repo_root_dir} != ${PWD} ]]; then 
-			builtin cd ${git_repo_root_dir} && generate_recent_dir_log && echo ${PWD}
+			builtin cd ${git_repo_root_dir} && generate_recent_dir_log && [[ ${piped_value} = "" ]] && echo ${PWD}
 		fi
 	}
 
@@ -162,24 +162,58 @@ __smartcd__() {
 
 	validate_parameters() {
 		local parameters=$@
-		if [[ $1 == "${SMARTCD_PARENT_DIR_OPT}" ]]; then
-			parent_dir_hop ${@:2}
-		elif [[ $1 == "${SMARTCD_HIST_OPT}" ]]; then
-			recent_dir_hop ${@:2}
-		elif [[ $1 == "${SMARTCD_GIT_ROOT_OPT}" ]]; then
+
+		# exceptional case handling for zsh
+		[[ $( ps -p $$ ) = *zsh && $( echo - ${parameters} ) = "-" ]] && builtin cd - && generate_recent_dir_log && return
+
+		local arg2=$( echo -e ${parameters} | tr -s ' ' | sed 's|^ ||' | sed 's| $||' | awk '{$1=""; print $0}' )
+		local arg1=$( echo -e ${parameters} | tr -s ' ' | sed 's|^ ||' | sed 's| $||' | awk '{print $1}' )
+
+		if [[ ${arg1} = "${SMARTCD_PARENT_DIR_OPT}" ]]; then
+			parent_dir_hop ${arg2}
+		elif [[ ${arg1} = "${SMARTCD_HIST_OPT}" ]]; then
+			recent_dir_hop ${arg2}
+		elif [[ ${arg1} = "${SMARTCD_GIT_ROOT_OPT}" ]]; then
 			git_root_dir_hop
-		elif [[ $1 == "${SMARTCD_CLEANUP_OPT}" ]]; then
+		elif [[ ${arg1} = "${SMARTCD_CLEANUP_OPT}" ]]; then
 			cleanup_log
-		elif [[ $1 == "${SMARTCD_VERSION_OPT}" ]]; then
+		elif [[ ${arg1} = "${SMARTCD_VERSION_OPT}" ]]; then
 			echo "SmartCd by Rishi K. - ${SMARTCD_VERSION}"
 			echo "The MIT License (MIT)"
 			echo "Copyright (c) 2021 Rishi K."
 		else
-			sub_dir_hop $@
+			parameters=$( echo ${parameters} | sed "s|^~|${HOME}|" )
+			sub_dir_hop ${parameters}
 		fi
 	}
 
-	validate_parameters $@
+	read_pipe() {
+		local pipe_read="0"
+		while read -t 0.001 _line; do
+			echo ${_line}
+			[[ -n ${_line} ]] && pipe_read="1"
+		done
+		return ${pipe_read}
+	}
+
+	local piped_value=$( read_pipe | fzf --select-1 --exit-0; echo ": ${pipestatus[*]}" )
+	local return_val=(${piped_value##*: })
+	piped_value=${piped_value%:*}
+	piped_value=${piped_value%$'\n'}
+
+	[[ -z ${piped_value} && $( echo ${return_val} | awk '{print $1}' ) -ne 0 ]] && return 1
+	
+	if [[ -n ${piped_value} ]]; then
+		if [[ $( echo -e ${piped_value} | tr -s ' ' | sed 's|^ ||' | sed 's| $||' ) = ${SMARTCD_CLEANUP_OPT} ]]; then
+			echo "WARNING: Do not pipe '${SMARTCD_CLEANUP_OPT}' to SmartCd as it can clean the log file without the user's consent!"
+			echo "If you want to clean the log file, then run '${SMARTCD_COMMAND} ${SMARTCD_CLEANUP_OPT}'"
+		else
+			validate_parameters ${piped_value}
+		fi
+
+	else
+		validate_parameters $@
+	fi
 }
 
 # validate if both fzf & fd/fdfind & find are available or not
