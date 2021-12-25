@@ -15,7 +15,7 @@ A `cd` command with improved and extended usability features to quickly navigate
   **Syntax:** `cd -- [string ...]`
 
   <details>
-  <summary>Screenshot</summary>
+  <summary>DEMO</summary>
       <img src="https://i.imgur.com/YlvKqNI.gif">
   </details>
 
@@ -24,7 +24,7 @@ A `cd` command with improved and extended usability features to quickly navigate
   **Syntax:** `cd [string ...]`
 
   <details>
-  <summary>Screenshot</summary>
+  <summary>DEMO</summary>
       <img src="https://i.imgur.com/Ig6Dczy.gif">
   </details>
 
@@ -33,14 +33,14 @@ A `cd` command with improved and extended usability features to quickly navigate
   **Syntax:** `cd .. [string ...]`
 
   <details>
-  <summary>Screenshot</summary>
+  <summary>DEMO</summary>
       <img src="https://i.imgur.com/7bjKbZV.gif">
   </details>
 
 - You can pipe options, (with or without) arguments and as well as multiple directory paths to `smartcd`.
 
   <details>
-  <summary>Screenshot</summary>
+  <summary>DEMO</summary>
       <img src="https://i.imgur.com/ztEtqqX.gif">
   </details>
 
