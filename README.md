@@ -37,6 +37,13 @@ A `cd` command with improved and extended usability features to quickly navigate
       <img src="https://i.imgur.com/7bjKbZV.gif">
   </details>
 
+- You can pipe options, (with or without) arguments and as well as multiple directory paths to `smartcd`.
+
+  <details>
+  <summary>Screenshot</summary>
+      <img src="https://i.imgur.com/ztEtqqX.gif">
+  </details>
+
 ### Other Features
 - Remove invalid paths from log using `--clean` option.
 
