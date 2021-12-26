@@ -74,11 +74,12 @@ __smartcd__() {
 	sub_dir_hop() {
 		local path_argument=$@
 		builtin cd ${path_argument} 2> /dev/null
-		if [[ ! $? -eq 0 ]]; then # the directory is not in any of cdpath values
+		if [[ $? -ne 0 ]]; then # the directory is not in any of cdpath values
 			local selected_entry=($( eval ${find_sub_dir_cmd_args} | run_fzf_command ${path_argument} ))
 
-			if [[ ${selected_entry} = "" ]]; then
+			if [[ -z ${selected_entry} ]]; then
 				printf '%s\n' "No directory found or selected!" 1>&2
+				return 1
 			else
 				builtin cd ${selected_entry} && generate_recent_dir_log && \
 					if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
@@ -92,14 +93,17 @@ __smartcd__() {
 	recent_dir_hop() {
 		if [[ ! -s ${recent_dir_log} ]]; then
 			printf '%s\n' "No any visited directory in record !!" 1>&2
+			return 1
 		else
 			local query=$@
 			local selected_entry=($( cat ${recent_dir_log} | run_fzf_command ${query} ))
 
-			if [[ ${selected_entry} = "" ]]; then
+			if [[ -z ${selected_entry} ]]; then
 				printf '%s\n' "No directory found or selected!" 1>&2
+				return 1
 			else
-				builtin cd ${selected_entry} && generate_recent_dir_log && \
+				builtin cd ${selected_entry} || return 1
+				generate_recent_dir_log && \
 					if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
 			fi
 		fi
@@ -124,8 +128,9 @@ __smartcd__() {
 		local query=$@
 		local selected_entry=($( find_parent_dir_paths | run_fzf_command ${query} ))
 
-		if [[ ${selected_entry} = "" ]]; then
+		if [[ -z ${selected_entry} ]]; then
 			printf '%s\n' "No directory found or selected!" 1>&2
+			return 1
 		else
 			builtin cd ${selected_entry} && generate_recent_dir_log && \
 				if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
@@ -134,9 +139,12 @@ __smartcd__() {
 
 	# feature
 	git_root_dir_hop() {
-		local git_repo_root_dir=$( git rev-parse --show-toplevel )
-		if [[ ${git_repo_root_dir} != "" && ${git_repo_root_dir} != ${PWD} ]]; then 
-			builtin cd ${git_repo_root_dir} && generate_recent_dir_log && \
+		local git_root_dir=$( git rev-parse --show-toplevel )
+
+		if [[ -z ${git_root_dir} ]]; then
+			return 1
+		elif [[ ${git_root_dir} != ${PWD} ]]; then 
+			builtin cd ${git_root_dir} && generate_recent_dir_log && \
 				if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
 		fi
 	}
@@ -208,6 +216,7 @@ __smartcd__() {
 		if [[ $( printf '%s\n' "${piped_value}" | tr -s ' ' | sed 's|^ ||' | sed 's| $||' ) = ${SMARTCD_CLEANUP_OPT} ]]; then
 			printf '%s\n' "WARNING: Do not pipe '${SMARTCD_CLEANUP_OPT}' to SmartCd as it can clean the log file without the user's consent!"
 			printf '%s\n' "If you want to clean the log file, then run '${SMARTCD_COMMAND} ${SMARTCD_CLEANUP_OPT}'"
+			return 1
 		else
 			validate_parameters ${piped_value}
 		fi
