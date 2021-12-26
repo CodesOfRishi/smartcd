@@ -63,16 +63,13 @@ Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash
 ### Optional requirements but recommended
 
 - [Fd](https://github.com/sharkdp/fd)
-
 - [Ripgrep](https://github.com/BurntSushi/ripgrep)
+- [Exa](https://the.exa.website/) or [Tree](https://linux.die.net/man/1/tree)
+  - Fzf will use the current line from the filter as the argument for `exa` or `tree`, and will show the result in a split window of the filter.
+  - `smartcd` has inbuilt support for `exa` and `tree`, i.e., just install either `exa` or `tree`, and `smartcd` will handle the rest.
+  - Otherwise, if you want to use any other tool, you need to export `SMARTCD_REC_LISTING_CMD` env with your desired command (with options).
+  - Even if you want to use `exa` or `tree` with different options other than the default ones, you can export `SMARTCD_REC_LISTING_CMD` env specifying the command with your desired options.
 
-- Any tool that can *recursively list directories as a tree*.
-
-  `smartcd` has inbuilt support for [`exa`](https://github.com/ogham/exa) & `tree`, i.e., just install either `exa` or `tree`, and `smartcd` will handle the rest.
-
-  Otherwise, if you want to use any other tool, you need to export `SMARTCD_REC_LISTING_CMD` env with your desired command (with options). 
-
-  Even if you want to use `exa` or `tree` with different options other than the default ones that `smartcd` is using, you can export `SMARTCD_REC_LISTING_CMD` env specifying the command with your desired options.
 
 ## Installation
 
