@@ -14,35 +14,23 @@ A `cd` command with improved and extended usability features to quickly navigate
 
   **Syntax:** `cd -- [string ...]`
 
-  <details>
-  <summary>DEMO</summary>
-      <img src="https://i.imgur.com/YlvKqNI.gif">
-  </details>
-
+  <img src="https://i.imgur.com/a5Ddvif.gif">
+  
 - If the provided argument is not in your `$CDPATH`, then `smartcd` will present you with a list of all the *sub-directories* that matched the argument, where you can Fuzzy search & directly traverse to the selected path.
 
   **Syntax:** `cd [string ...]`
 
-  <details>
-  <summary>DEMO</summary>
-      <img src="https://i.imgur.com/Ig6Dczy.gif">
-  </details>
-
+  <img src="https://i.imgur.com/fVbZjcI.gif">
+  
 - `smartcd` can also search *parent-directories* based on the argument string provided. It will list all parent directories that matched the argument string, where you can fuzzy search and automatically traverse to the selected path.
 
   **Syntax:** `cd .. [string ...]`
 
-  <details>
-  <summary>DEMO</summary>
-      <img src="https://i.imgur.com/7bjKbZV.gif">
-  </details>
-
+  <img src="https://i.imgur.com/eR9veZ0.gif">
+  
 - You can pipe options, (with or without) arguments and as well as multiple directory paths to `smartcd`.
 
-  <details>
-  <summary>DEMO</summary>
-      <img src="https://i.imgur.com/ztEtqqX.gif">
-  </details>
+  <img src="https://i.imgur.com/E9KBJmr.gif">
 
 ### Other Features
 - Remove invalid paths from log using `--clean` option.
