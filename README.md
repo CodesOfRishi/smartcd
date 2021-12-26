@@ -183,11 +183,6 @@ To use a different option name to print version information, export <code>SMARTC
 - `cd .` will follow up any symbolic links. For e.g., if you're in `~/my-proj/foo/bar` and `~/my-proj` is symbolic linked to `~/src/my-proj`, then `cd .` command will move you to `~/src/my-proj`.
 - The piping feature only works with `Zsh`, because in `Bash` every command in a pipeline is executed as a separate process (i.e., in a subshell).
 
-## To Do
-
-- [x] Users must be able to configure the number of unique last visited paths `smartcd` should remember.
-- [x] Make `fd` optional: Find alternative to the `fd` command used in the script using the `find` command.
-
 ## Inspiration
 
 [enhancd](https://github.com/b4b4r07/enhancd)
