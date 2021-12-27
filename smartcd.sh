@@ -174,9 +174,10 @@ __smartcd__() {
 
 	validate_parameters() {
 		local parameters=$@
+		parameters=$( printf '%s\n' "${parameters}" | awk '{$1=$1;print}' )
 
-		local arg1=$( printf '%s\n' "${parameters}" | tr -s ' ' | sed 's|^ ||' | sed 's| $||' | awk '{print $1}' )
-		local arg2=$( printf '%s\n' "${parameters}" | tr -s ' ' | sed 's|^ ||' | sed 's| $||' | awk '{$1=""; print $0}' )
+		local arg1=$( printf '%s\n' "${parameters}" | awk '{print $1}' )
+		local arg2=$( printf '%s\n' "${parameters}" | awk '{$1=""; print $0}' | awk '{$1=$1;print}' )
 
 		if [[ ${arg1} = "${SMARTCD_PARENT_DIR_OPT}" ]]; then
 			parent_dir_hop ${arg2}
@@ -213,7 +214,7 @@ __smartcd__() {
 	[[ -z ${piped_value} && $( printf '%s\n' "${return_val}" | awk '{print $1}' ) -ne 0 ]] && return 1
 	
 	if [[ -n ${piped_value} ]]; then
-		if [[ $( printf '%s\n' "${piped_value}" | tr -s ' ' | sed 's|^ ||' | sed 's| $||' ) = ${SMARTCD_CLEANUP_OPT} ]]; then
+		if [[ $( printf '%s\n' "${piped_value}" | awk '{$1=$1;print}' ) = ${SMARTCD_CLEANUP_OPT} ]]; then
 			printf '%s\n' "WARNING: Do not pipe '${SMARTCD_CLEANUP_OPT}' to SmartCd as it can clean the log file without the user's consent!"
 			printf '%s\n' "If you want to clean the log file, then run '${SMARTCD_COMMAND} ${SMARTCD_CLEANUP_OPT}'"
 			return 1
