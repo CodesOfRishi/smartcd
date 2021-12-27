@@ -126,17 +126,30 @@ brew upgrade smartcd # to upgrade smartcd
 
 
 ## Configurations
+
 <details>
 <summary><strong><code>SMARTCD_CONFIG_DIR</code></strong></summary>
 <code>smartcd</code> stores logs in this location, which defaults to <code>~/.config/.smartcd</code>. To change location of the log file, export <code>SMARTCD_CONFIG_DIR</code> with your desired location.
 </details>
+
 <details>
-<summary><strong><code>SMARTCD_FZF_PREVIEW_CMD</code></strong></summary> 
-Command (with options) to use with current line as argument from the <code>fzf</code> filter to show its result in <code>fzf</code>'s split/preview window.<br>
-For <code>exa</code>, it defaults to <code>exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always</code>.<br>
-For <Code>tree</Code>, it defaults to <Code>tree -I '.git' -C -a</Code>.
+<summary><strong><code>SMARTCD_SELECT_ONE</code></strong></summary>
+If only 1 matching path is found and if the env is set to
+<ul>
+<li><code>1</code> then <code>smartcd</code> will directly traverse to the only matched directory path.</li>
+<li><code>0</code> then <code>smartcd</code> will bring the interactive <code>fzf</code> filter before travering to the path.</li>
+</ul>
+This defaults to <code>0</code>.
 </details>
 
+<details>
+<summary><strong><code>SMARTCD_FZF_PREVIEW_CMD</code></strong></summary> 
+Command (with options) to use with current line as argument from the <code>fzf</code> filter to show its result in <code>fzf</code>'s split/preview window.
+<ul>
+<li>For <code>exa</code>, it defaults to <code>exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always</code>.</li>
+<li>For <Code>tree</Code>, it defaults to <Code>tree -I '.git' -C -a</Code>.</li>
+</ul>
+</details>
 
 <details>
 <summary><strong><code>SMARTCD_HIST_SIZE</code></strong></summary> 
