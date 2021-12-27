@@ -14,6 +14,7 @@ __smartcd__() {
 
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
+	export SMARTCD_SELECT_ONE=${SMARTCD_SELECT_ONE:-"0"}
 	export SMARTCD_VERSION="v3.0.1"
 
 	# options customizations
@@ -50,11 +51,14 @@ __smartcd__() {
 
 	run_fzf_command() {
 		local query=$@
+		local select_one=""
+		[[ ${SMARTCD_SELECT_ONE} -eq 1 ]] && select_one="--select-1"
+
 		validate_fzf_preview_cmd
 		if [[ -z ${SMARTCD_FZF_PREVIEW_CMD} ]]; then
-			fzf --exit-0 --query="${query}"
+			fzf ${select_one} --exit-0 --query="${query}"
 		else
-			fzf --exit-0 --query="${query}" --preview "${SMARTCD_FZF_PREVIEW_CMD} {}"
+			fzf ${select_one} --exit-0 --query="${query}" --preview "${SMARTCD_FZF_PREVIEW_CMD} {}"
 		fi
 	}
 
