@@ -39,22 +39,22 @@ __smartcd__() {
 
 	# ---------------------------------------------------------------------------------------------------------------------
 
-	# configure & validate SMARTCD_REC_LISTING_CMD env
-	validate_rec_listing_cmd() {
+	# configure & validate SMARTCD_FZF_PREVIEW_CMD env
+	validate_fzf_preview_cmd() {
 		if [[ $( whereis -b exa | awk '{print $2}' ) = *exa ]]; then
-			export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-"exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"}
+			export SMARTCD_FZF_PREVIEW_CMD=${SMARTCD_FZF_PREVIEW_CMD:-"exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"}
 		elif [[ $( whereis -b tree | awk '{print $2}' ) = *tree ]]; then
-			export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-"tree -I '.git' -C -a"}
-		else export SMARTCD_REC_LISTING_CMD=${SMARTCD_REC_LISTING_CMD:-""}; fi
+			export SMARTCD_FZF_PREVIEW_CMD=${SMARTCD_FZF_PREVIEW_CMD:-"tree -I '.git' -C -a"}
+		else export SMARTCD_FZF_PREVIEW_CMD=${SMARTCD_FZF_PREVIEW_CMD:-""}; fi
 	}
 
 	run_fzf_command() {
 		local query=$@
-		validate_rec_listing_cmd
-		if [[ ${SMARTCD_REC_LISTING_CMD} = "" ]]; then
+		validate_fzf_preview_cmd
+		if [[ ${SMARTCD_FZF_PREVIEW_CMD} = "" ]]; then
 			fzf --exit-0 --query="${query}"
 		else
-			fzf --exit-0 --query="${query}" --preview "${SMARTCD_REC_LISTING_CMD} {}"
+			fzf --exit-0 --query="${query}" --preview "${SMARTCD_FZF_PREVIEW_CMD} {}"
 		fi
 	}
 
