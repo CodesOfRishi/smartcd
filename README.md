@@ -65,10 +65,10 @@ Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash
 - [Fd](https://github.com/sharkdp/fd)
 - [Ripgrep](https://github.com/BurntSushi/ripgrep)
 - [Exa](https://the.exa.website/) or [Tree](https://linux.die.net/man/1/tree)
-  - Fzf will use the current line from the filter as the argument for `exa` or `tree`, and will show the result in a split window of the filter.
+  - Fzf will use the current line from the filter as the argument for `exa` or `tree`, and will show the result in a split/preview window of the filter.
   - `smartcd` has inbuilt support for `exa` and `tree`, i.e., just install either `exa` or `tree`, and `smartcd` will handle the rest.
-  - Otherwise, if you want to use any other tool, you need to export `SMARTCD_REC_LISTING_CMD` env with your desired command (with options).
-  - Even if you want to use `exa` or `tree` with different options other than the default ones, you can export `SMARTCD_REC_LISTING_CMD` env specifying the command with your desired options.
+  - Otherwise, if you want to use any other tool, you need to export `SMARTCD_FZF_PREVIEW_CMD` env with your desired command (with options).
+  - Even if you want to use `exa` or `tree` with different options other than the default ones, you can export `SMARTCD_FZF_PREVIEW_CMD` env specifying the command with your desired options.
 
 
 ## Installation
@@ -122,11 +122,13 @@ brew upgrade smartcd # to upgrade smartcd
 <summary><strong><code>SMARTCD_CONFIG_DIR</code></strong></summary>
 <code>smartcd</code> stores logs in this location, which defaults to <code>~/.config/.smartcd</code>. To change location of the log file, export <code>SMARTCD_CONFIG_DIR</code> with your desired location.
 </details>
-
 <details>
-<summary><strong><code>SMARTCD_REC_LISTING_CMD</code></strong></summary> 
-Command (with options) to use for recursive directory listing in tree format in <code>fzf</code> preview. If you want to use any other command export it with your desired command (with options).
+<summary><strong><code>SMARTCD_FZF_PREVIEW_CMD</code></strong></summary> 
+Command (with options) to use with current line as argument from the <code>fzf</code> filter to show its result in <code>fzf</code>'s split/preview window.<br>
+For <code>exa</code>, it defaults to <code>exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always</code>.<br>
+For <Code>tree</Code>, it defaults to <Code>tree -I '.git' -C -a</Code>.
 </details>
+
 
 <details>
 <summary><strong><code>SMARTCD_HIST_SIZE</code></strong></summary> 
