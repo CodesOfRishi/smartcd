@@ -51,7 +51,7 @@ __smartcd__() {
 	run_fzf_command() {
 		local query=$@
 		validate_fzf_preview_cmd
-		if [[ ${SMARTCD_FZF_PREVIEW_CMD} = "" ]]; then
+		if [[ -z ${SMARTCD_FZF_PREVIEW_CMD} ]]; then
 			fzf --exit-0 --query="${query}"
 		else
 			fzf --exit-0 --query="${query}" --preview "${SMARTCD_FZF_PREVIEW_CMD} {}"
@@ -111,14 +111,14 @@ __smartcd__() {
 
 	# feature
 	parent_dir_hop() {
-		if [[ $1 = "" ]]; then
+		if [[ -z $1 ]]; then
 			builtin cd .. && generate_recent_dir_log
 			return
 		fi
 
 		find_parent_dir_paths() {
 			_path=${PWD%/*}
-			while [[ ${_path} != "" ]]; do
+			while [[ -n ${_path} ]]; do
 				eval ${find_parent_dir_cmd_args}
 				_path=${_path%/*}
 			done
@@ -248,7 +248,7 @@ if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf ]]; then
 		printf '%s\n' "Can't use SmartCd: rg or grep not found !" 1>&2
 	fi
 
-	if [[ smartcd_finder != "" && smartcd_grep != "" ]]; then
+	if [[ -n ${smartcd_finder} && -n ${smartcd_grep} ]]; then
 		export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
 		alias $SMARTCD_COMMAND="__smartcd__"
 	fi
