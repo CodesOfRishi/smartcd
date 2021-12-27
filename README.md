@@ -1,8 +1,16 @@
-# SmartCd - A Mnemonist `cd` Command
+<div align="center">
 
-## Description
+# SmartCd
 
 A `cd` command with improved and extended usability features to quickly navigate your Linux filesystem.
+
+[Features](#features) •
+[Requirements](#requirements) •
+[Installation](#installation) •
+[Configurations](#configurations) •
+[Known Caveats](#known-caveats)
+
+</div>
 
 ## Features
 
