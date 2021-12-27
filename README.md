@@ -36,7 +36,7 @@ A `cd` command with improved and extended usability features to quickly navigate
 
   <img src="https://i.imgur.com/rgkVR6v.gif">
   
-- You can pipe options, (with or without) arguments and as well as multiple directory paths to `smartcd`.
+- You can pipe options, (with or without) arguments and as well as multiple directory paths stored in a file to `smartcd`.
 
   <img src="https://i.imgur.com/gy3LPnq.gif">
 
