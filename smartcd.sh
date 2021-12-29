@@ -216,19 +216,17 @@ __smartcd__() {
 	piped_value=${piped_value%$'\n'}
 
 	[[ -z ${piped_value} && $( printf '%s\n' "${return_val}" | awk '{print $1}' ) -ne 0 ]] && return 1
-	
-	if [[ -n ${piped_value} ]]; then
-		if [[ $( printf '%s\n' "${piped_value}" | awk '{$1=$1;print}' ) = ${SMARTCD_CLEANUP_OPT} ]]; then
-			printf '%s\n' "WARNING: Do not pipe '${SMARTCD_CLEANUP_OPT}' to SmartCd as it can clean the log file without the user's consent!"
-			printf '%s\n' "If you want to clean the log file, then run '${SMARTCD_COMMAND} ${SMARTCD_CLEANUP_OPT}'"
-			return 1
-		else
-			validate_parameters ${piped_value}
-		fi
 
-	else
-		validate_parameters $@
+	if [[ -n ${piped_value} ]] \
+		&& [[ $( printf '%s\n' "${piped_value}" | awk '{$1=$1;print}' ) = ${SMARTCD_CLEANUP_OPT}* \
+		|| $( printf '%s\n' $@ | awk '{$1=$1;print}' ) = ${SMARTCD_CLEANUP_OPT}* ]]; then
+
+		printf '%s\n' "WARNING: Do not try to clean the log file while piping, as it can clean it without the user's consent!"
+		printf '%s\n' "If you want to clean the log file, then run '${SMARTCD_COMMAND} ${SMARTCD_CLEANUP_OPT}'"
+		return 1
 	fi
+
+	validate_parameters $@ ${piped_value}
 }
 
 # validate if both fzf & fd/fdfind & find are available or not
