@@ -38,6 +38,14 @@ A `cd` command with improved and extended usability features to quickly navigate
   
 - You can pipe options, (with or without) arguments and as well as multiple directory paths stored in a file to `smartcd`.
 
+  **NOTE**: Since v3.2.0, you can also use `cd` with options & arguments along with piping, simultaneously.
+  For example,
+  
+  ```bash
+   echo ri \!git \'lua | cd -- \'color
+   cat $HOME/_testing/rough/dir_paths.txt | cd "bin 'dot"
+  ```
+  
   <img src="https://i.imgur.com/gy3LPnq.gif">
 
 ### Other Features
