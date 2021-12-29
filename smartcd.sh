@@ -174,6 +174,17 @@ __smartcd__() {
 		rm -rf ${invalid_paths}
 	}
 
+	version_info() {
+		printf '%s\n' "SmartCd by Rishi K. - ${SMARTCD_VERSION}"
+		printf '%s\n' "The MIT License (MIT)"
+		printf '%s\n' "Copyright (c) 2021 Rishi K."
+	}
+
+	warning_info() {
+		printf '%s\n' "WARNING: Do not try to clean the log file while piping, as it can clean it without the user's consent!" 2>&1
+		printf '%s\n' "If you want to clean the log file, then run '${SMARTCD_COMMAND} ${SMARTCD_CLEANUP_OPT}'" 2>&1
+	}
+
 	# ---------------------------------------------------------------------------------------------------------------------
 
 	validate_parameters() {
@@ -190,11 +201,10 @@ __smartcd__() {
 		elif [[ ${arg1} = "${SMARTCD_GIT_ROOT_OPT}" ]]; then
 			git_root_dir_hop
 		elif [[ ${arg1} = "${SMARTCD_CLEANUP_OPT}" ]]; then
+			[[ -n ${piped_value} ]] && warning_info && return 1
 			cleanup_log
 		elif [[ ${arg1} = "${SMARTCD_VERSION_OPT}" ]]; then
-			printf '%s\n' "SmartCd by Rishi K. - ${SMARTCD_VERSION}"
-			printf '%s\n' "The MIT License (MIT)"
-			printf '%s\n' "Copyright (c) 2021 Rishi K."
+			version_info
 		else
 			parameters=$( printf '%s\n' "${parameters}" | sed "s|^~|${HOME}|" )
 			sub_dir_hop ${parameters}
@@ -216,15 +226,6 @@ __smartcd__() {
 	piped_value=${piped_value%$'\n'}
 
 	[[ -z ${piped_value} && $( printf '%s\n' "${return_val}" | awk '{print $1}' ) -ne 0 ]] && return 1
-
-	if [[ -n ${piped_value} ]] \
-		&& [[ $( printf '%s\n' "${piped_value}" | awk '{$1=$1;print}' ) = ${SMARTCD_CLEANUP_OPT}* \
-		|| $( printf '%s\n' $@ | awk '{$1=$1;print}' ) = ${SMARTCD_CLEANUP_OPT}* ]]; then
-
-		printf '%s\n' "WARNING: Do not try to clean the log file while piping, as it can clean it without the user's consent!"
-		printf '%s\n' "If you want to clean the log file, then run '${SMARTCD_COMMAND} ${SMARTCD_CLEANUP_OPT}'"
-		return 1
-	fi
 
 	validate_parameters $@ ${piped_value}
 }
