@@ -157,21 +157,18 @@ __smartcd__() {
 	cleanup_log() {
 		local line_no="1"
 		local valid_paths=$( mktemp )
-		local invalid_paths=$( mktemp )
 
+		printf '%s\n' "Paths to remove: "
 		while [[ ${line_no} -le ${SMARTCD_HIST_SIZE} ]]; do
 			_path=$( sed -n $line_no'p' ${recent_dir_log} )
 
 			if [[ -d ${_path} ]]; then printf '%s\n' "${_path}" >> ${valid_paths}
-			else printf '%s\n' "${_path}" >> ${invalid_paths}; fi
+			elif [[ -n ${_path} ]]; then printf '%s\n' "${_path}"; fi
 			line_no=$(( ${line_no} + 1 ))
 		done
+		printf '%s\n'
 		cp -i ${valid_paths} ${recent_dir_log}
 		rm -rf ${valid_paths}
-
-		sed -i '/^$/d' ${invalid_paths} # remove empty/blank lines
-		[[ -s ${invalid_paths} ]] && printf '\n%s\n' "Deleted directory path(s):" && cat ${invalid_paths}
-		rm -rf ${invalid_paths}
 	}
 
 	version_info() {
