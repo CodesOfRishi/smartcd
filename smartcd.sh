@@ -15,7 +15,7 @@ __smartcd__() {
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 	export SMARTCD_SELECT_ONE=${SMARTCD_SELECT_ONE:-"0"}
-	export SMARTCD_VERSION="v3.2.2"
+	export SMARTCD_VERSION="v3.2.3"
 
 	# options customizations
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--clean"} # option for cleanup of log file
