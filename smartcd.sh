@@ -212,20 +212,17 @@ __smartcd__() {
 	}
 
 	read_pipe() {
-		local pipe_read="0"
 		while read -t 0.001 _line; do
 			printf '%s\n' "${_line}"
-			[[ -n ${_line} ]] && pipe_read="1"
 		done
-		return ${pipe_read}
 	}
 
-	local piped_value=$( read_pipe | fzf --select-1 --exit-0; printf '%s\n' ": ${pipestatus[*]}" )
-	local return_val=(${piped_value##*: })
-	piped_value=${piped_value%:*}
-	piped_value=${piped_value%$'\n'}
+	[[ ! -t 0 ]] && local piped_value=$( read_pipe | fzf --select-1 --exit-0 )
 
-	[[ -z ${piped_value} && $( printf '%s\n' "${return_val}" | awk '{print $1}' ) -ne 0 ]] && return 1
+	if [[ ! -t 0 && -z ${piped_value} ]]; then
+		printf '%s\n' "Nothing piped to smartcd!"
+		return 1
+	fi
 
 	validate_parameters $@ ${piped_value}
 }
