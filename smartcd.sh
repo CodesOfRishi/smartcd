@@ -18,11 +18,11 @@ __smartcd__() {
 	export SMARTCD_VERSION="v3.2.4"
 
 	# options customizations
-	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT:-"--clean"} # option for cleanup of log file
-	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT:-".."} # option for searching & traversing to parent-directories
-	export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT:-"--"} # option for searching & traversing to recently visited directories
-	export SMARTCD_GIT_ROOT_OPT=${SMARTCD_GIT_ROOT_OPT:-"."} # option for traversing to root of the git repo
-	export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT:-"--version"} # option for printing version information
+	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"--clean"} # option for cleanup of log file
+	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT-".."} # option for searching & traversing to parent-directories
+	export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
+	export SMARTCD_GIT_ROOT_OPT=${SMARTCD_GIT_ROOT_OPT-"."} # option for traversing to root of the git repo
+	export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"--version"} # option for printing version information
 
 	# log files
 	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
