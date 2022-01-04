@@ -10,7 +10,7 @@
 __smartcd__() {
 	# location for smartcd to store log
 	export SMARTCD_CONFIG_DIR=${SMARTCD_CONFIG_DIR:-"$HOME/.config/.smartcd"}
-	[[ -d ${SMARTCD_CONFIG_DIR} ]] || mkdir -p ${SMARTCD_CONFIG_DIR}
+	[[ -d ${SMARTCD_CONFIG_DIR} ]] || mkdir -p "${SMARTCD_CONFIG_DIR}"
 
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
@@ -64,14 +64,14 @@ __smartcd__() {
 
 	# generate logs of recently visited dirs
 	generate_recent_dir_log() { 
-		[[ -f ${recent_dir_log} ]] || touch ${recent_dir_log}
+		[[ -f ${recent_dir_log} ]] || touch "${recent_dir_log}"
 
 		local tmp_log="" && tmp_log=$( mktemp ) # temporary file
-		printf '%s\n' "${PWD}" >| ${tmp_log}
-		cat ${recent_dir_log} >> ${tmp_log}
-		awk '!seen[$0]++' ${tmp_log} >| ${recent_dir_log} # remove duplicates
-		rm -f ${tmp_log}
-		sed -i $(( ${SMARTCD_HIST_SIZE} + 1 ))',$ d' ${recent_dir_log} # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
+		printf '%s\n' "${PWD}" >| "${tmp_log}"
+		cat "${recent_dir_log}" >> "${tmp_log}"
+		awk '!seen[$0]++' "${tmp_log}" >| "${recent_dir_log}" # remove duplicates
+		rm -f "${tmp_log}"
+		sed -i $(( ${SMARTCD_HIST_SIZE} + 1 ))',$ d' "${recent_dir_log}" # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
 	}
 
 	# feature
@@ -79,13 +79,13 @@ __smartcd__() {
 		local path_argument=$@
 		builtin cd ${path_argument} 2> /dev/null
 		if [[ $? -ne 0 ]]; then # the directory is not in any of cdpath values
-			local selected_entry=($( eval ${find_sub_dir_cmd_args} | run_fzf_command ${path_argument} ))
+			local selected_entry=($( eval "${find_sub_dir_cmd_args}" | run_fzf_command "${path_argument}" ))
 
 			if [[ -z ${selected_entry} ]]; then
 				printf '%s\n' "No directory found or selected!" 1>&2
 				return 1
 			else
-				builtin cd ${selected_entry} && generate_recent_dir_log && \
+				builtin cd "${selected_entry}" && generate_recent_dir_log && \
 					if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
 			fi
 		else
@@ -100,13 +100,13 @@ __smartcd__() {
 			return 1
 		else
 			local query=$@
-			local selected_entry=($( cat ${recent_dir_log} | run_fzf_command ${query} ))
+			local selected_entry=($( cat "${recent_dir_log}" | run_fzf_command "${query}" ))
 
 			if [[ -z ${selected_entry} ]]; then
 				printf '%s\n' "No directory found or selected!" 1>&2
 				return 1
 			else
-				builtin cd ${selected_entry} || return 1
+				builtin cd "${selected_entry}" || return 1
 				generate_recent_dir_log && \
 					if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
 			fi
@@ -123,20 +123,20 @@ __smartcd__() {
 		find_parent_dir_paths() {
 			_path=${PWD%/*}
 			while [[ -n ${_path} ]]; do
-				eval ${find_parent_dir_cmd_args}
+				eval "${find_parent_dir_cmd_args}"
 				_path=${_path%/*}
 			done
-			[[ ${PWD} != "/" ]] && eval ${find_parent_dir_root_cmd_args}
+			[[ ${PWD} != "/" ]] && eval "${find_parent_dir_root_cmd_args}"
 		}
 
 		local query=$@
-		local selected_entry=($( find_parent_dir_paths | run_fzf_command ${query} ))
+		local selected_entry=($( find_parent_dir_paths | run_fzf_command "${query}" ))
 
 		if [[ -z ${selected_entry} ]]; then
 			printf '%s\n' "No directory found or selected!" 1>&2
 			return 1
 		else
-			builtin cd ${selected_entry} && generate_recent_dir_log && \
+			builtin cd "${selected_entry}" && generate_recent_dir_log && \
 				if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
 		fi
 	}
@@ -148,7 +148,7 @@ __smartcd__() {
 		if [[ -z ${git_root_dir} ]]; then
 			return 1
 		elif [[ ${git_root_dir} != ${PWD} ]]; then 
-			builtin cd ${git_root_dir} && generate_recent_dir_log && \
+			builtin cd "${git_root_dir}" && generate_recent_dir_log && \
 				if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
 		fi
 	}
@@ -160,15 +160,15 @@ __smartcd__() {
 
 		printf '%s\n' "Paths to remove: "
 		while [[ ${line_no} -le ${SMARTCD_HIST_SIZE} ]]; do
-			_path=$( sed -n $line_no'p' ${recent_dir_log} )
+			_path=$( sed -n $line_no'p' "${recent_dir_log}" )
 
-			if [[ -d ${_path} ]]; then printf '%s\n' "${_path}" >> ${valid_paths}
+			if [[ -d ${_path} ]]; then printf '%s\n' "${_path}" >> "${valid_paths}"
 			elif [[ -n ${_path} ]]; then printf '%s\n' "${_path}"; fi
 			line_no=$(( ${line_no} + 1 ))
 		done
 		printf '%s\n'
-		cp -i ${valid_paths} ${recent_dir_log}
-		rm -rf ${valid_paths}
+		cp -i "${valid_paths}" "${recent_dir_log}"
+		rm -rf "${valid_paths}"
 	}
 
 	version_info() {
@@ -192,9 +192,9 @@ __smartcd__() {
 		local arg2="" && arg2=$( printf '%s\n' "${parameters}" | awk '{$1=""; print $0}' | awk '{$1=$1;print}' )
 
 		if [[ ${arg1} = "${SMARTCD_PARENT_DIR_OPT}" ]]; then
-			parent_dir_hop ${arg2}
+			parent_dir_hop "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_HIST_OPT}" ]]; then
-			recent_dir_hop ${arg2}
+			recent_dir_hop "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_GIT_ROOT_OPT}" ]]; then
 			git_root_dir_hop
 		elif [[ ${arg1} = "${SMARTCD_CLEANUP_OPT}" ]]; then
@@ -204,7 +204,7 @@ __smartcd__() {
 			version_info
 		else
 			parameters=$( printf '%s\n' "${parameters}" | sed "s|^~|${HOME}|" )
-			sub_dir_hop ${parameters}
+			sub_dir_hop "${parameters}"
 		fi
 	}
 
@@ -224,7 +224,7 @@ __smartcd__() {
 		fi
 	fi
 
-	validate_parameters "$@" ${piped_value}
+	validate_parameters "$@" "${piped_value}"
 }
 
 # validate if both fzf & fd/fdfind & find are available or not
@@ -251,7 +251,7 @@ if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf ]]; then
 
 	if [[ -n ${smartcd_finder} && -n ${smartcd_grep} ]]; then
 		export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
-		alias $SMARTCD_COMMAND="__smartcd__"
+		alias "$SMARTCD_COMMAND"="__smartcd__"
 	fi
 else 
 	printf '%s\n' "Can't use SmartCd: fzf not found !" 1>&2
