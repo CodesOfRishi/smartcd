@@ -165,7 +165,7 @@ __smartcd__() {
 			elif [[ -n ${_path} ]]; then printf '%s\n' "${_path}"; fi
 			line_no=$(( line_no + 1 ))
 		done
-		printf '%s\n'
+		printf '\n'
 		cp -i "${valid_paths}" "${recent_dir_log}"
 		rm -rf "${valid_paths}"
 	}
