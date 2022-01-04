@@ -71,7 +71,7 @@ __smartcd__() {
 		cat "${recent_dir_log}" >> "${tmp_log}"
 		awk '!seen[$0]++' "${tmp_log}" >| "${recent_dir_log}" # remove duplicates
 		rm -f "${tmp_log}"
-		sed -i $(( ${SMARTCD_HIST_SIZE} + 1 ))',$ d' "${recent_dir_log}" # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
+		sed -i $(( SMARTCD_HIST_SIZE + 1 ))',$ d' "${recent_dir_log}" # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
 	}
 
 	# feature
@@ -164,7 +164,7 @@ __smartcd__() {
 
 			if [[ -d ${_path} ]]; then printf '%s\n' "${_path}" >> "${valid_paths}"
 			elif [[ -n ${_path} ]]; then printf '%s\n' "${_path}"; fi
-			line_no=$(( ${line_no} + 1 ))
+			line_no=$(( line_no + 1 ))
 		done
 		printf '%s\n'
 		cp -i "${valid_paths}" "${recent_dir_log}"
