@@ -66,7 +66,7 @@ __smartcd__() {
 	generate_recent_dir_log() { 
 		[[ -f ${recent_dir_log} ]] || touch ${recent_dir_log}
 
-		local tmp_log=$( mktemp ) # temporary file
+		local tmp_log="" && tmp_log=$( mktemp ) # temporary file
 		printf '%s\n' "${PWD}" >| ${tmp_log}
 		cat ${recent_dir_log} >> ${tmp_log}
 		awk '!seen[$0]++' ${tmp_log} >| ${recent_dir_log} # remove duplicates
@@ -143,7 +143,7 @@ __smartcd__() {
 
 	# feature
 	git_root_dir_hop() {
-		local git_root_dir=$( git rev-parse --show-toplevel )
+		local git_root_dir="" && git_root_dir=$( git rev-parse --show-toplevel )
 
 		if [[ -z ${git_root_dir} ]]; then
 			return 1
@@ -156,7 +156,7 @@ __smartcd__() {
 	# cleanup
 	cleanup_log() {
 		local line_no="1"
-		local valid_paths=$( mktemp )
+		local valid_paths="" && valid_paths=$( mktemp )
 
 		printf '%s\n' "Paths to remove: "
 		while [[ ${line_no} -le ${SMARTCD_HIST_SIZE} ]]; do
@@ -188,8 +188,8 @@ __smartcd__() {
 		local parameters=$@
 		parameters=$( printf '%s\n' "${parameters}" | awk '{$1=$1;print}' )
 
-		local arg1=$( printf '%s\n' "${parameters}" | awk '{print $1}' )
-		local arg2=$( printf '%s\n' "${parameters}" | awk '{$1=""; print $0}' | awk '{$1=$1;print}' )
+		local arg1="" && arg1=$( printf '%s\n' "${parameters}" | awk '{print $1}' )
+		local arg2="" && arg2=$( printf '%s\n' "${parameters}" | awk '{$1=""; print $0}' | awk '{$1=$1;print}' )
 
 		if [[ ${arg1} = "${SMARTCD_PARENT_DIR_OPT}" ]]; then
 			parent_dir_hop ${arg2}
@@ -217,7 +217,7 @@ __smartcd__() {
 	# ---------------------------------------------------------------------------------------------------------------------
 
 	if [[ ! -t 0 ]]; then
-		local piped_value=$( read_pipe | fzf --select-1 --exit-0 )
+		local piped_value="" && piped_value=$( read_pipe | fzf --select-1 --exit-0 )
 		if [[ -z ${piped_value} ]]; then
 			printf '%s\n' "Nothing piped to smartcd!"
 			return 1
