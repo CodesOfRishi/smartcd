@@ -67,9 +67,9 @@ __smartcd__() {
 		[[ -f ${recent_dir_log} ]] || touch ${recent_dir_log}
 
 		local tmp_log=$( mktemp ) # temporary file
-		printf '%s\n' "${PWD}" > ${tmp_log}
+		printf '%s\n' "${PWD}" >| ${tmp_log}
 		cat ${recent_dir_log} >> ${tmp_log}
-		awk '!seen[$0]++' ${tmp_log} > ${recent_dir_log} # remove duplicates
+		awk '!seen[$0]++' ${tmp_log} >| ${recent_dir_log} # remove duplicates
 		rm -f ${tmp_log}
 		sed -i $(( ${SMARTCD_HIST_SIZE} + 1 ))',$ d' ${recent_dir_log} # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
 	}
