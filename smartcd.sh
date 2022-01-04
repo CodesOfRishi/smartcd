@@ -99,7 +99,7 @@ __smartcd__() {
 			return 1
 		else
 			local query=$@
-			local selected_entry && selected_entry=$( cat "${recent_dir_log}" | run_fzf_command "${query}" )
+			local selected_entry && selected_entry=$( < "${recent_dir_log}" run_fzf_command "${query}" )
 
 			if [[ -z ${selected_entry} ]]; then
 				printf '%s\n' "No directory found or selected!" 1>&2
