@@ -50,7 +50,7 @@ __smartcd__() {
 	}
 
 	run_fzf_command() {
-		local query=$@
+		local query=$*
 		local select_one=""
 		[[ ${SMARTCD_SELECT_ONE} -eq 1 ]] && select_one="--select-1"
 
@@ -76,7 +76,7 @@ __smartcd__() {
 
 	# feature
 	sub_dir_hop() {
-		local path_argument=$@
+		local path_argument=$*
 		if ! builtin cd ${path_argument} 2> /dev/null; then # the directory is not in any of cdpath values
 			local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd_args}" | run_fzf_command "${path_argument}" )
 
@@ -98,7 +98,7 @@ __smartcd__() {
 			printf '%s\n' "No any visited directory in record !!" 1>&2
 			return 1
 		else
-			local query=$@
+			local query=$*
 			local selected_entry && selected_entry=$( < "${recent_dir_log}" run_fzf_command "${query}" )
 
 			if [[ -z ${selected_entry} ]]; then
@@ -128,7 +128,7 @@ __smartcd__() {
 			[[ ${PWD} != "/" ]] && eval "${find_parent_dir_root_cmd_args}"
 		}
 
-		local query=$@
+		local query=$*
 		local selected_entry && selected_entry=$( find_parent_dir_paths | run_fzf_command "${query}" )
 
 		if [[ -z ${selected_entry} ]]; then
@@ -184,7 +184,7 @@ __smartcd__() {
 	# ---------------------------------------------------------------------------------------------------------------------
 
 	validate_parameters() {
-		local parameters=$@
+		local parameters=$*
 		parameters=$( printf '%s\n' "${parameters}" | awk '{$1=$1;print}' )
 
 		local arg1="" && arg1=$( printf '%s\n' "${parameters}" | awk '{print $1}' )
