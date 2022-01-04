@@ -79,7 +79,7 @@ __smartcd__() {
 		local path_argument=$@
 		builtin cd ${path_argument} 2> /dev/null
 		if [[ $? -ne 0 ]]; then # the directory is not in any of cdpath values
-			local selected_entry=($( eval "${find_sub_dir_cmd_args}" | run_fzf_command "${path_argument}" ))
+			local selected_entry=$( eval "${find_sub_dir_cmd_args}" | run_fzf_command "${path_argument}" )
 
 			if [[ -z ${selected_entry} ]]; then
 				printf '%s\n' "No directory found or selected!" 1>&2
@@ -100,7 +100,7 @@ __smartcd__() {
 			return 1
 		else
 			local query=$@
-			local selected_entry=($( cat "${recent_dir_log}" | run_fzf_command "${query}" ))
+			local selected_entry=$( cat "${recent_dir_log}" | run_fzf_command "${query}" )
 
 			if [[ -z ${selected_entry} ]]; then
 				printf '%s\n' "No directory found or selected!" 1>&2
@@ -130,7 +130,7 @@ __smartcd__() {
 		}
 
 		local query=$@
-		local selected_entry=($( find_parent_dir_paths | run_fzf_command "${query}" ))
+		local selected_entry=$( find_parent_dir_paths | run_fzf_command "${query}" )
 
 		if [[ -z ${selected_entry} ]]; then
 			printf '%s\n' "No directory found or selected!" 1>&2
