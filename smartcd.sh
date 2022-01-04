@@ -77,8 +77,7 @@ __smartcd__() {
 	# feature
 	sub_dir_hop() {
 		local path_argument=$@
-		builtin cd ${path_argument} 2> /dev/null
-		if [[ $? -ne 0 ]]; then # the directory is not in any of cdpath values
+		if ! builtin cd ${path_argument} 2> /dev/null; then # the directory is not in any of cdpath values
 			local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd_args}" | run_fzf_command "${path_argument}" )
 
 			if [[ -z ${selected_entry} ]]; then
