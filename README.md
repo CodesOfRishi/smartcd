@@ -118,7 +118,7 @@ Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash
 
 ### Using Homebrew
 
-Currently has `v3.2.1`.
+Currently has `v3.2.5`.
 
 ```bash
 brew tap CodesOfRishi/smartcd
