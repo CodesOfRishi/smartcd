@@ -159,7 +159,7 @@ __smartcd__() {
 
 		printf '%s\n' "Paths to remove: "
 		while [[ ${line_no} -le ${SMARTCD_HIST_SIZE} ]]; do
-			_path=$( sed -n $line_no'p' "${recent_dir_log}" )
+			_path=$( sed -n ${line_no}'p' "${recent_dir_log}" )
 
 			if [[ -d ${_path} ]]; then printf '%s\n' "${_path}" >> "${valid_paths}"
 			elif [[ -n ${_path} ]]; then printf '%s\n' "${_path}"; fi
@@ -250,7 +250,7 @@ if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf ]]; then
 
 	if [[ -n ${smartcd_finder} && -n ${smartcd_grep} ]]; then
 		export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
-		alias "$SMARTCD_COMMAND"="__smartcd__"
+		alias "${SMARTCD_COMMAND}"="__smartcd__"
 	fi
 else 
 	printf '%s\n' "Can't use SmartCd: fzf not found !" 1>&2
