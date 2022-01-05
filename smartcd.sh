@@ -223,7 +223,7 @@ __smartcd__() {
 		fi
 	fi
 
-	validate_parameters "$@" "${piped_value}"
+	validate_parameters $@ "${piped_value}"
 }
 
 # validate if both fzf & fd/fdfind & find are available or not
