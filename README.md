@@ -110,6 +110,16 @@ Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash
 
 3. Open a new shell or reload your shell configuration file.
 
+### [Zinit](https://github.com/zdharma-continuum/zinit)
+
+1. Add the below code in your `.zshrc` (~~`.bashrc`~~).
+
+   ```bash
+   zinit snippet "https://raw.githubusercontent.com/CodesOfRishi/smartcd/main/smartcd.sh"
+   ```
+
+2. Open a new shell or reload your shell configuration file.
+
 ### [Sheldon](https://sheldon.cli.rs/)
 
 1. Add the plugin to Sheldon config file.
