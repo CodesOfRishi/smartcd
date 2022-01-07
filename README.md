@@ -146,6 +146,23 @@ This will also install the required dependencies, but you may have to install th
 brew upgrade smartcd # to upgrade smartcd
 ```
 
+## Zsh Completion
+
+- Add the below code after calling `compinit` in your `.zshrc`.
+
+  ```bash
+  compdef __smartcd__=cd
+  ```
+
+  This will enable completion for SmartCd same as of built-in `cd` command.
+
+- If you also want hidden directories completion for SmartCd, you need to enable GLOB_DOTS option.
+
+  ```bash
+  setopt globdots
+  ```
+
+Lastly, open a new shell or reload your shell configuration file.
 
 ## Configurations
 
