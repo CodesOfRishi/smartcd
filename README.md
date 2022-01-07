@@ -7,6 +7,7 @@ A `cd` command with improved and extended usability features to quickly navigate
 [Features](#features) •
 [Requirements](#requirements) •
 [Installation](#installation) •
+[Zsh Completion](#zsh-completion) •
 [Configurations](#configurations) •
 [Known Caveats](#known-caveats)
 
