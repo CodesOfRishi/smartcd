@@ -20,6 +20,7 @@ Make sure you're using the latest version, and mention it explicitly if you do.
 - [ ] Installation.
 - [ ] Dependencies/Requirements.
 - [ ] Configurations.
+- [ ] Documentation.
 - [ ] Other(s)
 
 **Describe the bug**
