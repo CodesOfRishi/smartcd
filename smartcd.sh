@@ -194,8 +194,8 @@ __smartcd__() {
 	}
 
 	warning_info() {
-		printf '%s\n' "WARNING: Do not try to clean the log file while piping, as it can clean it without the user's consent!" 2>&1
-		printf '%s\n' "If you want to clean the log file, then run '${SMARTCD_COMMAND} ${SMARTCD_CLEANUP_OPT}'" 2>&1
+		printf '%s\n' "WARNING: Do not try to clean the log file while piping, as it can clean it without the user's consent!" 1>&2
+		printf '%s\n' "If you want to clean the log file, then run '${SMARTCD_COMMAND} ${SMARTCD_CLEANUP_OPT}'" 1>&2
 	}
 
 	# ---------------------------------------------------------------------------------------------------------------------
