@@ -1,6 +1,6 @@
 ---
 name: Bug report
-about: Create a report to help me improve SmartCd
+about: Create a report to help improve SmartCd
 title: "[BUG]"
 labels: ''
 assignees: ''
@@ -10,7 +10,7 @@ assignees: ''
 **Are you using the latest version?**
 Make sure you're using the latest version, and mention it explicitly if you do.
 
-**Issue with the following feature(s):**
+**The issue is with the following feature(s):**
 - [ ] Traversal to root of a git repository.
 - [ ] Search & traverse recently visited directories.
 - [ ] Sub-directory search & traversal.
@@ -22,6 +22,10 @@ Make sure you're using the latest version, and mention it explicitly if you do.
 - [ ] Configurations.
 - [ ] Documentation.
 - [ ] Other(s)
+
+**Issue observed in the following shell(s):**
+- [ ] Bash
+- [ ] Zsh
 
 **Describe the bug**
 A clear and concise description of what the bug is.
