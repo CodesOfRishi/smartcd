@@ -18,6 +18,7 @@ __smartcd__() {
 	export SMARTCD_VERSION="v3.2.6"
 
 	# options customizations
+	export SMARTCD_LAST_DIR_OPT=${SMARTCD_LAST_DIR_OPT-"-"} # option for moving to $OLDPWD
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"--clean"} # option for cleanup of log file
 	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT-".."} # option for searching & traversing to parent-directories
 	export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
@@ -152,6 +153,11 @@ __smartcd__() {
 		fi
 	}
 
+	# feature
+	last_dir_hop() {
+		builtin cd "${OLDPWD}" && generate_recent_dir_log
+	}
+
 	# cleanup
 	cleanup_log() {
 		local line_no="1"
@@ -194,6 +200,8 @@ __smartcd__() {
 			recent_dir_hop "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_PARENT_DIR_OPT}" ]]; then
 			parent_dir_hop "${arg2}"
+		elif [[ ${arg1} = "${SMARTCD_LAST_DIR_OPT}" ]]; then
+			last_dir_hop "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_GIT_ROOT_OPT}" ]]; then
 			git_root_dir_hop
 		elif [[ ${arg1} = "${SMARTCD_CLEANUP_OPT}" ]]; then
