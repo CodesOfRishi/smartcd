@@ -15,9 +15,11 @@ __smartcd__() {
 	# no. of unique recently visited directories smartcd to remember
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 	export SMARTCD_SELECT_ONE=${SMARTCD_SELECT_ONE:-"0"}
+	export SMARTCD_BASE_PARENT=${SMARTCD_BASE_PARENT:-"${HOME}"}
 	export SMARTCD_VERSION="v3.2.6"
 
 	# options customizations
+	export SMARTCD_BASE_PARENT_OPT=${SMARTCD_BASE_PARENT_OPT-"-b"}
 	export SMARTCD_LAST_DIR_OPT=${SMARTCD_LAST_DIR_OPT-"-"} # option for moving to $OLDPWD
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"--clean"} # option for cleanup of log file
 	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT-".."} # option for searching & traversing to parent-directories
@@ -30,10 +32,12 @@ __smartcd__() {
 
 	# arguments for find or fd/fdfind command
 	if [[ ${smartcd_finder} = *fdfind || ${smartcd_finder} = *fd ]]; then
+		local find_base_dir_cmd_args="${smartcd_finder} --hidden --exclude .git/ --type d -I --absolute-path --base-directory \${SMARTCD_BASE_PARENT}"
 		local find_sub_dir_cmd_args="${smartcd_finder} --hidden --exclude .git/ --type d -I"
 		local find_parent_dir_cmd_args="${smartcd_finder} --exclude .git/ --search-path \${_path} -t d --max-depth=1 -H -I"
 		local find_parent_dir_root_cmd_args="${smartcd_finder} --exclude .git/ --search-path / -t d --max-depth=1 -H -I"
 	else 
+		local find_base_dir_cmd_args="${smartcd_finder} \${SMARTCD_BASE_PARENT} -type d ! -path '*/\.git/*' | ${smartcd_grep} -v '\.git$'"
 		local find_sub_dir_cmd_args="${smartcd_finder} . -type d ! -path '*/\.git/*' | ${smartcd_grep} -v '\.git$'"
 		local find_parent_dir_cmd_args="${smartcd_finder} \${_path} -maxdepth 1 -type d ! -path '*/\.git/*'"
 		local find_parent_dir_root_cmd_args="${smartcd_finder} / -maxdepth 1 -type d ! -path '*/\.git/*'"
@@ -165,6 +169,21 @@ __smartcd__() {
 	}
 
 	# feature
+	base_parent_cd() {
+		local path_argument=$*
+
+		local selected_entry && selected_entry=$( eval "${find_base_dir_cmd_args}" | run_fzf_command "${path_argument}" )
+
+		if [[ -z ${selected_entry} ]]; then
+			printf '%s\n' "No directory found or selected!" 1>&2
+			return 1
+		else
+			builtin cd "${selected_entry}" && generate_recent_dir_log && \
+				if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
+		fi
+	}
+
+	# feature
 	last_dir_hop() {
 		builtin cd "${OLDPWD}" && generate_recent_dir_log
 	}
@@ -213,6 +232,8 @@ __smartcd__() {
 			parent_dir_hop "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_LAST_DIR_OPT}" ]]; then
 			last_dir_hop "${arg2}"
+		elif [[ ${arg1} = "${SMARTCD_BASE_PARENT_OPT}" ]]; then
+			base_parent_cd "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_GIT_ROOT_OPT}" ]]; then
 			git_root_dir_hop
 		elif [[ ${arg1} = "${SMARTCD_CLEANUP_OPT}" ]]; then
