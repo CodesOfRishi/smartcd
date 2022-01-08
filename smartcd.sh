@@ -18,6 +18,7 @@ __smartcd__() {
 	export SMARTCD_VERSION="v3.2.6"
 
 	# options customizations
+	export SMARTCD_LAST_DIR_OPT=${SMARTCD_LAST_DIR_OPT-"-"} # option for moving to $OLDPWD
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"--clean"} # option for cleanup of log file
 	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT-".."} # option for searching & traversing to parent-directories
 	export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
@@ -77,15 +78,26 @@ __smartcd__() {
 	# feature
 	sub_dir_hop() {
 		local path_argument=$*
-		if ! builtin cd ${path_argument} 2> /dev/null; then # the directory is not in any of cdpath values
-			local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd_args}" | run_fzf_command "${path_argument}" )
 
-			if [[ -z ${selected_entry} ]]; then
-				printf '%s\n' "No directory found or selected!" 1>&2
+		local tmp_file && tmp_file=$( mktemp )
+		builtin cd ${path_argument} 2>> "${tmp_file}"
+		local err_msg && err_msg=$( tail -n 1 "${tmp_file}" )
+		rm -rf "${tmp_file}"
+
+		if [[ -n ${err_msg} ]]; then 
+			if [[ $( printf '%s\n' "${err_msg}" | tr "[:upper:]" "[:lower:]" ) = *"permission denied"* ]]; then
+				printf '%s\n' "${err_msg}" 1>&2
 				return 1
 			else
-				builtin cd "${selected_entry}" && generate_recent_dir_log && \
-					if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
+				local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd_args}" | run_fzf_command "${path_argument}" )
+
+				if [[ -z ${selected_entry} ]]; then
+					printf '%s\n' "No directory found or selected!" 1>&2
+					return 1
+				else
+					builtin cd "${selected_entry}" && generate_recent_dir_log && \
+						if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
+				fi
 			fi
 		else
 			generate_recent_dir_log
@@ -152,6 +164,11 @@ __smartcd__() {
 		fi
 	}
 
+	# feature
+	last_dir_hop() {
+		builtin cd "${OLDPWD}" && generate_recent_dir_log
+	}
+
 	# cleanup
 	cleanup_log() {
 		local line_no="1"
@@ -177,8 +194,8 @@ __smartcd__() {
 	}
 
 	warning_info() {
-		printf '%s\n' "WARNING: Do not try to clean the log file while piping, as it can clean it without the user's consent!" 2>&1
-		printf '%s\n' "If you want to clean the log file, then run '${SMARTCD_COMMAND} ${SMARTCD_CLEANUP_OPT}'" 2>&1
+		printf '%s\n' "WARNING: Do not try to clean the log file while piping, as it can clean it without the user's consent!" 1>&2
+		printf '%s\n' "If you want to clean the log file, then run '${SMARTCD_COMMAND} ${SMARTCD_CLEANUP_OPT}'" 1>&2
 	}
 
 	# ---------------------------------------------------------------------------------------------------------------------
@@ -190,10 +207,12 @@ __smartcd__() {
 		local arg1 && arg1=$( printf '%s\n' "${parameters}" | awk '{print $1}' )
 		local arg2 && arg2=$( printf '%s\n' "${parameters}" | awk '{$1=""; print $0}' | awk '{$1=$1;print}' )
 
-		if [[ ${arg1} = "${SMARTCD_PARENT_DIR_OPT}" ]]; then
-			parent_dir_hop "${arg2}"
-		elif [[ ${arg1} = "${SMARTCD_HIST_OPT}" ]]; then
+		if [[ ${arg1} = "${SMARTCD_HIST_OPT}" ]]; then
 			recent_dir_hop "${arg2}"
+		elif [[ ${arg1} = "${SMARTCD_PARENT_DIR_OPT}" ]]; then
+			parent_dir_hop "${arg2}"
+		elif [[ ${arg1} = "${SMARTCD_LAST_DIR_OPT}" ]]; then
+			last_dir_hop "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_GIT_ROOT_OPT}" ]]; then
 			git_root_dir_hop
 		elif [[ ${arg1} = "${SMARTCD_CLEANUP_OPT}" ]]; then
