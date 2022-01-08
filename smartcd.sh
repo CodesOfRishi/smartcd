@@ -190,10 +190,10 @@ __smartcd__() {
 		local arg1 && arg1=$( printf '%s\n' "${parameters}" | awk '{print $1}' )
 		local arg2 && arg2=$( printf '%s\n' "${parameters}" | awk '{$1=""; print $0}' | awk '{$1=$1;print}' )
 
-		if [[ ${arg1} = "${SMARTCD_PARENT_DIR_OPT}" ]]; then
-			parent_dir_hop "${arg2}"
-		elif [[ ${arg1} = "${SMARTCD_HIST_OPT}" ]]; then
+		if [[ ${arg1} = "${SMARTCD_HIST_OPT}" ]]; then
 			recent_dir_hop "${arg2}"
+		elif [[ ${arg1} = "${SMARTCD_PARENT_DIR_OPT}" ]]; then
+			parent_dir_hop "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_GIT_ROOT_OPT}" ]]; then
 			git_root_dir_hop
 		elif [[ ${arg1} = "${SMARTCD_CLEANUP_OPT}" ]]; then
