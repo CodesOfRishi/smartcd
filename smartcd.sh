@@ -37,10 +37,10 @@ __smartcd__() {
 		local find_parent_dir_cmd_args="${smartcd_finder} --exclude .git/ --search-path \${_path} -t d --max-depth=1 -H -I"
 		local find_parent_dir_root_cmd_args="${smartcd_finder} --exclude .git/ --search-path / -t d --max-depth=1 -H -I"
 	else 
-		local find_base_dir_cmd_args="${smartcd_finder} \${SMARTCD_BASE_PARENT} -type d ! -path '*/\.git/*' | ${smartcd_grep} -v '\.git$'"
-		local find_sub_dir_cmd_args="${smartcd_finder} . -type d ! -path '*/\.git/*' | ${smartcd_grep} -v '\.git$'"
-		local find_parent_dir_cmd_args="${smartcd_finder} \${_path} -maxdepth 1 -type d ! -path '*/\.git/*'"
-		local find_parent_dir_root_cmd_args="${smartcd_finder} / -maxdepth 1 -type d ! -path '*/\.git/*'"
+		local find_base_dir_cmd_args="${smartcd_finder} \${SMARTCD_BASE_PARENT} -type d ! -path '*/\.git/*' 2>&- | ${smartcd_grep} -v '\.git$'"
+		local find_sub_dir_cmd_args="${smartcd_finder} . -type d ! -path '*/\.git/*' 2>&- | ${smartcd_grep} -v '\.git$'"
+		local find_parent_dir_cmd_args="${smartcd_finder} \${_path} -maxdepth 1 -type d ! -path '*/\.git/*' 2>&-"
+		local find_parent_dir_root_cmd_args="${smartcd_finder} / -maxdepth 1 -type d ! -path '*/\.git/*' 2>&-"
 	fi
 
 	# ---------------------------------------------------------------------------------------------------------------------
