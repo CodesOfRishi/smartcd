@@ -212,6 +212,11 @@ To use a different option name for searching & traversing to recently visited di
 </details>
 
 <details>
+<summary><strong><code>SMARTCD_LAST_DIR_OPT</code></strong></summary> 
+To use a different option for traversing to last visited working directory, export <code>SMARTCD_LAST_DIR_OPT</code> with your desired option. This defaults to <code>-</code>.
+</details>
+
+<details>
 <summary><strong><code>SMARTCD_GIT_ROOT_OPT</code></strong></summary> 
 To use a different option name for traversing to root of a git repository, export <code>SMARTCD_GIT_ROOT_OPT</code> with your desired name for the option. This defaults to <code>.</code>.
 </details>
