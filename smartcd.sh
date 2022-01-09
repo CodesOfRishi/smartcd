@@ -57,9 +57,9 @@ __smartcd::run_fzf() {
 
 	validate_fzf_preview_cmd
 	if [[ -z ${SMARTCD_FZF_PREVIEW_CMD} ]]; then
-		fzf ${select_one} --exit-0 --query="${query}"
+		fzf ${select_one} --header "${fzf_header}" --exit-0 --query="${query}"
 	else
-		fzf ${select_one} --exit-0 --query="${query}" --preview "${SMARTCD_FZF_PREVIEW_CMD} {}"
+		fzf ${select_one} --header "${fzf_header}" --exit-0 --query="${query}" --preview "${SMARTCD_FZF_PREVIEW_CMD} {}"
 	fi
 }
 
@@ -119,6 +119,7 @@ __smartcd__() {
 
 		if [[ ${exit_status} -ne 0 ]]; then 
 			if [[ $( printf '%s\n' "${err_msg}" | tr "[:upper:]" "[:lower:]" ) = *"no such file or directory"* ]]; then
+				local fzf_header && fzf_header="SmartCd: Sub-directories"
 				local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd_args}" | __smartcd::run_fzf "${path_argument}" )
 				__smartcd::validate_selected_entry
 			else
@@ -137,6 +138,7 @@ __smartcd__() {
 			return 1
 		else
 			local query=$*
+			local fzf_header && fzf_header="SmartCd: Recently visited directories"
 			local selected_entry && selected_entry=$( < "${recent_dir_log}" __smartcd::run_fzf "${query}" )
 			__smartcd::validate_selected_entry
 		fi
@@ -159,6 +161,7 @@ __smartcd__() {
 		}
 
 		local query=$*
+		local fzf_header && fzf_header="SmartCd: Parent directories"
 		local selected_entry && selected_entry=$( find_parent_dir_paths | __smartcd::run_fzf "${query}" )
 		__smartcd::validate_selected_entry
 	}
@@ -178,6 +181,7 @@ __smartcd__() {
 	# feature
 	base_parent_cd() {
 		local path_argument=$*
+		local fzf_header && fzf_header="SmartCd: [${SMARTCD_BASE_PARENT}]'s sub-directories"
 		local selected_entry && selected_entry=$( eval "${find_base_dir_cmd_args}" | __smartcd::run_fzf "${path_argument}" )
 		__smartcd::validate_selected_entry
 	}
