@@ -37,7 +37,7 @@ __smartcd__() {
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 	export SMARTCD_SELECT_ONE=${SMARTCD_SELECT_ONE:-"0"}
 	export SMARTCD_BASE_PARENT=${SMARTCD_BASE_PARENT:-"${HOME}"}
-	export SMARTCD_VERSION="v3.2.6"
+	export SMARTCD_VERSION="v3.3.0"
 
 	# options customizations
 	export SMARTCD_BASE_PARENT_OPT=${SMARTCD_BASE_PARENT_OPT-"-b --base"} # option for searching & traversing w.r.t. a base directory
