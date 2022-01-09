@@ -19,13 +19,13 @@ __smartcd__() {
 	export SMARTCD_VERSION="v3.2.6"
 
 	# options customizations
-	export SMARTCD_BASE_PARENT_OPT=${SMARTCD_BASE_PARENT_OPT-"-b"}
+	export SMARTCD_BASE_PARENT_OPT=${SMARTCD_BASE_PARENT_OPT-"-b --base"} # option for searching & traversing w.r.t. a base directory
 	export SMARTCD_LAST_DIR_OPT=${SMARTCD_LAST_DIR_OPT-"-"} # option for moving to $OLDPWD
-	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"--clean"} # option for cleanup of log file
+	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"-c --clean"} # option for cleanup of log file
 	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT-".."} # option for searching & traversing to parent-directories
 	export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
 	export SMARTCD_GIT_ROOT_OPT=${SMARTCD_GIT_ROOT_OPT-"."} # option for traversing to root of the git repo
-	export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"--version"} # option for printing version information
+	export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"-v --version"} # option for printing version information
 
 	# log files
 	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
@@ -232,14 +232,17 @@ __smartcd__() {
 			parent_dir_hop "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_LAST_DIR_OPT}" ]]; then
 			last_dir_hop "${arg2}"
-		elif [[ ${arg1} = "${SMARTCD_BASE_PARENT_OPT}" ]]; then
+		elif [[ $( printf '%s\n' "${SMARTCD_BASE_PARENT_OPT}" | awk '{print $1}' ) = "${arg1}" || \
+			$( printf '%s\n' "${SMARTCD_BASE_PARENT_OPT}" | awk '{print $2}' ) = "${arg1}" ]]; then
 			base_parent_cd "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_GIT_ROOT_OPT}" ]]; then
 			git_root_dir_hop
-		elif [[ ${arg1} = "${SMARTCD_CLEANUP_OPT}" ]]; then
+		elif [[ $( printf '%s\n' "${SMARTCD_CLEANUP_OPT}" | awk '{print $1}' ) = "${arg1}" || \
+			$( printf '%s\n' "${SMARTCD_CLEANUP_OPT}" | awk '{print $2}' ) = "${arg1}" ]]; then
 			[[ -n ${piped_value} ]] && warning_info && return 1
 			cleanup_log
-		elif [[ ${arg1} = "${SMARTCD_VERSION_OPT}" ]]; then
+		elif [[ $( printf '%s\n' "${SMARTCD_VERSION_OPT}" | awk '{print $1}' ) = "${arg1}" || \
+			$( printf '%s\n' "${SMARTCD_VERSION_OPT}" | awk '{print $2}' ) = "${arg1}" ]]; then
 			version_info
 		else
 			parameters=$( printf '%s\n' "${parameters}" | sed "s|^~|${HOME}|" )
