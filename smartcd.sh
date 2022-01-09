@@ -28,6 +28,19 @@ __smartcd::validate_selected_entry() {
 	fi
 }
 
+__smartcd::run_fzf() {
+	local query=$*
+	local select_one
+	[[ ${SMARTCD_SELECT_ONE} -eq 1 ]] && select_one="--select-1"
+
+	validate_fzf_preview_cmd
+	if [[ -z ${SMARTCD_FZF_PREVIEW_CMD} ]]; then
+		fzf ${select_one} --exit-0 --query="${query}"
+	else
+		fzf ${select_one} --exit-0 --query="${query}" --preview "${SMARTCD_FZF_PREVIEW_CMD} {}"
+	fi
+}
+
 __smartcd__() {
 	# location for smartcd to store log
 	export SMARTCD_CONFIG_DIR=${SMARTCD_CONFIG_DIR:-"$HOME/.config/.smartcd"}
@@ -75,18 +88,6 @@ __smartcd__() {
 		else export SMARTCD_FZF_PREVIEW_CMD=${SMARTCD_FZF_PREVIEW_CMD:-""}; fi
 	}
 
-	run_fzf_command() {
-		local query=$*
-		local select_one
-		[[ ${SMARTCD_SELECT_ONE} -eq 1 ]] && select_one="--select-1"
-
-		validate_fzf_preview_cmd
-		if [[ -z ${SMARTCD_FZF_PREVIEW_CMD} ]]; then
-			fzf ${select_one} --exit-0 --query="${query}"
-		else
-			fzf ${select_one} --exit-0 --query="${query}" --preview "${SMARTCD_FZF_PREVIEW_CMD} {}"
-		fi
-	}
 
 	# generate logs of recently visited dirs
 	generate_recent_dir_log() { 
@@ -112,7 +113,7 @@ __smartcd__() {
 
 		if [[ ${exit_status} -ne 0 ]]; then 
 			if [[ $( printf '%s\n' "${err_msg}" | tr "[:upper:]" "[:lower:]" ) = *"no such file or directory"* ]]; then
-				local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd_args}" | run_fzf_command "${path_argument}" )
+				local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd_args}" | __smartcd::run_fzf "${path_argument}" )
 				__smartcd::validate_selected_entry
 			else
 				printf '%s\n' "${err_msg}" 1>&2
@@ -130,7 +131,7 @@ __smartcd__() {
 			return 1
 		else
 			local query=$*
-			local selected_entry && selected_entry=$( < "${recent_dir_log}" run_fzf_command "${query}" )
+			local selected_entry && selected_entry=$( < "${recent_dir_log}" __smartcd::run_fzf "${query}" )
 			__smartcd::validate_selected_entry
 		fi
 	}
@@ -152,7 +153,7 @@ __smartcd__() {
 		}
 
 		local query=$*
-		local selected_entry && selected_entry=$( find_parent_dir_paths | run_fzf_command "${query}" )
+		local selected_entry && selected_entry=$( find_parent_dir_paths | __smartcd::run_fzf "${query}" )
 		__smartcd::validate_selected_entry
 	}
 
@@ -171,7 +172,7 @@ __smartcd__() {
 	# feature
 	base_parent_cd() {
 		local path_argument=$*
-		local selected_entry && selected_entry=$( eval "${find_base_dir_cmd_args}" | run_fzf_command "${path_argument}" )
+		local selected_entry && selected_entry=$( eval "${find_base_dir_cmd_args}" | __smartcd::run_fzf "${path_argument}" )
 		__smartcd::validate_selected_entry
 	}
 
