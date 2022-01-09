@@ -7,6 +7,16 @@
 # ███████║██║ ╚═╝ ██║██║  ██║██║  ██║   ██║   ╚██████╗██████╔╝
 # ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═════╝ Rishi K. (https://github.com/CodesOfRishi)
 
+# utility
+__smartcd::col1() {
+	awk '{print $1}'
+}
+
+# utility
+__smartcd::col2() {
+	awk '{print $2}'
+}
+
 __smartcd__() {
 	# location for smartcd to store log
 	export SMARTCD_CONFIG_DIR=${SMARTCD_CONFIG_DIR:-"$HOME/.config/.smartcd"}
@@ -47,9 +57,9 @@ __smartcd__() {
 
 	# configure & validate SMARTCD_FZF_PREVIEW_CMD env
 	validate_fzf_preview_cmd() {
-		if [[ $( whereis -b exa | awk '{print $2}' ) = *exa ]]; then
+		if [[ $( whereis -b exa | __smartcd::col2 ) = *exa ]]; then
 			export SMARTCD_FZF_PREVIEW_CMD=${SMARTCD_FZF_PREVIEW_CMD:-"exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"}
-		elif [[ $( whereis -b tree | awk '{print $2}' ) = *tree ]]; then
+		elif [[ $( whereis -b tree | __smartcd::col2 ) = *tree ]]; then
 			export SMARTCD_FZF_PREVIEW_CMD=${SMARTCD_FZF_PREVIEW_CMD:-"tree -I '.git' -C -a"}
 		else export SMARTCD_FZF_PREVIEW_CMD=${SMARTCD_FZF_PREVIEW_CMD:-""}; fi
 	}
@@ -223,7 +233,7 @@ __smartcd__() {
 		local parameters=$*
 		parameters=$( printf '%s\n' "${parameters}" | awk '{$1=$1;print}' )
 
-		local arg1 && arg1=$( printf '%s\n' "${parameters}" | awk '{print $1}' )
+		local arg1 && arg1=$( printf '%s\n' "${parameters}" | __smartcd::col1 )
 		local arg2 && arg2=$( printf '%s\n' "${parameters}" | awk '{$1=""; print $0}' | awk '{$1=$1;print}' )
 
 		if [[ ${arg1} = "${SMARTCD_HIST_OPT}" ]]; then
@@ -232,17 +242,17 @@ __smartcd__() {
 			parent_dir_hop "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_LAST_DIR_OPT}" ]]; then
 			last_dir_hop "${arg2}"
-		elif [[ $( printf '%s\n' "${SMARTCD_BASE_PARENT_OPT}" | awk '{print $1}' ) = "${arg1}" || \
-			$( printf '%s\n' "${SMARTCD_BASE_PARENT_OPT}" | awk '{print $2}' ) = "${arg1}" ]]; then
+		elif [[ $( printf '%s\n' "${SMARTCD_BASE_PARENT_OPT}" | __smartcd::col1 ) = "${arg1}" || \
+			$( printf '%s\n' "${SMARTCD_BASE_PARENT_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
 			base_parent_cd "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_GIT_ROOT_OPT}" ]]; then
 			git_root_dir_hop
-		elif [[ $( printf '%s\n' "${SMARTCD_CLEANUP_OPT}" | awk '{print $1}' ) = "${arg1}" || \
-			$( printf '%s\n' "${SMARTCD_CLEANUP_OPT}" | awk '{print $2}' ) = "${arg1}" ]]; then
+		elif [[ $( printf '%s\n' "${SMARTCD_CLEANUP_OPT}" | __smartcd::col1 ) = "${arg1}" || \
+			$( printf '%s\n' "${SMARTCD_CLEANUP_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
 			[[ -n ${piped_value} ]] && warning_info && return 1
 			cleanup_log
-		elif [[ $( printf '%s\n' "${SMARTCD_VERSION_OPT}" | awk '{print $1}' ) = "${arg1}" || \
-			$( printf '%s\n' "${SMARTCD_VERSION_OPT}" | awk '{print $2}' ) = "${arg1}" ]]; then
+		elif [[ $( printf '%s\n' "${SMARTCD_VERSION_OPT}" | __smartcd::col1 ) = "${arg1}" || \
+			$( printf '%s\n' "${SMARTCD_VERSION_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
 			version_info
 		else
 			parameters=$( printf '%s\n' "${parameters}" | sed "s|^~|${HOME}|" )
@@ -270,22 +280,22 @@ __smartcd__() {
 }
 
 # validate if both fzf & fd/fdfind & find are available or not
-if [[ $( whereis -b fzf | awk '{print $2}' ) = *fzf ]]; then
+if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 	# validate fd/fdfind & find
-	if [[ $( whereis -b fdfind | awk '{print $2}' ) = *fdfind ]]; then
+	if [[ $( whereis -b fdfind | __smartcd::col2 ) = *fdfind ]]; then
 		smartcd_finder="fdfind"
-	elif [[ $( whereis -b fd | awk '{print $2}' ) = *fd ]]; then
+	elif [[ $( whereis -b fd | __smartcd::col2 ) = *fd ]]; then
 		smartcd_finder="fd"
-	elif [[ $( whereis -b find | awk '{print $2}' ) = *find ]]; then
+	elif [[ $( whereis -b find | __smartcd::col2 ) = *find ]]; then
 		smartcd_finder="find"
 	else
 		printf '%s\n' "Can't use SmartCd: fd/fdfind or find not found !" 1>&2
 	fi
 
 	# validate rg and grep
-	if [[ $( whereis -b rg | awk '{print $2}' ) = *rg ]]; then
+	if [[ $( whereis -b rg | __smartcd::col2 ) = *rg ]]; then
 		smartcd_grep="rg"
-	elif [[ $( whereis -b grep | awk '{print $2}' ) = *grep ]]; then
+	elif [[ $( whereis -b grep | __smartcd::col2 ) = *grep ]]; then
 		smartcd_grep="grep"
 	else
 		printf '%s\n' "Can't use SmartCd: rg or grep not found !" 1>&2
