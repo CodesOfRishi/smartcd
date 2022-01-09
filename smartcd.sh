@@ -17,6 +17,17 @@ __smartcd::col2() {
 	awk '{print $2}'
 }
 
+# validate selected_entry
+__smartcd::validate_selected_entry() {
+	if [[ -z ${selected_entry} ]]; then
+		printf '%s\n' "No directory found or selected!" 1>&2
+		return 1
+	else
+		builtin cd "${selected_entry}" && generate_recent_dir_log && \
+			if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
+	fi
+}
+
 __smartcd__() {
 	# location for smartcd to store log
 	export SMARTCD_CONFIG_DIR=${SMARTCD_CONFIG_DIR:-"$HOME/.config/.smartcd"}
@@ -102,14 +113,7 @@ __smartcd__() {
 		if [[ ${exit_status} -ne 0 ]]; then 
 			if [[ $( printf '%s\n' "${err_msg}" | tr "[:upper:]" "[:lower:]" ) = *"no such file or directory"* ]]; then
 				local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd_args}" | run_fzf_command "${path_argument}" )
-
-				if [[ -z ${selected_entry} ]]; then
-					printf '%s\n' "No directory found or selected!" 1>&2
-					return 1
-				else
-					builtin cd "${selected_entry}" && generate_recent_dir_log && \
-						if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
-				fi
+				__smartcd::validate_selected_entry
 			else
 				printf '%s\n' "${err_msg}" 1>&2
 				return 1
@@ -127,15 +131,7 @@ __smartcd__() {
 		else
 			local query=$*
 			local selected_entry && selected_entry=$( < "${recent_dir_log}" run_fzf_command "${query}" )
-
-			if [[ -z ${selected_entry} ]]; then
-				printf '%s\n' "No directory found or selected!" 1>&2
-				return 1
-			else
-				builtin cd "${selected_entry}" || return 1
-				generate_recent_dir_log && \
-					if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
-			fi
+			__smartcd::validate_selected_entry
 		fi
 	}
 
@@ -157,14 +153,7 @@ __smartcd__() {
 
 		local query=$*
 		local selected_entry && selected_entry=$( find_parent_dir_paths | run_fzf_command "${query}" )
-
-		if [[ -z ${selected_entry} ]]; then
-			printf '%s\n' "No directory found or selected!" 1>&2
-			return 1
-		else
-			builtin cd "${selected_entry}" && generate_recent_dir_log && \
-				if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
-		fi
+		__smartcd::validate_selected_entry
 	}
 
 	# feature
@@ -182,16 +171,8 @@ __smartcd__() {
 	# feature
 	base_parent_cd() {
 		local path_argument=$*
-
 		local selected_entry && selected_entry=$( eval "${find_base_dir_cmd_args}" | run_fzf_command "${path_argument}" )
-
-		if [[ -z ${selected_entry} ]]; then
-			printf '%s\n' "No directory found or selected!" 1>&2
-			return 1
-		else
-			builtin cd "${selected_entry}" && generate_recent_dir_log && \
-				if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
-		fi
+		__smartcd::validate_selected_entry
 	}
 
 	# feature
