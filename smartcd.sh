@@ -95,14 +95,12 @@ __smartcd__() {
 
 		local tmp_file && tmp_file=$( mktemp )
 		builtin cd ${path_argument} 2>> "${tmp_file}"
+		local exit_status=$?
 		local err_msg && err_msg=$( tail -n 1 "${tmp_file}" )
 		rm -rf "${tmp_file}"
 
-		if [[ -n ${err_msg} ]]; then 
-			if [[ $( printf '%s\n' "${err_msg}" | tr "[:upper:]" "[:lower:]" ) = *"permission denied"* ]]; then
-				printf '%s\n' "${err_msg}" 1>&2
-				return 1
-			else
+		if [[ ${exit_status} -ne 0 ]]; then 
+			if [[ $( printf '%s\n' "${err_msg}" | tr "[:upper:]" "[:lower:]" ) = *"no such file or directory"* ]]; then
 				local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd_args}" | run_fzf_command "${path_argument}" )
 
 				if [[ -z ${selected_entry} ]]; then
@@ -112,6 +110,9 @@ __smartcd__() {
 					builtin cd "${selected_entry}" && generate_recent_dir_log && \
 						if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
 				fi
+			else
+				printf '%s\n' "${err_msg}" 1>&2
+				return 1
 			fi
 		else
 			generate_recent_dir_log
