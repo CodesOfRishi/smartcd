@@ -17,6 +17,28 @@ __smartcd::col2() {
 	awk '{print $2}'
 }
 
+# Environment variables
+__smartcd::envs() {
+	# location for smartcd to store log
+	export SMARTCD_CONFIG_DIR=${SMARTCD_CONFIG_DIR:-"$HOME/.config/.smartcd"}
+	[[ -d ${SMARTCD_CONFIG_DIR} ]] || mkdir -p "${SMARTCD_CONFIG_DIR}"
+
+	# no. of unique recently visited directories smartcd to remember
+	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
+	export SMARTCD_SELECT_ONE=${SMARTCD_SELECT_ONE:-"0"}
+	export SMARTCD_BASE_PARENT=${SMARTCD_BASE_PARENT:-"${HOME}"}
+	export SMARTCD_VERSION="v3.3.0"
+
+	# options customizations
+	export SMARTCD_BASE_PARENT_OPT=${SMARTCD_BASE_PARENT_OPT-"-b --base"} # option for searching & traversing w.r.t. a base directory
+	export SMARTCD_LAST_DIR_OPT=${SMARTCD_LAST_DIR_OPT-"-"} # option for moving to $OLDPWD
+	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"-c --clean"} # option for cleanup of log file
+	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT-".."} # option for searching & traversing to parent-directories
+	export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
+	export SMARTCD_GIT_ROOT_OPT=${SMARTCD_GIT_ROOT_OPT-"."} # option for traversing to root of the git repo
+	export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"-v --version"} # option for printing version information
+}
+
 # validate selected_entry
 __smartcd::validate_selected_entry() {
 	if [[ -z ${selected_entry} ]]; then
@@ -42,24 +64,8 @@ __smartcd::run_fzf() {
 }
 
 __smartcd__() {
-	# location for smartcd to store log
-	export SMARTCD_CONFIG_DIR=${SMARTCD_CONFIG_DIR:-"$HOME/.config/.smartcd"}
-	[[ -d ${SMARTCD_CONFIG_DIR} ]] || mkdir -p "${SMARTCD_CONFIG_DIR}"
 
-	# no. of unique recently visited directories smartcd to remember
-	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
-	export SMARTCD_SELECT_ONE=${SMARTCD_SELECT_ONE:-"0"}
-	export SMARTCD_BASE_PARENT=${SMARTCD_BASE_PARENT:-"${HOME}"}
-	export SMARTCD_VERSION="v3.3.0"
-
-	# options customizations
-	export SMARTCD_BASE_PARENT_OPT=${SMARTCD_BASE_PARENT_OPT-"-b --base"} # option for searching & traversing w.r.t. a base directory
-	export SMARTCD_LAST_DIR_OPT=${SMARTCD_LAST_DIR_OPT-"-"} # option for moving to $OLDPWD
-	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"-c --clean"} # option for cleanup of log file
-	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT-".."} # option for searching & traversing to parent-directories
-	export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
-	export SMARTCD_GIT_ROOT_OPT=${SMARTCD_GIT_ROOT_OPT-"."} # option for traversing to root of the git repo
-	export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"-v --version"} # option for printing version information
+	__smartcd::envs
 
 	# log files
 	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
