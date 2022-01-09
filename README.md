@@ -54,16 +54,16 @@ A `cd` command with improved and extended usability features to quickly navigate
   <img src="https://i.imgur.com/gy3LPnq.gif">
 
 ### Other Features
-- Remove invalid paths from log using `--clean` option.
+- Remove invalid paths from log.
 
   ```bash
-  cd --clean
+  cd (-c | --clean)
   ```
 
-- Use `--version` option to print version information.
+- Print version information.
 
   ```bash
-  cd --version
+  cd (-v | --version)
   # or
   echo $SMARTCD_VERSION
   ```
