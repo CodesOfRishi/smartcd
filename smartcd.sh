@@ -326,6 +326,10 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 	if [[ -n ${smartcd_finder} && -n ${smartcd_grep} ]]; then
 		__smartcd::envs
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
+
+		# source key bindings for __smartcd::select_base function
+		if ps -p $$ | ${smartcd_grep} -i --quiet 'zsh$'; then source "$( dirname "${(%):-%x}" )"/key-bindings/base-key-binding.zsh
+		elif ps -p $$ | ${smartcd_grep} -i --quiet 'bash$'; then source "$( dirname "${BASH_SOURCE[0]}" )"/key-bindings/base-key-binding.bash; fi
 	fi
 else 
 	printf '%s\n' "Can't use SmartCd: fzf not found !" 1>&2
