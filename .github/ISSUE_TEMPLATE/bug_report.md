@@ -12,6 +12,7 @@ Make sure you're using the latest version, and mention it explicitly if you do.
 
 **The issue is with the following feature(s):**
 - [ ] Traversal to root of a git repository.
+- [ ] Search & traverse w.r.t. to a base directory.
 - [ ] Search & traverse recently visited directories.
 - [ ] Sub-directory search & traversal.
 - [ ] Parent-directory search & traversal.
