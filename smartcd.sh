@@ -19,8 +19,10 @@ __smartcd::col2() {
 
 # Environment variables
 __smartcd::envs() {
+	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
+
 	# location for smartcd to store log
-	export SMARTCD_CONFIG_DIR=${SMARTCD_CONFIG_DIR:-"$HOME/.config/.smartcd"}
+	export SMARTCD_CONFIG_DIR=${SMARTCD_CONFIG_DIR:-"${HOME}/.config/.smartcd"}
 	[[ -d ${SMARTCD_CONFIG_DIR} ]] || mkdir -p "${SMARTCD_CONFIG_DIR}"
 
 	# no. of unique recently visited directories smartcd to remember
@@ -73,8 +75,6 @@ __smartcd::run_fzf() {
 }
 
 __smartcd__() {
-
-	__smartcd::envs
 
 	# log files
 	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
@@ -294,7 +294,7 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 	fi
 
 	if [[ -n ${smartcd_finder} && -n ${smartcd_grep} ]]; then
-		export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
+		__smartcd::envs
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 	fi
 else 
