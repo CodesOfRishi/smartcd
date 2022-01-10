@@ -19,26 +19,46 @@ __smartcd::col2() {
 
 # Environment variables
 __smartcd::envs() {
-	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
-
 	# location for smartcd to store log
 	export SMARTCD_CONFIG_DIR=${SMARTCD_CONFIG_DIR:-"${HOME}/.config/.smartcd"}
 	[[ -d ${SMARTCD_CONFIG_DIR} ]] || mkdir -p "${SMARTCD_CONFIG_DIR}"
 
-	# no. of unique recently visited directories smartcd to remember
+	# array containing Multiple paths for base directory search & traversal
+	[[ -z ${SMARTCD_BASE_PATHS} ]] && export SMARTCD_BASE_PATHS=( "${HOME}" ) 
+
+	# Needs to be configured twice; once before calling __smartcd__() & another within __smartcd__()
+	export SMARTCD_BASE_DIR=${SMARTCD_BASE_PATHS[*]:0:1} # by default always set to the 1st element of $SMARTCD_BASE_PATHS
+
+	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 	export SMARTCD_SELECT_ONE=${SMARTCD_SELECT_ONE:-"0"}
-	export SMARTCD_BASE_PARENT=${SMARTCD_BASE_PARENT:-"${HOME}"}
 	export SMARTCD_VERSION="v3.3.0"
 
 	# options customizations
-	export SMARTCD_BASE_PARENT_OPT=${SMARTCD_BASE_PARENT_OPT-"-b --base"} # option for searching & traversing w.r.t. a base directory
+	export SMARTCD_BASE_DIR_OPT=${SMARTCD_BASE_DIR_OPT-"-b --base"} # option for searching & traversing w.r.t. a base directory
 	export SMARTCD_LAST_DIR_OPT=${SMARTCD_LAST_DIR_OPT-"-"} # option for moving to $OLDPWD
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"-c --clean"} # option for cleanup of log file
 	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT-".."} # option for searching & traversing to parent-directories
 	export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
 	export SMARTCD_GIT_ROOT_OPT=${SMARTCD_GIT_ROOT_OPT-"."} # option for traversing to root of the git repo
 	export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"-v --version"} # option for printing version information
+}
+
+__smartcd::select_base() {
+	local selected_entry \
+		&& selected_entry=$( for _path in "${SMARTCD_BASE_PATHS[@]}"; do printf '%s\n' "${_path}"; done | fzf --header="SmartCd: Select a base path" )
+
+	if [[ -z ${selected_entry} ]]; then
+		printf '%s\n' "No directory selected!" 1>&2
+		return 1 
+	elif [[ ! -d ${selected_entry} ]]; then
+		printf '%s\n' "Invalid directory path!" 1>&2
+		return 1
+	else
+		export SMARTCD_BASE_DIR="${selected_entry}"
+		export smartcd_manual_base_selected='1'
+		printf '%s\n' "SmartCd: Base path: ${SMARTCD_BASE_DIR}"
+	fi
 }
 
 # validate selected_entry
@@ -81,12 +101,12 @@ __smartcd__() {
 
 	# arguments for find or fd/fdfind command
 	if [[ ${smartcd_finder} = *fdfind || ${smartcd_finder} = *fd ]]; then
-		local find_base_dir_cmd_args="${smartcd_finder} --hidden --exclude .git/ --type d -I --absolute-path --base-directory \${SMARTCD_BASE_PARENT}"
+		local find_base_dir_cmd_args="${smartcd_finder} --hidden --exclude .git/ --type d -I --absolute-path --base-directory \${SMARTCD_BASE_DIR}"
 		local find_sub_dir_cmd_args="${smartcd_finder} --hidden --exclude .git/ --type d -I"
 		local find_parent_dir_cmd_args="${smartcd_finder} --exclude .git/ --search-path \${_path} -t d --max-depth=1 -H -I"
 		local find_parent_dir_root_cmd_args="${smartcd_finder} --exclude .git/ --search-path / -t d --max-depth=1 -H -I"
 	else 
-		local find_base_dir_cmd_args="${smartcd_finder} \${SMARTCD_BASE_PARENT} -type d ! -path '*/\.git/*' 2>&- | ${smartcd_grep} -v '\.git$'"
+		local find_base_dir_cmd_args="${smartcd_finder} \${SMARTCD_BASE_DIR} -type d ! -path '*/\.git/*' 2>&- | ${smartcd_grep} -v '\.git$'"
 		local find_sub_dir_cmd_args="${smartcd_finder} . -type d ! -path '*/\.git/*' 2>&- | ${smartcd_grep} -v '\.git$'"
 		local find_parent_dir_cmd_args="${smartcd_finder} \${_path} -maxdepth 1 -type d ! -path '*/\.git/*' 2>&-"
 		local find_parent_dir_root_cmd_args="${smartcd_finder} / -maxdepth 1 -type d ! -path '*/\.git/*' 2>&-"
@@ -179,8 +199,18 @@ __smartcd__() {
 
 	# feature
 	base_parent_cd() {
+		if [[ -z ${SMARTCD_BASE_PATHS[*]} ]]; then
+			printf '%s\n' "ERROR: SMARTCD_BASE_PATHS env seems to be empty!" 1>&2
+			printf '%s\n' "INFO: SMARTCD_BASE_PATHS env is an array which requires at least one valid path for base directory search & traversal." 1>&2
+			return 1
+		fi
+
+		# Needs to be configured twice; once before calling __smartcd__() & another within __smartcd__()
+		# by default always set to the 1st element of $SMARTCD_BASE_PATHS
+		[[ ${smartcd_manual_base_selected} -ne 1 ]] && export SMARTCD_BASE_DIR=${SMARTCD_BASE_PATHS[*]:0:1} 
+
 		local path_argument=$*
-		local fzf_header && fzf_header="SmartCd: [${SMARTCD_BASE_PARENT}]'s sub-directories"
+		local fzf_header && fzf_header="SmartCd: [${SMARTCD_BASE_DIR}]'s sub-directories"
 		local selected_entry && selected_entry=$( eval "${find_base_dir_cmd_args}" | __smartcd::run_fzf "${path_argument}" )
 		__smartcd::validate_selected_entry
 	}
@@ -234,8 +264,8 @@ __smartcd__() {
 			parent_dir_hop "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_LAST_DIR_OPT}" ]]; then
 			last_dir_hop "${arg2}"
-		elif [[ $( printf '%s\n' "${SMARTCD_BASE_PARENT_OPT}" | __smartcd::col1 ) = "${arg1}" || \
-			$( printf '%s\n' "${SMARTCD_BASE_PARENT_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
+		elif [[ $( printf '%s\n' "${SMARTCD_BASE_DIR_OPT}" | __smartcd::col1 ) = "${arg1}" || \
+			$( printf '%s\n' "${SMARTCD_BASE_DIR_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
 			base_parent_cd "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_GIT_ROOT_OPT}" ]]; then
 			git_root_dir_hop
