@@ -195,7 +195,8 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
 		# source key bindings for __smartcd::select_base function
-		if ps -p $$ | ${smartcd_grep} -i --quiet 'zsh$'; then source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.zsh
+		if ps -p $$ | ${smartcd_grep} -i --quiet 'zsh$'; then 
+			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.zsh
 		elif ps -p $$ | ${smartcd_grep} -i --quiet 'bash$'; then 
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.bash; 
 			source "${SMARTCD_ROOT}"/completion/completion.bash
