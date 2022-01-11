@@ -1,9 +1,11 @@
 # Feature: Search & traverse recently visited direcetories.
+# Feature: Remove invalid paths from the log file.
 
 source "${SMARTCD_ROOT}"/tools/other-utilities.sh
 
 export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
+export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"-c --clean"} # option for cleanup of log file
 
 # log file
 SMARTCD_RECENT_DIR_LOG="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
@@ -30,4 +32,21 @@ generate_recent_dir_log() {
 	awk '!seen[$0]++' "${tmp_log}" >| "${SMARTCD_RECENT_DIR_LOG}" # remove duplicates
 	rm -f "${tmp_log}"
 	sed -i $(( SMARTCD_HIST_SIZE + 1 ))',$ d' "${SMARTCD_RECENT_DIR_LOG}" # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
+}
+
+__smartcd::cleanup_log() {
+	local line_no="1"
+	local valid_paths && valid_paths=$( mktemp )
+
+	printf '%s\n' "Paths to remove: "
+	while [[ ${line_no} -le ${SMARTCD_HIST_SIZE} ]]; do
+		_path=$( sed -n ${line_no}'p' "${SMARTCD_RECENT_DIR_LOG}" )
+
+		if [[ -d ${_path} ]]; then printf '%s\n' "${_path}" >> "${valid_paths}"
+		elif [[ -n ${_path} ]]; then printf '%s\n' "${_path}"; fi
+		line_no=$(( line_no + 1 ))
+	done
+	printf '\n'
+	cp -i "${valid_paths}" "${SMARTCD_RECENT_DIR_LOG}"
+	rm -rf "${valid_paths}"
 }
