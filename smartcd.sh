@@ -145,12 +145,6 @@ __smartcd__() {
 		fi
 	}
 
-	read_pipe() {
-		while read -r _line; do
-			printf '%s\n' "${_line}"
-		done
-	}
-
 	# ---------------------------------------------------------------------------------------------------------------------
 
 	if [[ ! -t 0 ]]; then
@@ -196,6 +190,7 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 		source "${SMARTCD_ROOT}"/feats/clean-log.sh
 		source "${SMARTCD_ROOT}"/feats/last-dir.sh
 		source "${SMARTCD_ROOT}"/feats/version-info.sh
+		source "${SMARTCD_ROOT}"/feats/piping.sh
 
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
