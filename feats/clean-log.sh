@@ -1,5 +1,7 @@
 # Feature: Remove invalid paths from the log file.
 
+export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"-c --clean"} # option for cleanup of log file
+
 __smartcd::cleanup_log() {
 	local line_no="1"
 	local valid_paths && valid_paths=$( mktemp )
