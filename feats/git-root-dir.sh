@@ -2,7 +2,7 @@
 
 export SMARTCD_GIT_ROOT_OPT=${SMARTCD_GIT_ROOT_OPT-"."} # option for traversing to root of the git repo
 
-__smartcd::git_root_dir_hop() {
+__smartcd::git_root_dir() {
 	local git_root_dir && git_root_dir=$( git rev-parse --show-toplevel )
 
 	if [[ -z ${git_root_dir} ]]; then
