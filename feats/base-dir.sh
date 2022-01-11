@@ -29,7 +29,7 @@ __smartcd::select_base() {
 	fi
 }
 
-__smartcd::base_parent_cd() {
+__smartcd::base_dir() {
 	if [[ -z ${SMARTCD_BASE_PATHS[*]} ]]; then
 		printf '%s\n' "ERROR: SMARTCD_BASE_PATHS env seems to be empty!" 1>&2
 		printf '%s\n' "INFO: SMARTCD_BASE_PATHS env is an array which requires at least one valid path for base directory search & traversal." 1>&2
