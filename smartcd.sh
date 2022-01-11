@@ -44,22 +44,6 @@ __smartcd::envs() {
 	export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"-v --version"} # option for printing version information
 }
 
-__smartcd::select_base() {
-	local selected_entry \
-		&& selected_entry=$( for _path in "${SMARTCD_BASE_PATHS[@]}"; do printf '%s\n' "${_path}"; done | fzf --header="SmartCd: Select a base path" )
-
-	if [[ -z ${selected_entry} ]]; then
-		printf '%s\n' "No directory selected!" 1>&2
-		return 1 
-	elif [[ ! -d ${selected_entry} ]]; then
-		printf '%s\n' "Invalid directory path!" 1>&2
-		return 1
-	else
-		export SMARTCD_BASE_DIR="${selected_entry}"
-		export smartcd_manual_base_selected='1'
-		printf '%s\n' "SmartCd: Base path: ${SMARTCD_BASE_DIR}"
-	fi
-}
 
 # validate selected_entry
 __smartcd::validate_selected_entry() {
@@ -91,6 +75,24 @@ __smartcd::run_fzf() {
 		fzf ${select_one} --header "${fzf_header}" --exit-0 --query="${query}"
 	else
 		fzf ${select_one} --header "${fzf_header}" --exit-0 --query="${query}" --preview "${SMARTCD_FZF_PREVIEW_CMD} {}"
+	fi
+}
+
+__smartcd::select_base() {
+	local fzf_header && fzf_header="Smartcd: Select a base path"
+	local selected_entry \
+		&& selected_entry=$( for _path in "${SMARTCD_BASE_PATHS[@]}"; do printf '%s\n' "${_path}"; done | __smartcd::run_fzf )
+
+	if [[ -z ${selected_entry} ]]; then
+		printf '%s\n' "No directory selected!" 1>&2
+		return 1 
+	elif [[ ! -d ${selected_entry} ]]; then
+		printf '%s\n' "Invalid directory path!" 1>&2
+		return 1
+	else
+		export SMARTCD_BASE_DIR="${selected_entry}"
+		export smartcd_manual_base_selected='1'
+		printf '%s\n' "SmartCd: Base path: ${SMARTCD_BASE_DIR}"
 	fi
 }
 
