@@ -42,13 +42,6 @@ __smartcd__() {
 
 	# ---------------------------------------------------------------------------------------------------------------------
 
-	warning_info() {
-		printf '%s\n' "WARNING: Do not try to clean the log file while piping, as it can clean it without the user's consent!" 1>&2
-		printf '%s\n' "If you want to clean the log file, then run '${SMARTCD_COMMAND} ${SMARTCD_CLEANUP_OPT}'" 1>&2
-	}
-
-	# ---------------------------------------------------------------------------------------------------------------------
-
 	validate_parameters() {
 		local parameters=$*
 		parameters=$( printf '%s\n' "${parameters}" | awk '{$1=$1;print}' )
@@ -69,7 +62,7 @@ __smartcd__() {
 			__smartcd::git_root_dir
 		elif [[ $( printf '%s\n' "${SMARTCD_CLEANUP_OPT}" | __smartcd::col1 ) = "${arg1}" || \
 			$( printf '%s\n' "${SMARTCD_CLEANUP_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
-			[[ -n ${piped_value} ]] && warning_info && return 1
+			[[ -n ${piped_value} ]] && __smartcd::warning_info && return 1
 			__smartcd::clean_log
 		elif [[ $( printf '%s\n' "${SMARTCD_VERSION_OPT}" | __smartcd::col1 ) = "${arg1}" || \
 			$( printf '%s\n' "${SMARTCD_VERSION_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
