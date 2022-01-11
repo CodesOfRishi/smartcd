@@ -1,5 +1,7 @@
 # Feature: Search & traverse recently visited direcetories.
 
+source "${SMARTCD_ROOT}"/tools/other-utilities.sh
+
 export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
 

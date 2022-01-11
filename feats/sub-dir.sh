@@ -1,5 +1,7 @@
 # Feature: Search & traverse sub-directories
 
+source "${SMARTCD_ROOT}"/tools/other-utilities.sh
+
 __smartcd::sub_dir_hop() {
 	local path_argument=$*
 
