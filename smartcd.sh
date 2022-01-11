@@ -87,15 +87,6 @@ __smartcd::run_fzf() {
 	fi
 }
 
-# Features
-# --------
-
-__smartcd::version_info() {
-	printf '%s\n' "SmartCd by Rishi K. - ${SMARTCD_VERSION}"
-	printf '%s\n' "The MIT License (MIT)"
-	printf '%s\n' "Copyright (c) 2021 Rishi K."
-}
-
 __smartcd__() {
 
 	# log files
@@ -204,6 +195,7 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 		source "${SMARTCD_ROOT}"/feats/parent-dir.sh
 		source "${SMARTCD_ROOT}"/feats/clean-log.sh
 		source "${SMARTCD_ROOT}"/feats/last-dir.sh
+		source "${SMARTCD_ROOT}"/feats/version-info.sh
 
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
