@@ -32,19 +32,12 @@ __smartcd::envs() {
 	export SMARTCD_CONFIG_DIR=${SMARTCD_CONFIG_DIR:-"${HOME}/.config/.smartcd"}
 	[[ -d ${SMARTCD_CONFIG_DIR} ]] || mkdir -p "${SMARTCD_CONFIG_DIR}"
 
-	# array containing Multiple paths for base directory search & traversal
-	[[ -z ${SMARTCD_BASE_PATHS} ]] && export SMARTCD_BASE_PATHS=( "${HOME}" ) 
-
-	# Needs to be configured twice; once before calling __smartcd__() & another within __smartcd__()
-	export SMARTCD_BASE_DIR=${SMARTCD_BASE_PATHS[*]:0:1} # by default always set to the 1st element of $SMARTCD_BASE_PATHS
-
 	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
 	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 	export SMARTCD_SELECT_ONE=${SMARTCD_SELECT_ONE:-"0"}
 	export SMARTCD_VERSION="v3.3.0"
 
 	# options customizations
-	export SMARTCD_BASE_DIR_OPT=${SMARTCD_BASE_DIR_OPT-"-b --base"} # option for searching & traversing w.r.t. a base directory
 	export SMARTCD_LAST_DIR_OPT=${SMARTCD_LAST_DIR_OPT-"-"} # option for moving to $OLDPWD
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"-c --clean"} # option for cleanup of log file
 	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT-".."} # option for searching & traversing to parent-directories

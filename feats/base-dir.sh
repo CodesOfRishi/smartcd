@@ -1,5 +1,14 @@
 # Feature: Base directory search & traversal.
 
+# Array containing Multiple paths for base directory search & traversal
+[[ -z ${SMARTCD_BASE_PATHS} ]] && export SMARTCD_BASE_PATHS=( "${HOME}" ) 
+
+# Needs to be configured twice; once before calling __smartcd__() & another within __smartcd__()
+export SMARTCD_BASE_DIR=${SMARTCD_BASE_PATHS[*]:0:1} # by default always set to the 1st element of $SMARTCD_BASE_PATHS
+
+# Option name
+export SMARTCD_BASE_DIR_OPT=${SMARTCD_BASE_DIR_OPT-"-b --base"} # option for searching & traversing w.r.t. a base directory
+
 __smartcd::select_base() {
 	local fzf_header && fzf_header="Smartcd: Select a base path"
 	local selected_entry \
