@@ -105,6 +105,120 @@ __smartcd::select_base() {
 	fi
 }
 
+# Features
+# --------
+
+__smartcd::sub_dir_hop() {
+	local path_argument=$*
+
+	local tmp_file && tmp_file=$( mktemp )
+	builtin cd ${path_argument} 2>> "${tmp_file}"
+	local exit_status=$?
+	local err_msg && err_msg=$( tail -n 1 "${tmp_file}" )
+	rm -rf "${tmp_file}"
+
+	if [[ ${exit_status} -ne 0 ]]; then 
+		if [[ $( printf '%s\n' "${err_msg}" | tr "[:upper:]" "[:lower:]" ) = *"no such file or directory"* ]]; then
+			local fzf_header && fzf_header="SmartCd: Sub-directories"
+			local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd_args}" | __smartcd::run_fzf "${path_argument}" )
+			__smartcd::validate_selected_entry
+		else
+			printf '%s\n' "${err_msg}" 1>&2
+			return 1
+		fi
+	else
+		generate_recent_dir_log
+	fi
+}
+
+__smartcd::recent_dir_hop() {
+	if [[ ! -s ${recent_dir_log} ]]; then
+		printf '%s\n' "No any visited directory in record !!" 1>&2
+		return 1
+	else
+		local query=$*
+		local fzf_header && fzf_header="SmartCd: Recently visited directories"
+		local selected_entry && selected_entry=$( < "${recent_dir_log}" __smartcd::run_fzf "${query}" )
+		__smartcd::validate_selected_entry
+	fi
+}
+
+__smartcd::parent_dir_hop() {
+	if [[ -z $1 ]]; then
+		builtin cd .. && generate_recent_dir_log
+		return
+	fi
+
+	find_parent_dir_paths() {
+		_path=${PWD%/*}
+		while [[ -n ${_path} ]]; do
+			eval "${find_parent_dir_cmd_args}"
+			_path=${_path%/*}
+		done
+		[[ ${PWD} != "/" ]] && eval "${find_parent_dir_root_cmd_args}"
+	}
+
+	local query=$*
+	local fzf_header && fzf_header="SmartCd: Parent directories"
+	local selected_entry && selected_entry=$( find_parent_dir_paths | __smartcd::run_fzf "${query}" )
+	__smartcd::validate_selected_entry
+}
+
+__smartcd::git_root_dir_hop() {
+	local git_root_dir && git_root_dir=$( git rev-parse --show-toplevel )
+
+	if [[ -z ${git_root_dir} ]]; then
+		return 1
+	elif [[ ${git_root_dir} != "${PWD}" ]]; then 
+		builtin cd "${git_root_dir}" && generate_recent_dir_log && \
+			if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
+	fi
+}
+
+__smartcd::base_parent_cd() {
+	if [[ -z ${SMARTCD_BASE_PATHS[*]} ]]; then
+		printf '%s\n' "ERROR: SMARTCD_BASE_PATHS env seems to be empty!" 1>&2
+		printf '%s\n' "INFO: SMARTCD_BASE_PATHS env is an array which requires at least one valid path for base directory search & traversal." 1>&2
+		return 1
+	fi
+
+	# Needs to be configured twice; once before calling __smartcd__() & another within __smartcd__()
+	# by default always set to the 1st element of $SMARTCD_BASE_PATHS
+	[[ ${smartcd_manual_base_selected} -ne 1 ]] && export SMARTCD_BASE_DIR=${SMARTCD_BASE_PATHS[*]:0:1} 
+
+	local path_argument=$*
+	local fzf_header && fzf_header="SmartCd: [${SMARTCD_BASE_DIR}]'s sub-directories"
+	local selected_entry && selected_entry=$( eval "${find_base_dir_cmd_args}" | __smartcd::run_fzf "${path_argument}" )
+	__smartcd::validate_selected_entry
+}
+
+__smartcd::last_dir_hop() {
+	builtin cd "${OLDPWD}" && generate_recent_dir_log
+}
+
+__smartcd::cleanup_log() {
+	local line_no="1"
+	local valid_paths && valid_paths=$( mktemp )
+
+	printf '%s\n' "Paths to remove: "
+	while [[ ${line_no} -le ${SMARTCD_HIST_SIZE} ]]; do
+		_path=$( sed -n ${line_no}'p' "${recent_dir_log}" )
+
+		if [[ -d ${_path} ]]; then printf '%s\n' "${_path}" >> "${valid_paths}"
+		elif [[ -n ${_path} ]]; then printf '%s\n' "${_path}"; fi
+		line_no=$(( line_no + 1 ))
+	done
+	printf '\n'
+	cp -i "${valid_paths}" "${recent_dir_log}"
+	rm -rf "${valid_paths}"
+}
+
+__smartcd::version_info() {
+	printf '%s\n' "SmartCd by Rishi K. - ${SMARTCD_VERSION}"
+	printf '%s\n' "The MIT License (MIT)"
+	printf '%s\n' "Copyright (c) 2021 Rishi K."
+}
+
 __smartcd__() {
 
 	# log files
@@ -137,123 +251,6 @@ __smartcd__() {
 		sed -i $(( SMARTCD_HIST_SIZE + 1 ))',$ d' "${recent_dir_log}" # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
 	}
 
-	# feature
-	sub_dir_hop() {
-		local path_argument=$*
-
-		local tmp_file && tmp_file=$( mktemp )
-		builtin cd ${path_argument} 2>> "${tmp_file}"
-		local exit_status=$?
-		local err_msg && err_msg=$( tail -n 1 "${tmp_file}" )
-		rm -rf "${tmp_file}"
-
-		if [[ ${exit_status} -ne 0 ]]; then 
-			if [[ $( printf '%s\n' "${err_msg}" | tr "[:upper:]" "[:lower:]" ) = *"no such file or directory"* ]]; then
-				local fzf_header && fzf_header="SmartCd: Sub-directories"
-				local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd_args}" | __smartcd::run_fzf "${path_argument}" )
-				__smartcd::validate_selected_entry
-			else
-				printf '%s\n' "${err_msg}" 1>&2
-				return 1
-			fi
-		else
-			generate_recent_dir_log
-		fi
-	}
-
-	# feature
-	recent_dir_hop() {
-		if [[ ! -s ${recent_dir_log} ]]; then
-			printf '%s\n' "No any visited directory in record !!" 1>&2
-			return 1
-		else
-			local query=$*
-			local fzf_header && fzf_header="SmartCd: Recently visited directories"
-			local selected_entry && selected_entry=$( < "${recent_dir_log}" __smartcd::run_fzf "${query}" )
-			__smartcd::validate_selected_entry
-		fi
-	}
-
-	# feature
-	parent_dir_hop() {
-		if [[ -z $1 ]]; then
-			builtin cd .. && generate_recent_dir_log
-			return
-		fi
-
-		find_parent_dir_paths() {
-			_path=${PWD%/*}
-			while [[ -n ${_path} ]]; do
-				eval "${find_parent_dir_cmd_args}"
-				_path=${_path%/*}
-			done
-			[[ ${PWD} != "/" ]] && eval "${find_parent_dir_root_cmd_args}"
-		}
-
-		local query=$*
-		local fzf_header && fzf_header="SmartCd: Parent directories"
-		local selected_entry && selected_entry=$( find_parent_dir_paths | __smartcd::run_fzf "${query}" )
-		__smartcd::validate_selected_entry
-	}
-
-	# feature
-	git_root_dir_hop() {
-		local git_root_dir && git_root_dir=$( git rev-parse --show-toplevel )
-
-		if [[ -z ${git_root_dir} ]]; then
-			return 1
-		elif [[ ${git_root_dir} != "${PWD}" ]]; then 
-			builtin cd "${git_root_dir}" && generate_recent_dir_log && \
-				if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
-		fi
-	}
-
-	# feature
-	base_parent_cd() {
-		if [[ -z ${SMARTCD_BASE_PATHS[*]} ]]; then
-			printf '%s\n' "ERROR: SMARTCD_BASE_PATHS env seems to be empty!" 1>&2
-			printf '%s\n' "INFO: SMARTCD_BASE_PATHS env is an array which requires at least one valid path for base directory search & traversal." 1>&2
-			return 1
-		fi
-
-		# Needs to be configured twice; once before calling __smartcd__() & another within __smartcd__()
-		# by default always set to the 1st element of $SMARTCD_BASE_PATHS
-		[[ ${smartcd_manual_base_selected} -ne 1 ]] && export SMARTCD_BASE_DIR=${SMARTCD_BASE_PATHS[*]:0:1} 
-
-		local path_argument=$*
-		local fzf_header && fzf_header="SmartCd: [${SMARTCD_BASE_DIR}]'s sub-directories"
-		local selected_entry && selected_entry=$( eval "${find_base_dir_cmd_args}" | __smartcd::run_fzf "${path_argument}" )
-		__smartcd::validate_selected_entry
-	}
-
-	# feature
-	last_dir_hop() {
-		builtin cd "${OLDPWD}" && generate_recent_dir_log
-	}
-
-	# cleanup
-	cleanup_log() {
-		local line_no="1"
-		local valid_paths && valid_paths=$( mktemp )
-
-		printf '%s\n' "Paths to remove: "
-		while [[ ${line_no} -le ${SMARTCD_HIST_SIZE} ]]; do
-			_path=$( sed -n ${line_no}'p' "${recent_dir_log}" )
-
-			if [[ -d ${_path} ]]; then printf '%s\n' "${_path}" >> "${valid_paths}"
-			elif [[ -n ${_path} ]]; then printf '%s\n' "${_path}"; fi
-			line_no=$(( line_no + 1 ))
-		done
-		printf '\n'
-		cp -i "${valid_paths}" "${recent_dir_log}"
-		rm -rf "${valid_paths}"
-	}
-
-	version_info() {
-		printf '%s\n' "SmartCd by Rishi K. - ${SMARTCD_VERSION}"
-		printf '%s\n' "The MIT License (MIT)"
-		printf '%s\n' "Copyright (c) 2021 Rishi K."
-	}
 
 	warning_info() {
 		printf '%s\n' "WARNING: Do not try to clean the log file while piping, as it can clean it without the user's consent!" 1>&2
@@ -270,26 +267,26 @@ __smartcd__() {
 		local arg2 && arg2=$( printf '%s\n' "${parameters}" | awk '{$1=""; print $0}' | awk '{$1=$1;print}' )
 
 		if [[ ${arg1} = "${SMARTCD_HIST_OPT}" ]]; then
-			recent_dir_hop "${arg2}"
+			__smartcd::recent_dir_hop "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_PARENT_DIR_OPT}" ]]; then
-			parent_dir_hop "${arg2}"
+			__smartcd::parent_dir_hop "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_LAST_DIR_OPT}" ]]; then
-			last_dir_hop "${arg2}"
+			__smartcd::last_dir_hop "${arg2}"
 		elif [[ $( printf '%s\n' "${SMARTCD_BASE_DIR_OPT}" | __smartcd::col1 ) = "${arg1}" || \
 			$( printf '%s\n' "${SMARTCD_BASE_DIR_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
-			base_parent_cd "${arg2}"
+			__smartcd::base_parent_cd "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_GIT_ROOT_OPT}" ]]; then
-			git_root_dir_hop
+			__smartcd::git_root_dir_hop
 		elif [[ $( printf '%s\n' "${SMARTCD_CLEANUP_OPT}" | __smartcd::col1 ) = "${arg1}" || \
 			$( printf '%s\n' "${SMARTCD_CLEANUP_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
 			[[ -n ${piped_value} ]] && warning_info && return 1
-			cleanup_log
+			__smartc::cleanup_log
 		elif [[ $( printf '%s\n' "${SMARTCD_VERSION_OPT}" | __smartcd::col1 ) = "${arg1}" || \
 			$( printf '%s\n' "${SMARTCD_VERSION_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
-			version_info
+			__smartcd::version_info
 		else
 			parameters=$( printf '%s\n' "${parameters}" | sed "s|^~|${HOME}|" )
-			sub_dir_hop "${parameters}"
+			__smartcd::sub_dir_hop "${parameters}"
 		fi
 	}
 
