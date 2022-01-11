@@ -196,7 +196,10 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 
 		# source key bindings for __smartcd::select_base function
 		if ps -p $$ | ${smartcd_grep} -i --quiet 'zsh$'; then source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.zsh
-		elif ps -p $$ | ${smartcd_grep} -i --quiet 'bash$'; then source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.bash; fi
+		elif ps -p $$ | ${smartcd_grep} -i --quiet 'bash$'; then 
+			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.bash; 
+			source "${SMARTCD_ROOT}"/completion/completion.bash
+		fi
 	fi
 else 
 	printf '%s\n' "Can't use SmartCd: fzf not found !" 1>&2
