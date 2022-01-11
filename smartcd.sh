@@ -134,17 +134,6 @@ __smartcd::parent_dir_hop() {
 	__smartcd::validate_selected_entry
 }
 
-__smartcd::git_root_dir_hop() {
-	local git_root_dir && git_root_dir=$( git rev-parse --show-toplevel )
-
-	if [[ -z ${git_root_dir} ]]; then
-		return 1
-	elif [[ ${git_root_dir} != "${PWD}" ]]; then 
-		builtin cd "${git_root_dir}" && generate_recent_dir_log && \
-			if [[ -z ${piped_value} ]]; then printf '%s\n' "${PWD}"; fi
-	fi
-}
-
 __smartcd::last_dir_hop() {
 	builtin cd "${OLDPWD}" && generate_recent_dir_log
 }
@@ -275,6 +264,7 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 		__smartcd::envs
 		source "${SMARTCD_ROOT}"/feats/base-dir.sh
 		source "${SMARTCD_ROOT}"/feats/hist-dir.sh
+		source "${SMARTCD_ROOT}"/feats/git-root-dir.sh
 
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
