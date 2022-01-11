@@ -49,9 +49,6 @@ __smartcd::validate_selected_entry() {
 
 __smartcd__() {
 
-	# log files
-	local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
-
 	source "${SMARTCD_ROOT}"/tools/find-utilities.sh
 
 	# ---------------------------------------------------------------------------------------------------------------------

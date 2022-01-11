@@ -3,6 +3,9 @@
 export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
 
+# log file
+local recent_dir_log="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
+
 __smartcd::recent_dir_hop() {
 	if [[ ! -s ${recent_dir_log} ]]; then
 		printf '%s\n' "No any visited directory in record !!" 1>&2
