@@ -34,7 +34,6 @@ __smartcd::envs() {
 
 	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
 	export SMARTCD_SELECT_ONE=${SMARTCD_SELECT_ONE:-"0"}
-	export SMARTCD_VERSION="v3.3.0"
 
 	# options customizations
 	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT-".."} # option for searching & traversing to parent-directories
