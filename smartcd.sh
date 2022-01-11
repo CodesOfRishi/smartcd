@@ -113,18 +113,6 @@ __smartcd::sub_dir_hop() {
 	fi
 }
 
-__smartcd::recent_dir_hop() {
-	if [[ ! -s ${recent_dir_log} ]]; then
-		printf '%s\n' "No any visited directory in record !!" 1>&2
-		return 1
-	else
-		local query=$*
-		local fzf_header && fzf_header="SmartCd: Recently visited directories"
-		local selected_entry && selected_entry=$( < "${recent_dir_log}" __smartcd::run_fzf "${query}" )
-		__smartcd::validate_selected_entry
-	fi
-}
-
 __smartcd::parent_dir_hop() {
 	if [[ -z $1 ]]; then
 		builtin cd .. && generate_recent_dir_log
@@ -203,19 +191,6 @@ __smartcd__() {
 	fi
 
 	# ---------------------------------------------------------------------------------------------------------------------
-
-	# generate logs of recently visited dirs
-	generate_recent_dir_log() { 
-		[[ -f ${recent_dir_log} ]] || touch "${recent_dir_log}"
-
-		local tmp_log && tmp_log=$( mktemp ) # temporary file
-		printf '%s\n' "${PWD}" >| "${tmp_log}"
-		cat "${recent_dir_log}" >> "${tmp_log}"
-		awk '!seen[$0]++' "${tmp_log}" >| "${recent_dir_log}" # remove duplicates
-		rm -f "${tmp_log}"
-		sed -i $(( SMARTCD_HIST_SIZE + 1 ))',$ d' "${recent_dir_log}" # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
-	}
-
 
 	warning_info() {
 		printf '%s\n' "WARNING: Do not try to clean the log file while piping, as it can clean it without the user's consent!" 1>&2
@@ -299,6 +274,7 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 	if [[ -n ${smartcd_finder} && -n ${smartcd_grep} ]]; then
 		__smartcd::envs
 		source "${SMARTCD_ROOT}"/feats/base-dir.sh
+		source "${SMARTCD_ROOT}"/feats/hist-dir.sh
 
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
