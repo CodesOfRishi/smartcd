@@ -34,9 +34,6 @@ __smartcd::envs() {
 
 	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
 	export SMARTCD_SELECT_ONE=${SMARTCD_SELECT_ONE:-"0"}
-
-	# options customizations
-	export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"-v --version"} # option for printing version information
 }
 
 # validate selected_entry
