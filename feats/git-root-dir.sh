@@ -1,5 +1,7 @@
 # Features: Move to the root directory of a git repository
 
+export SMARTCD_GIT_ROOT_OPT=${SMARTCD_GIT_ROOT_OPT-"."} # option for traversing to root of the git repo
+
 __smartcd::git_root_dir_hop() {
 	local git_root_dir && git_root_dir=$( git rev-parse --show-toplevel )
 

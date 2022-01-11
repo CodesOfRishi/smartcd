@@ -36,7 +36,6 @@ __smartcd::envs() {
 	export SMARTCD_SELECT_ONE=${SMARTCD_SELECT_ONE:-"0"}
 
 	# options customizations
-	export SMARTCD_GIT_ROOT_OPT=${SMARTCD_GIT_ROOT_OPT-"."} # option for traversing to root of the git repo
 	export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"-v --version"} # option for printing version information
 }
 
