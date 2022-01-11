@@ -120,15 +120,10 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 		
 		source "${SMARTCD_ROOT}"/tools/fzf-utilities.sh
 
-		source "${SMARTCD_ROOT}"/feats/base-dir.sh
-		source "${SMARTCD_ROOT}"/feats/hist-dir.sh
-		source "${SMARTCD_ROOT}"/feats/git-root-dir.sh
-		source "${SMARTCD_ROOT}"/feats/sub-dir.sh
-		source "${SMARTCD_ROOT}"/feats/parent-dir.sh
-		source "${SMARTCD_ROOT}"/feats/clean-log.sh
-		source "${SMARTCD_ROOT}"/feats/last-dir.sh
-		source "${SMARTCD_ROOT}"/feats/version-info.sh
-		source "${SMARTCD_ROOT}"/feats/piping.sh
+		# source features
+		for _feats in "${SMARTCD_ROOT}"/feats/*.sh; do
+			source "${_feats}"
+		done
 
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
