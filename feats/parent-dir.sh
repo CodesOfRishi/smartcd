@@ -1,5 +1,7 @@
 # Feature: Search & traverse parent directories.
 
+export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT-".."} # option for searching & traversing to parent-directories
+
 __smartcd::parent_dir_hop() {
 	if [[ -z $1 ]]; then
 		builtin cd .. && generate_recent_dir_log
