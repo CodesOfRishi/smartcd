@@ -34,7 +34,7 @@ generate_recent_dir_log() {
 	sed -i $(( SMARTCD_HIST_SIZE + 1 ))',$ d' "${SMARTCD_RECENT_DIR_LOG}" # remove lines from line no. 51 to end. (keep only last 50 unique visited paths)
 }
 
-__smartcd::cleanup_log() {
+__smartcd::clean_log() {
 	local line_no="1"
 	local valid_paths && valid_paths=$( mktemp )
 
