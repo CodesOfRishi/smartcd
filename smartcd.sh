@@ -90,27 +90,6 @@ __smartcd::run_fzf() {
 # Features
 # --------
 
-__smartcd::parent_dir_hop() {
-	if [[ -z $1 ]]; then
-		builtin cd .. && generate_recent_dir_log
-		return
-	fi
-
-	find_parent_dir_paths() {
-		_path=${PWD%/*}
-		while [[ -n ${_path} ]]; do
-			eval "${find_parent_dir_cmd_args}"
-			_path=${_path%/*}
-		done
-		[[ ${PWD} != "/" ]] && eval "${find_parent_dir_root_cmd_args}"
-	}
-
-	local query=$*
-	local fzf_header && fzf_header="SmartCd: Parent directories"
-	local selected_entry && selected_entry=$( find_parent_dir_paths | __smartcd::run_fzf "${query}" )
-	__smartcd::validate_selected_entry
-}
-
 __smartcd::last_dir_hop() {
 	builtin cd "${OLDPWD}" && generate_recent_dir_log
 }
@@ -243,6 +222,7 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 		source "${SMARTCD_ROOT}"/feats/hist-dir.sh
 		source "${SMARTCD_ROOT}"/feats/git-root-dir.sh
 		source "${SMARTCD_ROOT}"/feats/sub-dir.sh
+		source "${SMARTCD_ROOT}"/feats/parent-dir.sh
 
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
