@@ -90,10 +90,6 @@ __smartcd::run_fzf() {
 # Features
 # --------
 
-__smartcd::last_dir_hop() {
-	builtin cd "${OLDPWD}" && generate_recent_dir_log
-}
-
 __smartcd::version_info() {
 	printf '%s\n' "SmartCd by Rishi K. - ${SMARTCD_VERSION}"
 	printf '%s\n' "The MIT License (MIT)"
@@ -207,6 +203,7 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 		source "${SMARTCD_ROOT}"/feats/sub-dir.sh
 		source "${SMARTCD_ROOT}"/feats/parent-dir.sh
 		source "${SMARTCD_ROOT}"/feats/clean-log.sh
+		source "${SMARTCD_ROOT}"/feats/last-dir.sh
 
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
