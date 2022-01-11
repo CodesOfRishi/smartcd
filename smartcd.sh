@@ -33,7 +33,6 @@ __smartcd::envs() {
 	[[ -d ${SMARTCD_CONFIG_DIR} ]] || mkdir -p "${SMARTCD_CONFIG_DIR}"
 
 	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
-	export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 	export SMARTCD_SELECT_ONE=${SMARTCD_SELECT_ONE:-"0"}
 	export SMARTCD_VERSION="v3.3.0"
 
@@ -41,11 +40,9 @@ __smartcd::envs() {
 	export SMARTCD_LAST_DIR_OPT=${SMARTCD_LAST_DIR_OPT-"-"} # option for moving to $OLDPWD
 	export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"-c --clean"} # option for cleanup of log file
 	export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT-".."} # option for searching & traversing to parent-directories
-	export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
 	export SMARTCD_GIT_ROOT_OPT=${SMARTCD_GIT_ROOT_OPT-"."} # option for traversing to root of the git repo
 	export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"-v --version"} # option for printing version information
 }
-
 
 # validate selected_entry
 __smartcd::validate_selected_entry() {

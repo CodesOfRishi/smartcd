@@ -1,5 +1,8 @@
 # Feature: Search & traverse recently visited direcetories.
 
+export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
+export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
+
 __smartcd::recent_dir_hop() {
 	if [[ ! -s ${recent_dir_log} ]]; then
 		printf '%s\n' "No any visited directory in record !!" 1>&2
