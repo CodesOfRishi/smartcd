@@ -61,7 +61,7 @@ __smartcd__() {
 		elif [[ ${arg1} = "${SMARTCD_PARENT_DIR_OPT}" ]]; then
 			__smartcd::parent_dir "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_LAST_DIR_OPT}" ]]; then
-			__smartcd::last_dir_hop "${arg2}"
+			__smartcd::last_dir "${arg2}"
 		elif [[ $( printf '%s\n' "${SMARTCD_BASE_DIR_OPT}" | __smartcd::col1 ) = "${arg1}" || \
 			$( printf '%s\n' "${SMARTCD_BASE_DIR_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
 			__smartcd::base_parent_cd "${arg2}"
