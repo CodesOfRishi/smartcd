@@ -19,6 +19,15 @@ __smartcd::col2() {
 
 # Environment variables
 __smartcd::envs() {
+
+	# Root directory of the SmartCd project
+	if ps -p $$ | ${smartcd_grep} -i --quiet 'zsh$'; then 
+		SMARTCD_ROOT="$( dirname "${(%):-%x}" )"
+	elif ps -p $$ | ${smartcd_grep} -i --quiet 'bash$'; then 
+		SMARTCD_ROOT="$( dirname "${BASH_SOURCE[0]}" )"; 
+	fi
+	export SMARTCD_ROOT
+
 	# location for smartcd to store log
 	export SMARTCD_CONFIG_DIR=${SMARTCD_CONFIG_DIR:-"${HOME}/.config/.smartcd"}
 	[[ -d ${SMARTCD_CONFIG_DIR} ]] || mkdir -p "${SMARTCD_CONFIG_DIR}"
@@ -330,8 +339,8 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
 		# source key bindings for __smartcd::select_base function
-		if ps -p $$ | ${smartcd_grep} -i --quiet 'zsh$'; then source "$( dirname "${(%):-%x}" )"/key-bindings/base-key-binding.zsh
-		elif ps -p $$ | ${smartcd_grep} -i --quiet 'bash$'; then source "$( dirname "${BASH_SOURCE[0]}" )"/key-bindings/base-key-binding.bash; fi
+		if ps -p $$ | ${smartcd_grep} -i --quiet 'zsh$'; then source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.zsh
+		elif ps -p $$ | ${smartcd_grep} -i --quiet 'bash$'; then source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.bash; fi
 	fi
 else 
 	printf '%s\n' "Can't use SmartCd: fzf not found !" 1>&2
