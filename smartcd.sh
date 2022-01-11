@@ -57,7 +57,7 @@ __smartcd__() {
 		local arg2 && arg2=$( printf '%s\n' "${parameters}" | awk '{$1=""; print $0}' | awk '{$1=$1;print}' )
 
 		if [[ ${arg1} = "${SMARTCD_HIST_OPT}" ]]; then
-			__smartcd::recent_dir_hop "${arg2}"
+			__smartcd::hist_dir "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_PARENT_DIR_OPT}" ]]; then
 			__smartcd::parent_dir_hop "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_LAST_DIR_OPT}" ]]; then

@@ -8,7 +8,7 @@ export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traver
 # log file
 SMARTCD_RECENT_DIR_LOG="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths
 
-__smartcd::recent_dir_hop() {
+__smartcd::hist_dir() {
 	if [[ ! -s ${SMARTCD_RECENT_DIR_LOG} ]]; then
 		printf '%s\n' "No any visited directory in record !!" 1>&2
 		return 1
