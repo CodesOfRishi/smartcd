@@ -298,7 +298,7 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 
 	if [[ -n ${smartcd_finder} && -n ${smartcd_grep} ]]; then
 		__smartcd::envs
-		source "${SMARTCD_ROOT}"/feats/base_srch_trvrs.sh
+		source "${SMARTCD_ROOT}"/feats/base-dir.sh
 
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
