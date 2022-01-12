@@ -5,7 +5,7 @@ source "${SMARTCD_ROOT}"/tools/other-utilities.sh
 
 export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
-export SMARTCD_CLEANUP_OPT=${SMARTCD_CLEANUP_OPT-"-c --clean"} # option for cleanup of log file
+export SMARTCD_CLEAN_LOG_OPT=${SMARTCD_CLEAN_LOG_OPT-"-c --clean"} # option for cleanup of log file
 
 # log file
 SMARTCD_HIST_DIR_LOG="${SMARTCD_CONFIG_DIR}/smartcd_recent_dir.log" # stores last 50 unique visited absolute paths

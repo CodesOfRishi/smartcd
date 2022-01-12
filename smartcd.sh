@@ -60,8 +60,8 @@ __smartcd__() {
 			__smartcd::base_dir "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_GIT_ROOT_OPT}" ]]; then
 			__smartcd::git_root_dir
-		elif [[ $( printf '%s\n' "${SMARTCD_CLEANUP_OPT}" | __smartcd::col1 ) = "${arg1}" || \
-			$( printf '%s\n' "${SMARTCD_CLEANUP_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
+		elif [[ $( printf '%s\n' "${SMARTCD_CLEAN_LOG_OPT}" | __smartcd::col1 ) = "${arg1}" || \
+			$( printf '%s\n' "${SMARTCD_CLEAN_LOG_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
 			[[ -n ${piped_value} ]] && __smartcd::warning_info && return 1
 			__smartcd::clean_log
 		elif [[ $( printf '%s\n' "${SMARTCD_VERSION_OPT}" | __smartcd::col1 ) = "${arg1}" || \
