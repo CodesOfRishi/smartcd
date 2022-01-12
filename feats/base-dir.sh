@@ -7,6 +7,7 @@ source "${SMARTCD_ROOT}"/tools/other-utilities.sh
 
 # Needs to be configured twice; before & after calling of __smartcd__()
 export SMARTCD_BASE_DIR=${SMARTCD_BASE_PATHS[*]:0:1} # by default always set to the 1st element of $SMARTCD_BASE_PATHS
+export SMARTCD_BASE_DIR_KEYBIND=${SMARTCD_BASE_DIR_KEYBIND-"\\C-k"} # key binding for __smartcd::select_base
 
 # Option for Base-Dir feature
 export SMARTCD_BASE_DIR_OPT=${SMARTCD_BASE_DIR_OPT-"-b --base"} 

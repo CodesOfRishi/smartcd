@@ -7,4 +7,5 @@ __smartcd::select_base-widget() {
 }
 
 zle -N __smartcd::select_base-widget
-bindkey "\C-k" __smartcd::select_base-widget
+
+bindkey "${SMARTCD_BASE_DIR_KEYBIND}" __smartcd::select_base-widget
