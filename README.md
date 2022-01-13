@@ -199,6 +199,22 @@ To manually configure either to use <code>rg</code> or <code>grep</code> command
 </details>
 
 <details>
+<summary><strong><code>SMARTCD_BASE_PATHS</code></strong></summary> 
+<ul>
+<li>An array which stores multiple base directory paths. You can add multiple base directory paths to the array & the 1st element of the array will always be used as base.</li>
+<li>For e.g., you can configure the array as:
+<p>
+
+```bash
+SMARTCD_BASE_PATHS=( "path/to/my/dir1" "path/to/my/proj1" "path/to/my/dir2" "path/to/my/proj2" )
+export SMARTCD_BASE_PATHS
+```
+</p>
+<li>It defaults to <code>( "${HOME}" )</code>.</li>
+</ul>
+</details>
+
+<details>
 <summary><strong><code>SMARTCD_BASE_DIR_OPT</code></strong></summary> 
 To use a different option for searching & traversing w.r.t. a particular base directory, export <code>SMARTCD_BASE_DIR_OPT</code> with your desired options with <i>spaces</i>. SmartCd will validate only the first 2 options provided in the env. This defaults to <code>"-b --base"</code>.
 </details>
