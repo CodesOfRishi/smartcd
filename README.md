@@ -206,7 +206,12 @@ To manually configure either to use <code>rg</code> or <code>grep</code> command
 <p>
 
 ```bash
-SMARTCD_BASE_PATHS=( "path/to/my/dir1" "path/to/my/proj1" "path/to/my/dir2" "path/to/my/proj2" )
+SMARTCD_BASE_PATHS=( 
+	"path/to/my/dir1" 
+	"path/to/my/proj1" 
+	"path/to/my/dir2" 
+	"path/to/my/proj2" 
+)
 export SMARTCD_BASE_PATHS
 ```
 </p>
