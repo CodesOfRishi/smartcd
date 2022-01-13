@@ -36,7 +36,7 @@ A `cd` command with improved and extended usability features to quickly navigate
 
   <img src="https://i.imgur.com/xVDkHD7.gif">
 
-- `smartcd` can also search *parent-directories* based on the argument string provided. It will list all parent directories that matched the argument string, where you can fuzzy search and automatically traverse to the selected path.
+- `smartcd` can search *parent-directories* based on the argument string provided. It will list all parent directories that matched the argument string, where you can fuzzy search and automatically traverse to the selected path.
 
   **Synopsis:** `cd .. [string ...]`
 
