@@ -18,27 +18,27 @@ A `cd` command with improved and extended usability features to quickly navigate
 
 - If you're in a git repository and deeply embedded within directories, you can directly traverse to the root of the git repository.
 
-  **Syntax:** `cd .`
+  **Synopsis:** `cd .`
 
 - Often when you're deeply embedded within directories, you may want to be able to search and traverse with respect to a particular directory. For example, many users may often feel the need of searching and traversing within their `$HOME` directory irrespective of what their current working directory is. SmartCd will use `$HOME` as its default base directory.
 
-  **Syntax:** `cd (-b | --base) [string ...]`
+  **Synopsis:** `cd (-b | --base) [string ...]`
 
 - By default `smartcd` can remember the last 50 unique visited directory locations, where you can Fuzzy search and automatically traverse to the selected one.
 
-  **Syntax:** `cd -- [string ...]`
+  **Synopsis:** `cd -- [string ...]`
 
   <img src="https://i.imgur.com/UqfGpLw.gif">
 
 - If the provided argument is not in your `$CDPATH`, then `smartcd` will present you with a list of all the *sub-directories* that matched the argument, where you can Fuzzy search & directly traverse to the selected path.
 
-  **Syntax:** `cd [string ...]`
+  **Synopsis:** `cd [string ...]`
 
   <img src="https://i.imgur.com/xVDkHD7.gif">
 
 - `smartcd` can also search *parent-directories* based on the argument string provided. It will list all parent directories that matched the argument string, where you can fuzzy search and automatically traverse to the selected path.
 
-  **Syntax:** `cd .. [string ...]`
+  **Synopsis:** `cd .. [string ...]`
 
   <img src="https://i.imgur.com/rgkVR6v.gif">
 
