@@ -267,7 +267,8 @@ To use a different option name to print version information, export <code>SMARTC
 **What if the user configures the same options for multiple features?** 
 
 SmartCd gives priority in the following order:<br>
-`SMARTCD_HIST_OPT` > `SMARTCD_PARENT_DIR_OPT` > `SMARTCD_LAST_DIR_OPT` > `SMARTCD_BASE_PARENT_OPT` > `SMARTCD_GIT_ROOT_OPT` > `SMARTCD_CLEANUP_OP` > `SMARTCD_VERSION_OPT` 
+
+`SMARTCD_HIST_DIR_OPT` > `SMARTCD_PARENT_DIR_OPT` > `SMARTCD_LAST_DIR_OPT` > `SMARTCD_BASE_DIR_OPT` > `SMARTCD_GIT_ROOT_OPT` > `SMARTCD_CLEAN_LOG_OPT` > `SMARTCD_VERSION_OPT` 
 
 ## Known Caveats
 
