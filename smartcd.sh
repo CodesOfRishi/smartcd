@@ -11,9 +11,9 @@
 __smartcd::envs() {
 
 	# Root directory of the SmartCd project
-	if ps -p $$ | ${smartcd_grep} -i --quiet 'zsh$'; then 
+	if ps -p $$ | ${SMARTCD_GREP} -i --quiet 'zsh$'; then 
 		SMARTCD_ROOT="$( dirname "${(%):-%x}" )"
-	elif ps -p $$ | ${smartcd_grep} -i --quiet 'bash$'; then 
+	elif ps -p $$ | ${SMARTCD_GREP} -i --quiet 'bash$'; then 
 		SMARTCD_ROOT="$( dirname "${BASH_SOURCE[0]}" )"; 
 	fi
 	export SMARTCD_ROOT
@@ -80,25 +80,25 @@ __smartcd__() {
 if hash fzf 2> /dev/null; then
 	# validate fd/fdfind & find
 	if hash fdfind 2> /dev/null; then
-		smartcd_finder="fdfind"
+		export SMARTCD_FINDER=${SMARTCD_FIND:-"fdfind"}
 	elif hash fd 2> /dev/null; then
-		smartcd_finder="fd"
+		export SMARTCD_FINDER=${SMARTCD_FINDER:-"fd"}
 	elif hash find 2> /dev/null; then
-		smartcd_finder="find"
+		export SMARTCD_FINDER=${SMARTCD_FINDER:-"find"}
 	else
 		printf '%s\n' "Can't use SmartCd: fd/fdfind or find not found !" 1>&2
 	fi
 
 	# validate rg and grep
 	if hash rg 2> /dev/null; then
-		smartcd_grep="rg"
+		export SMARTCD_GREP=${SMARTCD_GREP:-"rg"}
 	elif hash grep 2> /dev/null; then
-		smartcd_grep="grep"
+		export SMARTCD_GREP=${SMARTCD_GREP:-"grep"} 
 	else
 		printf '%s\n' "Can't use SmartCd: rg or grep not found !" 1>&2
 	fi
 
-	if [[ -n ${smartcd_finder} && -n ${smartcd_grep} ]]; then
+	if [[ -n ${SMARTCD_FINDER} && -n ${SMARTCD_GREP} ]]; then
 		__smartcd::envs
 		
 		source "${SMARTCD_ROOT}"/tools/fzf-utilities.sh
@@ -112,9 +112,9 @@ if hash fzf 2> /dev/null; then
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
 		# source key bindings for __smartcd::select_base function
-		if ps -p $$ | ${smartcd_grep} -i --quiet 'zsh$'; then 
+		if ps -p $$ | ${SMARTCD_GREP} -i --quiet 'zsh$'; then 
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.zsh
-		elif ps -p $$ | ${smartcd_grep} -i --quiet 'bash$'; then 
+		elif ps -p $$ | ${SMARTCD_GREP} -i --quiet 'bash$'; then 
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.bash; 
 			source "${SMARTCD_ROOT}"/completion/completion.bash
 		fi
