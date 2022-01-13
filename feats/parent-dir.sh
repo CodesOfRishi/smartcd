@@ -14,7 +14,7 @@ __smartcd::parent_dir() {
 			eval "${find_parent_dir_cmd}"
 			_path=${_path%/*}
 		done
-		[[ ${PWD} != "/" ]] && eval "${find_parent_dir_root_cmd_args}"
+		[[ ${PWD} != "/" ]] && eval "${find_root_dir_cmd}"
 	}
 
 	local query=$*
