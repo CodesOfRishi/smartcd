@@ -87,22 +87,22 @@ __smartcd__() {
 }
 
 # validate if both fzf & fd/fdfind & find are available or not
-if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
+if hash fzf 2> /dev/null; then
 	# validate fd/fdfind & find
-	if [[ $( whereis -b fdfind | __smartcd::col2 ) = *fdfind ]]; then
+	if hash fdfind 2> /dev/null; then
 		smartcd_finder="fdfind"
-	elif [[ $( whereis -b fd | __smartcd::col2 ) = *fd ]]; then
+	elif hash fd 2> /dev/null; then
 		smartcd_finder="fd"
-	elif [[ $( whereis -b find | __smartcd::col2 ) = *find ]]; then
+	elif hash find 2> /dev/null; then
 		smartcd_finder="find"
 	else
 		printf '%s\n' "Can't use SmartCd: fd/fdfind or find not found !" 1>&2
 	fi
 
 	# validate rg and grep
-	if [[ $( whereis -b rg | __smartcd::col2 ) = *rg ]]; then
+	if hash rg 2> /dev/null; then
 		smartcd_grep="rg"
-	elif [[ $( whereis -b grep | __smartcd::col2 ) = *grep ]]; then
+	elif hash grep 2> /dev/null; then
 		smartcd_grep="grep"
 	else
 		printf '%s\n' "Can't use SmartCd: rg or grep not found !" 1>&2
