@@ -24,7 +24,7 @@ A `cd` command with improved and extended usability features to quickly navigate
 
   **Synopsis:** `cd (-b | --base) [string ...]`
 
-- By default `smartcd` can remember the last 50 unique visited directory locations, where you can Fuzzy search and automatically traverse to the selected one.
+- `smartcd` can remember the last 50 (default) unique recently visited directory locations, where you can Fuzzy search and automatically traverse to the selected one.
 
   **Synopsis:** `cd -- [string ...]`
 
