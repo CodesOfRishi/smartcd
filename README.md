@@ -199,8 +199,8 @@ To use a different option name for searching & traversing to parent-directories,
 </details>
 
 <details>
-<summary><strong><code>SMARTCD_HIST_OPT</code></strong></summary> 
-To use a different option name for searching & traversing to recently visited directories, export <code>SMARTCD_HIST_OPT</code> with your desired option. This defaults to <code>--</code>.
+<summary><strong><code>SMARTCD_HIST_DIR_OPT</code></strong></summary> 
+To use a different option name for searching & traversing to recently visited directories, export <code>SMARTCD_HIST_DIR_OPT</code> with your desired option. This defaults to <code>--</code>.
 </details>
 
 <details>
