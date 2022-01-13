@@ -215,6 +215,14 @@ export SMARTCD_BASE_PATHS
 </details>
 
 <details>
+<summary><strong><code>SMARTCD_BASE_DIR_KEYBIND</code></strong></summary> 
+<ul>
+<li>User can use <code>CTRL-k</code> (default) keystroke to fuzzy search & select to change the base directory to use (for the current shell) from the <code>SMARTCD_BASE_PATHS</code> array.</li>
+<li>This defaults to <code>\\C-k</code>, i.e., <code>CTRL-k</code></li>
+</ul>
+</details>
+
+<details>
 <summary><strong><code>SMARTCD_BASE_DIR_OPT</code></strong></summary> 
 To use a different option for searching & traversing w.r.t. a particular base directory, export <code>SMARTCD_BASE_DIR_OPT</code> with your desired options with <i>spaces</i>. SmartCd will validate only the first 2 options provided in the env. This defaults to <code>"-b --base"</code>.
 </details>
