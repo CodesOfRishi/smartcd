@@ -21,7 +21,7 @@ __smartcd::sub_dir_hop() {
 		for _cd_error in "${ignore_cd_errors[@]}"; do
 			if [[ ${curr_err} = *"${_cd_error}"* ]]; then
 				local fzf_header && fzf_header="SmartCd: Sub-directories"
-				local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd_args}" | __smartcd::run_fzf "${path_argument}" )
+				local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd}" | __smartcd::run_fzf "${path_argument}" )
 				__smartcd::validate_selected_entry
 				return $?
 			fi
