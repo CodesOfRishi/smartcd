@@ -179,7 +179,7 @@ Command (with options) to use with current line as argument from the <code>fzf</
 </details>
 
 <details>
-<summary><strong><code>SMARTCD_HIST_SIZE</code></strong></summary> 
+<summary><strong><code>SMARTCD_HIST_DIR_LOG_SIZE</code></strong></summary> 
 Set number of unique recently visited directory paths <code>smartcd</code> should remember. This defaults to 50.
 </details>
 
