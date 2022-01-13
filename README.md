@@ -118,7 +118,8 @@ Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash
 1. Add the below code in your `.zshrc` (~~`.bashrc`~~).
 
    ```bash
-   zinit snippet "https://raw.githubusercontent.com/CodesOfRishi/smartcd/main/smartcd.sh"
+   zinit ice depth=1
+   zinit light "CodesOfRishi/smartcd"
    ```
 
 2. Open a new shell or reload your shell configuration file.
