@@ -1,3 +1,13 @@
+# utility
+__smartcd::col1() {
+	awk '{print $1}'
+}
+
+# utility
+__smartcd::col2() {
+	awk '{print $2}'
+}
+
 # validate selected_entry
 __smartcd::validate_selected_entry() {
 	if [[ -z ${selected_entry} ]]; then

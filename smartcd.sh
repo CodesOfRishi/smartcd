@@ -7,16 +7,6 @@
 # ███████║██║ ╚═╝ ██║██║  ██║██║  ██║   ██║   ╚██████╗██████╔╝
 # ╚══════╝╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═╝   ╚═╝    ╚═════╝╚═════╝ Rishi K. (https://github.com/CodesOfRishi)
 
-# utility
-__smartcd::col1() {
-	awk '{print $1}'
-}
-
-# utility
-__smartcd::col2() {
-	awk '{print $2}'
-}
-
 # Environment variables
 __smartcd::envs() {
 
