@@ -97,22 +97,19 @@ Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash
 
 ### Manual Installation
 
-1. Download the `smartcd.sh` script.
+1. Clone the repository.
 
    ```bash
-   # using curl
-   curl -O https://raw.githubusercontent.com/CodesOfRishi/smartcd/main/smartcd.sh
-   # OR using wget
-   wget https://raw.githubusercontent.com/CodesOfRishi/smartcd/main/smartcd.sh
+   git clone --depth 1 https://github.com/CodesOfRishi/smartcd.git
    ```
-
-2. Just put the below code in your shell configuration file (`.bashrc` and/or `.zshrc`).
+   
+2. Source the `smartcd.sh` script in your shell configuration file (`.bashrc` and/or `.zshrc`).
 
    ```bash
-   source path/to/smartcd.sh
+   source path/to/smartcd/smartcd.sh
    ```
 
-   Where `path/to/smartcd.sh` is the path to the `smartcd.sh` script.
+   Where `path/to/smartcd/smartcd.sh` is the path to the `smartcd.sh` script in the smartcd repository.
 
 3. Open a new shell or reload your shell configuration file.
 
