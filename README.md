@@ -189,11 +189,6 @@ To use a custom command name for using smartcd, export <code>SMARTCD_COMMAND</co
 </details>
 
 <details>
-<summary><strong><code>SMARTCD_BASE_PARENT</code></strong></summary> 
-Base directory that SmartCd uses to search & traverse to a location, irrespective of your current working directory. To use a different base directory export <code>SMARTCD_BASE_PARENT</code> with your desired directory path. This defaults to <code>$HOME</code>.
-</details>
-
-<details>
 <summary><strong><code>SMARTCD_BASE_PARENT_OPT</code></strong></summary> 
 To use a different option for searching & traversing w.r.t. a particular base directory, export <code>SMARTCD_BASE_PARENT_OPT</code> with your desired options with <i>spaces</i>. SmartCd will validate only the first 2 options provided in the env. This defaults to <code>"-b --base"</code>.
 </details>
