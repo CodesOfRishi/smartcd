@@ -1,7 +1,5 @@
 # Feature: Base directory search & traversal.
 
-source "${SMARTCD_ROOT}"/tools/other-utilities.sh
-
 # Array containing multiple base paths for Base-Dir feature
 [[ -z ${SMARTCD_BASE_PATHS} ]] && export SMARTCD_BASE_PATHS=( "${HOME}" ) 
 

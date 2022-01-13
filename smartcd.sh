@@ -112,6 +112,7 @@ if [[ $( whereis -b fzf | __smartcd::col2 ) = *fzf ]]; then
 		__smartcd::envs
 		
 		source "${SMARTCD_ROOT}"/tools/fzf-utilities.sh
+		source "${SMARTCD_ROOT}"/tools/other-utilities.sh
 
 		# source features
 		for _feats in "${SMARTCD_ROOT}"/feats/*.sh; do

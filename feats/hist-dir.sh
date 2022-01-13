@@ -1,8 +1,6 @@
 # Feature: Search & traverse recently visited direcetories.
 # Feature: Remove invalid paths from the log file.
 
-source "${SMARTCD_ROOT}"/tools/other-utilities.sh
-
 export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
 export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
 export SMARTCD_CLEAN_LOG_OPT=${SMARTCD_CLEAN_LOG_OPT-"-c --clean"} # option for cleanup of log file

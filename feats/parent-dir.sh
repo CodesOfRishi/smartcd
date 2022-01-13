@@ -1,7 +1,5 @@
 # Feature: Search & traverse parent directories.
 
-source "${SMARTCD_ROOT}"/tools/other-utilities.sh
-
 export SMARTCD_PARENT_DIR_OPT=${SMARTCD_PARENT_DIR_OPT-".."} # option for searching & traversing to parent-directories
 
 __smartcd::parent_dir() {
