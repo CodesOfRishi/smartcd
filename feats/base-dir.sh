@@ -41,6 +41,6 @@ __smartcd::base_dir() {
 
 	local path_argument=$*
 	local fzf_header && fzf_header="SmartCd: [${SMARTCD_BASE_DIR}]'s sub-directories"
-	local selected_entry && selected_entry=$( eval "${find_base_dir_cmd_args}" | __smartcd::run_fzf "${path_argument}" )
+	local selected_entry && selected_entry=$( eval "${find_base_dir_cmd}" | __smartcd::run_fzf "${path_argument}" )
 	__smartcd::validate_selected_entry
 }
