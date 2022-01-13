@@ -20,7 +20,7 @@ A `cd` command with improved and extended usability features to quickly navigate
 
   **Synopsis:** `cd .`
 
-- Often when you're deeply embedded within directories, you may want to be able to search and traverse with respect to a particular directory. For example, many users may often feel the need of searching and traversing within their `$HOME` directory irrespective of what their current working directory is. SmartCd will use `$HOME` as its default base directory.
+- Often when you're deeply embedded within directories, you may want to be able to search and traverse with respect to a particular directory. For example, many users may often feel the need of searching and traversing within their `$HOME` directory irrespective of what their current working directory is.<br>By default, `smartcd` will use `$HOME` as base. User can provide multiple base paths as well (check out `SMARTCD_BASE_PATHS` & `SMARTCD_BASE_DIR_KEYBIND`).
 
   **Synopsis:** `cd (-b | --base) [string ...]`
 
