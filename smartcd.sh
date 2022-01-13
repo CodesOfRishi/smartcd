@@ -101,6 +101,7 @@ if hash fzf 2> /dev/null; then
 	if [[ -n ${SMARTCD_FINDER} && -n ${SMARTCD_GREP} ]]; then
 		__smartcd::envs
 		
+		# source fzf & other utilities
 		source "${SMARTCD_ROOT}"/tools/fzf-utilities.sh
 		source "${SMARTCD_ROOT}"/tools/other-utilities.sh
 
