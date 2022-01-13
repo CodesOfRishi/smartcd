@@ -2,7 +2,7 @@
 # Feature: Remove invalid paths from the log file.
 
 export SMARTCD_HIST_SIZE=${SMARTCD_HIST_SIZE:-"50"}
-export SMARTCD_HIST_OPT=${SMARTCD_HIST_OPT-"--"} # option for searching & traversing to recently visited directories
+export SMARTCD_HIST_DIR_OPT=${SMARTCD_HIST_DIR_OPT-"--"} # option for searching & traversing to recently visited directories
 export SMARTCD_CLEAN_LOG_OPT=${SMARTCD_CLEAN_LOG_OPT-"-c --clean"} # option for cleanup of log file
 
 # log file
