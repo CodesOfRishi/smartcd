@@ -11,7 +11,7 @@ __smartcd::parent_dir() {
 	find_parent_dir_paths() {
 		_path=${PWD%/*}
 		while [[ -n ${_path} ]]; do
-			eval "${find_parent_dir_cmd_args}"
+			eval "${find_parent_dir_cmd}"
 			_path=${_path%/*}
 		done
 		[[ ${PWD} != "/" ]] && eval "${find_parent_dir_root_cmd_args}"
