@@ -24,6 +24,8 @@ A `cd` command with improved and extended usability features to quickly navigate
 
   **Synopsis:** `cd (-b | --base) [string ...]`
 
+  <img src="https://i.imgur.com/cLaBg3B.gif">
+
 - `smartcd` can remember the last 50 (default) unique recently visited directory locations, where you can Fuzzy search and automatically traverse to the selected one.
 
   **Synopsis:** `cd -- [string ...]`
