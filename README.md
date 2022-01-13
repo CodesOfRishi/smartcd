@@ -214,8 +214,8 @@ To use a different option name for traversing to root of a git repository, expor
 </details>
 
 <details>
-<summary><strong><code>SMARTCD_CLEANUP_OPT</code></strong></summary> 
-To use a different option name for removing invalid paths from log, export <code>SMARTCD_CLEANUP_OPT</code> with your desired options with <i>spaces</i>. SmartCd will validate only the first 2 options provided in the env. This defaults to <code>"-c --clean"</code>.
+<summary><strong><code>SMARTCD_CLEAN_LOG_OPT</code></strong></summary> 
+To use a different option name for removing invalid paths from log, export <code>SMARTCD_CLEAN_LOG_OPT</code> with your desired options with <i>spaces</i>. SmartCd will validate only the first 2 options provided in the env. This defaults to <code>"-c --clean"</code>.
 </details>
 
 <details>
