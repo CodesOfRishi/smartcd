@@ -76,23 +76,35 @@ __smartcd__() {
 	validate_parameters "$@" "${piped_value}"
 }
 
+__smartcd::exec_exist() {
+	local _executable=$1
+	if ps -p $$ | grep -i --quiet 'zsh$'; then
+		whence -p "${_executable}" &> /dev/null
+	elif ps -p $$ | grep -i --quiet 'bash$'; then
+		type -P "${_executable}" &> /dev/null
+	else 
+		printf '%s\n' "Current shell doesn't seems to be either Base or Zsh" 1>&2
+		return 1
+	fi
+}
+
 # validate if both fzf & fd/fdfind & find are available or not
-if hash fzf 2> /dev/null; then
+if __smartcd::exec_exist fzf; then
 	# validate fd/fdfind & find
-	if hash fdfind 2> /dev/null; then
+	if __smartcd::exec_exist fdfind; then
 		export SMARTCD_FINDER=${SMARTCD_FIND:-"fdfind"}
-	elif hash fd 2> /dev/null; then
+	elif __smartcd::exec_exist fd; then
 		export SMARTCD_FINDER=${SMARTCD_FINDER:-"fd"}
-	elif hash find 2> /dev/null; then
+	elif __smartcd::exec_exist fd; then
 		export SMARTCD_FINDER=${SMARTCD_FINDER:-"find"}
 	else
 		printf '%s\n' "Can't use SmartCd: fd/fdfind or find not found !" 1>&2
 	fi
 
 	# validate rg and grep
-	if hash rg 2> /dev/null; then
+	if __smartcd::exec_exist rg; then
 		export SMARTCD_GREP=${SMARTCD_GREP:-"rg"}
-	elif hash grep 2> /dev/null; then
+	elif __smartcd::exec_exist grep; then
 		export SMARTCD_GREP=${SMARTCD_GREP:-"grep"} 
 	else
 		printf '%s\n' "Can't use SmartCd: rg or grep not found !" 1>&2

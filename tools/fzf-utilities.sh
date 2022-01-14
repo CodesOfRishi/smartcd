@@ -1,8 +1,8 @@
 # configure & validate SMARTCD_FZF_PREVIEW_CMD env
 __smartcd::fzf_preview() {
-	if hash exa 2> /dev/null; then
+	if __smartcd::exec_exist exa; then
 		export SMARTCD_FZF_PREVIEW_CMD=${SMARTCD_FZF_PREVIEW_CMD-"exa -TaF -I '.git' --icons --group-directories-first --git-ignore --colour=always"}
-	elif hash tree 2> /dev/null; then
+	elif __smartcd::exec_exist tree; then
 		export SMARTCD_FZF_PREVIEW_CMD=${SMARTCD_FZF_PREVIEW_CMD-"tree -I '.git' -C -a"}
 	else export SMARTCD_FZF_PREVIEW_CMD=${SMARTCD_FZF_PREVIEW_CMD-""}; fi
 }
