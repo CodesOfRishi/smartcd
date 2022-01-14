@@ -7,7 +7,6 @@ A `cd` command with improved and extended usability features to quickly navigate
 [Features](#features) •
 [Requirements](#requirements) •
 [Installation](#installation) •
-[Zsh Completion](#zsh-completion) •
 [Configurations](#configurations) •
 [Other Info](#other-info) •
 [Known Caveats](#known-caveats)
@@ -135,24 +134,6 @@ Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash
    ```
 
 2. Open a new shell or reload your shell configuration file.
-
-## Zsh Completion
-
-- Add the below code after calling `compinit` in your `.zshrc`.
-
-  ```bash
-  compdef __smartcd__=cd
-  ```
-
-  This will enable completion for SmartCd same as of built-in `cd` command.
-
-- If you also want hidden directories completion for SmartCd, you need to enable GLOB_DOTS option.
-
-  ```bash
-  setopt globdots
-  ```
-
-Lastly, open a new shell or reload your shell configuration file.
 
 ## Configurations
 
