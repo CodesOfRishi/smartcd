@@ -117,8 +117,8 @@ if hash fzf 2> /dev/null; then
 			typeset -f compinit > /dev/null && compdef __smartcd__=cd # completion for zsh
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.zsh
 		elif ps -p $$ | ${SMARTCD_GREP} -i --quiet 'bash$'; then 
+			complete -A directory "${SMARTCD_COMMAND}" # completion for bash
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.bash; 
-			source "${SMARTCD_ROOT}"/completion/completion.bash
 		fi
 	fi
 else 
