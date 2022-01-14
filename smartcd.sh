@@ -83,7 +83,7 @@ __smartcd::exec_exist() {
 	elif ps -p $$ | grep -i --quiet 'bash$'; then
 		type -P "${_executable}" &> /dev/null
 	else 
-		printf '%s\n' "Current shell doesn't seems to be either Base or Zsh" 1>&2
+		printf '%s\n' "Current shell doesn't seems to be either Bash or Zsh" 1>&2
 		return 1
 	fi
 }
