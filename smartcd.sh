@@ -106,9 +106,10 @@ if hash fzf 2> /dev/null; then
 		source "${SMARTCD_ROOT}"/tools/other-utilities.sh
 
 		# source features
-		for _feats in "${SMARTCD_ROOT}"/feats/*.sh; do
-			source "${_feats}"
+		for _feat in "${SMARTCD_ROOT}"/feats/*.sh; do
+			source "${_feat}"
 		done
+		unset _feat
 
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
@@ -120,6 +121,9 @@ if hash fzf 2> /dev/null; then
 			complete -A directory "${SMARTCD_COMMAND}" # completion for bash
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.bash; 
 		fi
+	else
+		unset SMARTCD_FIND
+		unset SMARTCD_GREP
 	fi
 else 
 	printf '%s\n' "Can't use SmartCd: fzf not found !" 1>&2
