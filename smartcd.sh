@@ -88,7 +88,7 @@ __smartcd::exec_exist() {
 	fi
 }
 
-# validate if both fzf & fd/fdfind & find are available or not
+# validate if fzf available or not
 if __smartcd::exec_exist fzf; then
 	# validate fd/fdfind & find
 	if __smartcd::exec_exist fdfind; then
