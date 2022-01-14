@@ -114,6 +114,7 @@ if hash fzf 2> /dev/null; then
 
 		# source key bindings for __smartcd::select_base function
 		if ps -p $$ | ${SMARTCD_GREP} -i --quiet 'zsh$'; then 
+			typeset -f compinit > /dev/null && compdef __smartcd__=cd # completion for zsh
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.zsh
 		elif ps -p $$ | ${SMARTCD_GREP} -i --quiet 'bash$'; then 
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.bash; 
