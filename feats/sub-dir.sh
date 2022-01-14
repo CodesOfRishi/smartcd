@@ -4,7 +4,7 @@ __smartcd::sub_dir_hop() {
 	local path_argument=$*
 
 	# builtin cd errors to ignore for Sub-Dir feature
-	ignore_cd_errors=(
+	local ignore_cd_errors=(
 		"no such file or directory"
 		"too many arguments"
 	)
@@ -23,6 +23,7 @@ __smartcd::sub_dir_hop() {
 				local fzf_header && fzf_header="SmartCd: Sub-directories"
 				local selected_entry && selected_entry=$( eval "${find_sub_dir_cmd}" | __smartcd::run_fzf "${path_argument}" )
 				__smartcd::validate_selected_entry
+				unset _cd_error
 				return $?
 			fi
 		done
