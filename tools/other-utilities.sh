@@ -13,7 +13,7 @@ __smartcd::col_n() {
 	read -r _line
 
 	local _opt
-	if [[ ${SMARTCD_CURRENT_SHELL} = "bash" ]]; then
+	if [[ ${smartcd_current_shell} = "bash" ]]; then
 		for _opt in ${_line}; do
 			if [[ ${count} -eq "${col}" ]]; then
 				printf '%s\n' "${_opt}"
@@ -22,7 +22,7 @@ __smartcd::col_n() {
 			count=$(( count + 1))
 
 		done
-	elif [[ ${SMARTCD_CURRENT_SHELL} = "zsh" ]]; then
+	elif [[ ${smartcd_current_shell} = "zsh" ]]; then
 		for _opt in ${=_line}; do
 			if [[ ${count} -eq "${col}" ]]; then
 				printf '%s\n' "${_opt}"

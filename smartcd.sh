@@ -11,9 +11,9 @@
 __smartcd::envs() {
 
 	# Root directory of the SmartCd project
-	if [[ ${SMARTCD_CURRENT_SHELL} = "zsh" ]]; then 
+	if [[ ${smartcd_current_shell} = "zsh" ]]; then 
 		SMARTCD_ROOT="$( dirname "${(%):-%x}" )"
-	elif [[ ${SMARTCD_CURRENT_SHELL} = "bash" ]]; then 
+	elif [[ ${smartcd_current_shell} = "bash" ]]; then 
 		SMARTCD_ROOT="$( dirname "${BASH_SOURCE[0]}" )"; 
 	fi
 	export SMARTCD_ROOT
@@ -78,19 +78,19 @@ __smartcd__() {
 
 __smartcd::exec_exist() {
 	local _executable=$1
-	if [[ ${SMARTCD_CURRENT_SHELL} = "zsh" ]]; then
+	if [[ ${smartcd_current_shell} = "zsh" ]]; then
 		whence -p "${_executable}" &> /dev/null
-	elif [[ ${SMARTCD_CURRENT_SHELL} = "bash" ]]; then
+	elif [[ ${smartcd_current_shell} = "bash" ]]; then
 		type -P "${_executable}" &> /dev/null
 	fi
 }
 
 # Determine the current shell
-# do NOT export SMARTCD_CURRENT_SHELL (must not be an environment variable)
+# do NOT export smartcd_current_shell (must not be an environment variable)
 if ps -p $$ | grep --quiet 'zsh$'; then
-	SMARTCD_CURRENT_SHELL="zsh"
+	smartcd_current_shell="zsh"
 elif ps -p $$ | grep --quiet 'bash$'; then
-	SMARTCD_CURRENT_SHELL="bash"
+	smartcd_current_shell="bash"
 else 
 	printf '%s\n' "Current shell doesn't seems to be either Bash or Zsh" 1>&2
 	unset -f __smartcd::envs
@@ -137,15 +137,15 @@ if __smartcd::exec_exist fzf; then
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
 		# source key bindings for __smartcd::select_base function
-		if [[ ${SMARTCD_CURRENT_SHELL} = "zsh" ]]; then 
+		if [[ ${smartcd_current_shell} = "zsh" ]]; then 
 			typeset -f compinit > /dev/null && compdef __smartcd__=cd # completion for zsh
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.zsh
-		elif [[ ${SMARTCD_CURRENT_SHELL} = "bash" ]]; then 
+		elif [[ ${smartcd_current_shell} = "bash" ]]; then 
 			complete -A directory "${SMARTCD_COMMAND}" # completion for bash
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.bash; 
 		fi
 	else
-		unset SMARTCD_CURRENT_SHELL
+		unset smartcd_current_shell
 		unset SMARTCD_FIND
 		unset SMARTCD_GREP
 		unset -f __smartcd::envs
@@ -155,7 +155,7 @@ if __smartcd::exec_exist fzf; then
 	fi
 else 
 	printf '%s\n' "Can't use SmartCd: fzf not found !" 1>&2
-	unset SMARTCD_CURRENT_SHELL
+	unset smartcd_current_shell
 	unset -f __smartcd::envs
 	unset -f __smartcd::exec_exist
 	unset -f __smartcd__
