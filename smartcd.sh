@@ -36,7 +36,7 @@ __smartcd__() {
 		local parameters=$*
 		parameters=$( printf '%s\n' "${parameters}" | awk '{$1=$1;print}' )
 
-		local arg1 && arg1=$( printf '%s\n' "${parameters}" | __smartcd::col1 )
+		local arg1 && arg1=$( printf '%s\n' "${parameters}" | __smartcd::col_n 1 )
 		local arg2 && arg2=$( printf '%s\n' "${parameters}" | awk '{$1=""; print $0}' | awk '{$1=$1;print}' )
 
 		if [[ ${arg1} = "${SMARTCD_HIST_DIR_OPT}" ]]; then
@@ -45,17 +45,17 @@ __smartcd__() {
 			__smartcd::parent_dir "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_LAST_DIR_OPT}" ]]; then
 			__smartcd::last_dir "${arg2}"
-		elif [[ $( printf '%s\n' "${SMARTCD_BASE_DIR_OPT}" | __smartcd::col1 ) = "${arg1}" || \
-			$( printf '%s\n' "${SMARTCD_BASE_DIR_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
+		elif [[ $( printf '%s\n' "${SMARTCD_BASE_DIR_OPT}" | __smartcd::col_n 1 ) = "${arg1}" || \
+			$( printf '%s\n' "${SMARTCD_BASE_DIR_OPT}" | __smartcd::col_n 2 ) = "${arg1}" ]]; then
 			__smartcd::base_dir "${arg2}"
 		elif [[ ${arg1} = "${SMARTCD_GIT_ROOT_OPT}" ]]; then
 			__smartcd::git_root_dir
-		elif [[ $( printf '%s\n' "${SMARTCD_CLEAN_LOG_OPT}" | __smartcd::col1 ) = "${arg1}" || \
-			$( printf '%s\n' "${SMARTCD_CLEAN_LOG_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
+		elif [[ $( printf '%s\n' "${SMARTCD_CLEAN_LOG_OPT}" | __smartcd::col_n 1 ) = "${arg1}" || \
+			$( printf '%s\n' "${SMARTCD_CLEAN_LOG_OPT}" | __smartcd::col_n 2 ) = "${arg1}" ]]; then
 			[[ -n ${piped_value} ]] && __smartcd::warning_info && return 1
 			__smartcd::clean_log
-		elif [[ $( printf '%s\n' "${SMARTCD_VERSION_OPT}" | __smartcd::col1 ) = "${arg1}" || \
-			$( printf '%s\n' "${SMARTCD_VERSION_OPT}" | __smartcd::col2 ) = "${arg1}" ]]; then
+		elif [[ $( printf '%s\n' "${SMARTCD_VERSION_OPT}" | __smartcd::col_n 1 ) = "${arg1}" || \
+			$( printf '%s\n' "${SMARTCD_VERSION_OPT}" | __smartcd::col_n 2 ) = "${arg1}" ]]; then
 			__smartcd::version_info
 		else
 			parameters=$( printf '%s\n' "${parameters}" | sed "s|^~|${HOME}|" )
@@ -143,7 +143,6 @@ if __smartcd::exec_exist fzf; then
 			complete -A directory "${SMARTCD_COMMAND}" # completion for bash
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.bash; 
 		fi
-		unset SMARTCD_CURRENT_SHELL
 	else
 		unset SMARTCD_CURRENT_SHELL
 		unset SMARTCD_FIND

@@ -1,11 +1,39 @@
-# utility
-__smartcd::col1() {
-	awk '{print $1}'
-}
+__smartcd::col_n() {
+	local OLD_IFS=${IFS}
 
-# utility
-__smartcd::col2() {
-	awk '{print $2}'
+	# IFS value contains a space, a tab & a new-line character
+	# >  ^I$
+	# > $
+	IFS=" 	
+	"
+	local col=$1
+	local count=1
+
+	local _line
+	read -r _line
+
+	local _opt
+	if [[ ${SMARTCD_CURRENT_SHELL} = "bash" ]]; then
+		for _opt in ${_line}; do
+			if [[ ${count} -eq "${col}" ]]; then
+				printf '%s\n' "${_opt}"
+				break
+			fi
+			count=$(( count + 1))
+
+		done
+	elif [[ ${SMARTCD_CURRENT_SHELL} = "zsh" ]]; then
+		for _opt in ${=_line}; do
+			if [[ ${count} -eq "${col}" ]]; then
+				printf '%s\n' "${_opt}"
+				break
+			fi
+			count=$(( count + 1))
+
+		done
+	fi
+
+	IFS=${OLD_IFS}
 }
 
 # validate selected_entry
