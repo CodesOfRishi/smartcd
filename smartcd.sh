@@ -147,6 +147,9 @@ if __smartcd::exec_exist fzf; then
 		unset SMARTCD_CURRENT_SHELL
 		unset SMARTCD_FIND
 		unset SMARTCD_GREP
+		unset -f __smartcd::envs
+		unset -f __smartcd::exec_exist
+		unset -f __smartcd__
 	fi
 else 
 	printf '%s\n' "Can't use SmartCd: fzf not found !" 1>&2
