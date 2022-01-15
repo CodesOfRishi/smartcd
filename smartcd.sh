@@ -150,6 +150,7 @@ if __smartcd::exec_exist fzf; then
 		unset -f __smartcd::envs
 		unset -f __smartcd::exec_exist
 		unset -f __smartcd__
+		return 1
 	fi
 else 
 	printf '%s\n' "Can't use SmartCd: fzf not found !" 1>&2
@@ -157,4 +158,5 @@ else
 	unset -f __smartcd::envs
 	unset -f __smartcd::exec_exist
 	unset -f __smartcd__
+	return 1
 fi
