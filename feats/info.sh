@@ -1,6 +1,6 @@
 # Feature: Print version information.
 
-export SMARTCD_VERSION="v4.0.0"
+export SMARTCD_VERSION="v4.1.0"
 export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"-v --version"} # option for printing version information
 
 __smartcd::version_info() {
