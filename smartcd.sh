@@ -11,9 +11,9 @@
 __smartcd::envs() {
 
 	# Root directory of the SmartCd project
-	if ps -p $$ | ${SMARTCD_GREP} -i --quiet 'zsh$'; then 
+	if ps -p $$ | ${SMARTCD_GREP} --quiet 'zsh$'; then 
 		SMARTCD_ROOT="$( dirname "${(%):-%x}" )"
-	elif ps -p $$ | ${SMARTCD_GREP} -i --quiet 'bash$'; then 
+	elif ps -p $$ | ${SMARTCD_GREP} --quiet 'bash$'; then 
 		SMARTCD_ROOT="$( dirname "${BASH_SOURCE[0]}" )"; 
 	fi
 	export SMARTCD_ROOT
@@ -78,9 +78,9 @@ __smartcd__() {
 
 __smartcd::exec_exist() {
 	local _executable=$1
-	if ps -p $$ | grep -i --quiet 'zsh$'; then
+	if ps -p $$ | grep --quiet 'zsh$'; then
 		whence -p "${_executable}" &> /dev/null
-	elif ps -p $$ | grep -i --quiet 'bash$'; then
+	elif ps -p $$ | grep --quiet 'bash$'; then
 		type -P "${_executable}" &> /dev/null
 	else 
 		printf '%s\n' "Current shell doesn't seems to be either Bash or Zsh" 1>&2
@@ -126,10 +126,10 @@ if __smartcd::exec_exist fzf; then
 		alias "${SMARTCD_COMMAND}"="__smartcd__"
 
 		# source key bindings for __smartcd::select_base function
-		if ps -p $$ | ${SMARTCD_GREP} -i --quiet 'zsh$'; then 
+		if ps -p $$ | ${SMARTCD_GREP} --quiet 'zsh$'; then 
 			typeset -f compinit > /dev/null && compdef __smartcd__=cd # completion for zsh
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.zsh
-		elif ps -p $$ | ${SMARTCD_GREP} -i --quiet 'bash$'; then 
+		elif ps -p $$ | ${SMARTCD_GREP} --quiet 'bash$'; then 
 			complete -A directory "${SMARTCD_COMMAND}" # completion for bash
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.bash; 
 		fi
