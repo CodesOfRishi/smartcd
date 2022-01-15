@@ -86,6 +86,7 @@ __smartcd::exec_exist() {
 }
 
 # Determine the current shell
+# do NOT export SMARTCD_CURRENT_SHELL (must not be an environment variable)
 if ps -p $$ | grep --quiet 'zsh$'; then
 	SMARTCD_CURRENT_SHELL="zsh"
 elif ps -p $$ | grep --quiet 'bash$'; then
