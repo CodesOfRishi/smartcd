@@ -8,7 +8,7 @@ __smartcd::parent_dir() {
 		return
 	fi
 
-	find_parent_dir_paths() {
+	__smartcd::find_parent_dir() {
 		_path=${PWD%/*}
 		while [[ -n ${_path} ]]; do
 			eval "${find_parent_dir_cmd}"
@@ -19,6 +19,6 @@ __smartcd::parent_dir() {
 
 	local query=$*
 	local fzf_header && fzf_header="SmartCd: Parent directories"
-	local selected_entry && selected_entry=$( find_parent_dir_paths | __smartcd::run_fzf "${query}" )
+	local selected_entry && selected_entry=$( __smartcd::find_parent_dir | __smartcd::run_fzf "${query}" )
 	__smartcd::validate_selected_entry
 }
