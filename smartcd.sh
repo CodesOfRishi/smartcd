@@ -87,9 +87,9 @@ __smartcd::exec_exist() {
 
 # Determine the current shell
 if ps -p $$ | grep --quiet 'zsh$'; then
-	export SMARTCD_CURRENT_SHELL="zsh"
+	SMARTCD_CURRENT_SHELL="zsh"
 elif ps -p $$ | grep --quiet 'bash$'; then
-	export SMARTCD_CURRENT_SHELL="bash"
+	SMARTCD_CURRENT_SHELL="bash"
 else 
 	printf '%s\n' "Current shell doesn't seems to be either Bash or Zsh" 1>&2
 	unset -f __smartcd::envs
@@ -143,6 +143,7 @@ if __smartcd::exec_exist fzf; then
 			complete -A directory "${SMARTCD_COMMAND}" # completion for bash
 			source "${SMARTCD_ROOT}"/key-bindings/base-key-binding.bash; 
 		fi
+		unset SMARTCD_CURRENT_SHELL
 	else
 		unset SMARTCD_CURRENT_SHELL
 		unset SMARTCD_FIND
