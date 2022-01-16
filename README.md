@@ -153,6 +153,11 @@ This defaults to <code>0</code>.
 </details>
 
 <details>
+<summary><strong><code>SMARTCD_EXACT_SEARCH</code></strong></summary>
+Export the env as <code>1</code> to perform exact fzf search always. This defaults to <code>0</code>.
+</details>
+
+<details>
 <summary><strong><code>SMARTCD_FZF_PREVIEW_CMD</code></strong></summary> 
 Command (with options) to use with current line as argument from the <code>fzf</code> filter to show its result in <code>fzf</code>'s split/preview window.
 <ul>
