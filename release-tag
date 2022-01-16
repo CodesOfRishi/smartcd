@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+
+
+repo_path=$( realpath $( dirname ${BASH_SOURCE[0]} ) )
+
+# validate if the path is a git repository
+if ! git -C ${repo_path} rev-parse; then
+	printf '%s\n' "${repo_path} is not a git repository!" 1>&2
+	exit 1
+else 
+	printf '%s\n\n' "Repository path: ${repo_path}"
+fi
+
+# check if main branch exist or not
+if [[ -z $( git branch --list main ) ]]; then
+	printf '%s\n' "main branch doesn't exist!" 1>&2
+	exit 1
+fi
+
+# generate tag name
+commit_count=$( git --git-dir="${repo_path}"/.git rev-list --count main )
+latest_commit=$( git --git-dir="${repo_path}"/.git rev-parse --short main )
+tag_name="r${commit_count}.${latest_commit}"
+
+# create tag to the most recent commit on the main branch
+read -r -p "Create tag on main: ${tag_name}: (Y/n): " response
+[[ ${response} != "Y" && ${response} != "y" ]] && exit 1
+git tag ${tag_name} main
+
+# check if tag created successfully by checking if the tag exist or not
+if [[ -z $( git tag --list ${tag_name} ) ]]; then
+	printf '%s\n' "No tag exist with name ${tag_name}" 1>&2
+	printf '%s\n' "Tag may not be created successfully!" 1>&2
+	exit 1
+fi
+
+# if exist, ask the user wether to push the tag or not
+read -r -p "Push tag ${tag_name}: (Y/n): " response
+[[ ${response} != "Y" && ${response} != "y" ]] && exit 1
+git push origin ${tag_name}
