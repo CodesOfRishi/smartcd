@@ -24,6 +24,7 @@ __smartcd::envs() {
 
 	export SMARTCD_COMMAND=${SMARTCD_COMMAND:-"cd"} # command name to use smartcd
 	export SMARTCD_SELECT_ONE=${SMARTCD_SELECT_ONE:-"0"}
+	export SMARTCD_EXACT_SEARCH=${SMARTCD_EXACT_SEARCH:-"0"}
 }
 
 __smartcd__() {
