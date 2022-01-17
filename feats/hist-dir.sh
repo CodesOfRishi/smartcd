@@ -48,9 +48,13 @@ __smartcd::clean_log() {
 				printf '%s\n' "${_path}" >> "${valid_paths}"
 			else
 				if [[ ${smartcd_current_shell} = "zsh" ]]; then
-					printf '%s\n' "${_path} ${colr_red}$( printf '%s\n' "${_cd_error}" | __smartcd::col_n 6 ":" )${colr_reset}"
+					_cd_error=${_cd_error##*::}
+					_cd_error=${_cd_error#* }
+					_cd_error=${_cd_error%:*}
+					printf '%s\n' "${_path} ${colr_red}${_cd_error}${colr_reset}"
 				else 
-					printf '%s\n' "${_path} ${colr_red}$( printf '%s\n' "${_cd_error}" | __smartcd::col_n 4 ":" )${colr_reset}"
+					_cd_error=${_cd_error##*:}
+					printf '%s\n' "${_path} ${colr_red}${_cd_error}${colr_reset}"
 				fi
 			fi
 		fi
