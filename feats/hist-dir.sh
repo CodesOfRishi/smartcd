@@ -36,7 +36,7 @@ __smartcd::clean_log() {
 	local line_no="1"
 	local valid_paths && valid_paths=$( mktemp )
 
-	printf '%s\n' "Paths to remove: "
+	printf '%s\n' "Path(s) to remove from log: "
 	while [[ ${line_no} -le ${SMARTCD_HIST_DIR_LOG_SIZE} ]]; do
 		_path=$( sed -n ${line_no}'p' "${SMARTCD_HIST_DIR_LOG}" )
 
