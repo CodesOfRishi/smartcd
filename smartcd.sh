@@ -60,7 +60,7 @@ __smartcd__() {
 			__smartcd::version_info
 		else
 			parameters=$( printf '%s\n' "${parameters}" | sed "s|^~|${HOME}|" )
-			__smartcd::sub_dir_hop "${parameters}"
+			__smartcd::sub_dir "${parameters}"
 		fi
 	}
 

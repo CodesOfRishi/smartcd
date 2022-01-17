@@ -1,6 +1,6 @@
 # Feature: Search & traverse sub-directories
 
-__smartcd::sub_dir_hop() {
+__smartcd::sub_dir() {
 	local path_argument=$*
 
 	# builtin cd errors to ignore for Sub-Dir feature
