@@ -36,6 +36,8 @@ __smartcd::clean_log() {
 	local line_no="1"
 	local valid_paths && valid_paths=$( mktemp )
 
+	local colr_red && colr_red=$( tput setaf 9 )
+	local colr_reset && colr_reset=$( tput sgr0 )
 	printf '%s\n' "Path(s) to remove from log: "
 	while [[ ${line_no} -le ${SMARTCD_HIST_DIR_LOG_SIZE} ]]; do
 		_path=$( sed -n ${line_no}'p' "${SMARTCD_HIST_DIR_LOG}" )
@@ -45,7 +47,7 @@ __smartcd::clean_log() {
 			if [[ -z ${_cd_error} ]]; then
 				printf '%s\n' "${_path}" >> "${valid_paths}"
 			else
-				printf '%s\n' "${_path} $( printf '%s\n' "${_cd_error}" | __smartcd::col_n 6 ":" )"
+				printf '%s\n' "${_path} ${colr_red}$( printf '%s\n' "${_cd_error}" | __smartcd::col_n 6 ":" )${colr_reset}"
 			fi
 		fi
 		line_no=$(( line_no + 1 ))
