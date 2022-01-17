@@ -1,11 +1,11 @@
 __smartcd::col_n() {
 	local OLD_IFS=${IFS}
 
-	# IFS value contains a space, a tab & a new-line character
+	# custom default IFS value contains a space, a tab & a new-line character
 	# >  ^I$
-	# > $
-	IFS=" 	
-	"
+	local ifs_val=$2
+	IFS=${ifs_val:-" 	"}
+
 	local col=$1
 	local count=1
 
