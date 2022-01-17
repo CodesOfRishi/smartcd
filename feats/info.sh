@@ -1,6 +1,6 @@
 # Feature: Print version information.
 
-SMARTCD_VERSION="r$( git --git-dir="${SMARTCD_ROOT}"/.git rev-list --count main ).$( git --git-dir="${SMARTCD_ROOT}"/.git rev-parse --short main )" \
+SMARTCD_VERSION="$( git --git-dir="${SMARTCD_ROOT}"/.git tag --points-at=HEAD )" \
 	&& export SMARTCD_VERSION
 export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"-v --version"} # option for printing version information
 
