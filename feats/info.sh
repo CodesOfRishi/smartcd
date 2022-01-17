@@ -21,3 +21,8 @@ __smartcd::warning_info() {
 	printf '%s\n' "${colr178}WARNING:${colr_reset} Do not try to clean the log file while piping, as it can clean it without the user's consent!" 1>&2
 	printf '%s\n' "To clean the log file run either '${colr118}${SMARTCD_COMMAND} $( printf '%s\n' "${SMARTCD_CLEAN_LOG_OPT}" | __smartcd::col_n 1 )${colr_reset}' or '${colr118}${SMARTCD_COMMAND} $( printf '%s\n' "${SMARTCD_CLEAN_LOG_OPT}" | __smartcd::col_n 2 )${colr_reset}'".
 }
+
+__smartcd::base_dir_info() {
+	printf '%s\n' "ERROR: SMARTCD_BASE_PATHS env seems to be empty!" 1>&2
+	printf '%s\n' "INFO: SMARTCD_BASE_PATHS env is an array which requires at least one valid path for base directory search & traversal." 1>&2
+}

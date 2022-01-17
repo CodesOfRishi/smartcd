@@ -11,6 +11,8 @@ export SMARTCD_BASE_DIR_KEYBIND=${SMARTCD_BASE_DIR_KEYBIND-"\\C-k"} # key bindin
 export SMARTCD_BASE_DIR_OPT=${SMARTCD_BASE_DIR_OPT-"-b --base"} 
 
 __smartcd::select_base() {
+	[[ -z ${SMARTCD_BASE_PATHS[*]} ]] && __smartcd::base_dir_info && return 1
+
 	local fzf_header && fzf_header="Smartcd: Select a base path"
 	local selected_entry \
 		&& selected_entry=$( for _path in "${SMARTCD_BASE_PATHS[@]}"; do printf '%s\n' "${_path}"; done | __smartcd::run_fzf )
@@ -29,11 +31,7 @@ __smartcd::select_base() {
 }
 
 __smartcd::base_dir() {
-	if [[ -z ${SMARTCD_BASE_PATHS[*]} ]]; then
-		printf '%s\n' "ERROR: SMARTCD_BASE_PATHS env seems to be empty!" 1>&2
-		printf '%s\n' "INFO: SMARTCD_BASE_PATHS env is an array which requires at least one valid path for base directory search & traversal." 1>&2
-		return 1
-	fi
+	[[ -z ${SMARTCD_BASE_PATHS[*]} ]] && __smartcd::base_dir_info && return 1
 
 	# Needs to be configured twice; before & after calling of __smartcd__()
 	# by default always set to the 1st element of $SMARTCD_BASE_PATHS array
