@@ -1,6 +1,6 @@
 # Feature: Print version information.
 
-SMARTCD_VERSION="$( git --git-dir="${SMARTCD_ROOT}"/.git tag --points-at=HEAD )" \
+SMARTCD_VERSION="$( git --git-dir="${SMARTCD_ROOT}"/.git describe --tags --match "r*.[[:alnum:]][[:alnum:]][[:alnum:]][[:alnum:]][[:alnum:]][[:alnum:]][[:alnum:]]" )" \
 	&& export SMARTCD_VERSION
 export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"-v --version"} # option for printing version information
 
