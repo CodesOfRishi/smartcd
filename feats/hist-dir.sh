@@ -40,8 +40,14 @@ __smartcd::clean_log() {
 	while [[ ${line_no} -le ${SMARTCD_HIST_DIR_LOG_SIZE} ]]; do
 		_path=$( sed -n ${line_no}'p' "${SMARTCD_HIST_DIR_LOG}" )
 
-		if [[ -d ${_path} ]]; then printf '%s\n' "${_path}" >> "${valid_paths}"
-		elif [[ -n ${_path} ]]; then printf '%s\n' "${_path}"; fi
+		if [[ -n ${_path} ]]; then 
+			local _cd_error=$( builtin cd "${_path}" 2>&1 1> /dev/null )
+			if [[ -z ${_cd_error} ]]; then
+				printf '%s\n' "${_path}" >> "${valid_paths}"
+			else
+				printf '%s\n' "${_path} $( printf '%s\n' "${_cd_error}" | __smartcd::col_n 6 ":" )"
+			fi
+		fi
 		line_no=$(( line_no + 1 ))
 	done
 	printf '\n'
