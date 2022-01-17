@@ -5,7 +5,10 @@ SMARTCD_VERSION="$( git --git-dir="${SMARTCD_ROOT}"/.git describe --tags --match
 export SMARTCD_VERSION_OPT=${SMARTCD_VERSION_OPT-"-v --version"} # option for printing version information
 
 __smartcd::version_info() {
-	printf '%s\n' "SmartCd by Rishi K. - ${SMARTCD_VERSION%%-*}"
+	local colr87 && colr87=$( tput setaf 87 )
+	local colr_reset && colr_reset=$( tput sgr 0 )
+
+	printf '%s\n' "SmartCd by Rishi K. - ${colr87}${SMARTCD_VERSION%%-*}${colr_reset}"
 	printf '%s\n' "The MIT License (MIT)"
 	printf '%s\n' "Copyright (c) 2021 Rishi K."
 }
