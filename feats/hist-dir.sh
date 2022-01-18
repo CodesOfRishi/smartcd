@@ -38,6 +38,7 @@ __smartcd::clean_log() {
 
 	local colr9 && colr9=$( tput setaf 9 )
 	local colr_reset && colr_reset=$( tput sgr0 )
+
 	printf '%s\n' "Path(s) to remove from log: "
 	while [[ ${line_no} -le ${SMARTCD_HIST_DIR_LOG_SIZE} ]]; do
 		_path=$( sed -n ${line_no}'p' "${SMARTCD_HIST_DIR_LOG}" )
