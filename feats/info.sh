@@ -8,7 +8,8 @@ __smartcd::version_info() {
 	local colr87 && colr87=$( tput setaf 87 )
 	local colr_reset && colr_reset=$( tput sgr 0 )
 
-	printf '%s\n' "SmartCd by Rishi K. - ${colr87}${SMARTCD_VERSION%%-*}${colr_reset}"
+	[[ ${SMARTCD_VERSION} = *"-"* ]] && SMARTCD_VERSION=${SMARTCD_VERSION%%-*}"+beta"
+	printf '%s\n' "SmartCd by Rishi K. - ${colr87}${SMARTCD_VERSION}${colr_reset}"
 	printf '%s\n' "The MIT License (MIT)"
 	printf '%s\n' "Copyright (c) 2021 Rishi K."
 }
