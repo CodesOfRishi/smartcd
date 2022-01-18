@@ -7,7 +7,6 @@ __smartcd::col_n() {
 	IFS=${ifs_val:-" 	"}
 
 	local col=$1
-	local count=1
 
 	local _line
 	read -r _line
@@ -15,21 +14,19 @@ __smartcd::col_n() {
 	local _opt
 	if [[ ${smartcd_current_shell} = "bash" ]]; then
 		for _opt in ${_line}; do
-			if [[ ${count} -eq "${col}" ]]; then
+			col=$(( col - 1))
+			if [[ ${col} -eq 0 ]]; then
 				printf '%s\n' "${_opt}"
 				break
 			fi
-			count=$(( count + 1))
-
 		done
 	elif [[ ${smartcd_current_shell} = "zsh" ]]; then
 		for _opt in ${=_line}; do
-			if [[ ${count} -eq "${col}" ]]; then
+			col=$(( col - 1))
+			if [[ ${col} -eq 0 ]]; then
 				printf '%s\n' "${_opt}"
 				break
 			fi
-			count=$(( count + 1))
-
 		done
 	fi
 
