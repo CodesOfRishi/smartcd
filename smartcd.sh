@@ -107,7 +107,7 @@ if __smartcd::exec_exist fzf; then
 		export SMARTCD_FINDER=${SMARTCD_FIND:-"fdfind"}
 	elif __smartcd::exec_exist fd; then
 		export SMARTCD_FINDER=${SMARTCD_FINDER:-"fd"}
-	elif __smartcd::exec_exist fd; then
+	elif __smartcd::exec_exist find; then
 		export SMARTCD_FINDER=${SMARTCD_FINDER:-"find"}
 	else
 		printf '%s\n' "Can't use SmartCd: fd/fdfind or find not found !" 1>&2
