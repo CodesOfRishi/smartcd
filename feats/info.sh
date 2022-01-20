@@ -24,10 +24,10 @@ __smartcd::warning_info() {
 }
 
 __smartcd::base_dir_info() {
-	local col9 && col9=$( tput setaf 9 )
-	local colr_test && colr_test=$( tput setaf 33 )
-	local colr_reset && colr_reset=$( tput sgr 0 )
+	local colr9 && colr9='\e[01;91m'
+	local colr34 && colr34='\e[01;34m'
+	local colr_reset && colr_reset='\e[0m'
 
-	printf '%s\n' "${col9}ERROR:${colr_reset} SMARTCD_BASE_PATHS env seems to be empty!" 1>&2
-	printf '%s\n' "${colr_test}INFO:${colr_reset} SMARTCD_BASE_PATHS env is an array which requires at least one valid path for base directory search & traversal." 1>&2
+	printf '%b\n' "${colr9}ERROR:${colr_reset} SMARTCD_BASE_PATHS env seems to be empty!" 1>&2
+	printf '%b\n' "${colr34}INFO:${colr_reset} SMARTCD_BASE_PATHS env is an array which requires at least one valid path for base directory search & traversal." 1>&2
 }
