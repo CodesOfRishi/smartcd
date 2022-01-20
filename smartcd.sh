@@ -59,7 +59,6 @@ __smartcd__() {
 			$( printf '%s\n' "${SMARTCD_VERSION_OPT}" | __smartcd::col_n 2 ) = "${arg1}" ]]; then
 			__smartcd::version_info
 		else
-			parameters=$( printf '%s\n' "${parameters}" | sed "s|^~|${HOME}|" )
 			__smartcd::sub_dir "${parameters}"
 		fi
 	}
