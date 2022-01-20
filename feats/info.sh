@@ -15,12 +15,12 @@ __smartcd::version_info() {
 }
 
 __smartcd::warning_info() {
-	local colr118 && colr118=$( tput setaf 118 )
-	local colr178 && colr178=$( tput setaf 178 )
-	local colr_reset && colr_reset=$( tput sgr 0 )
+	local colr82 && colr82='\e[38;5;82m'
+	local colr214 && colr214='\e[38;5;214m'
+	local colr_reset && colr_reset='\e[0m'
 
-	printf '%s\n' "${colr178}WARNING:${colr_reset} Do not try to clean the log file while piping, as it can clean it without the user's consent!" 1>&2
-	printf '%s\n' "To clean the log file run either '${colr118}${SMARTCD_COMMAND} $( printf '%s\n' "${SMARTCD_CLEAN_LOG_OPT}" | __smartcd::col_n 1 )${colr_reset}' or '${colr118}${SMARTCD_COMMAND} $( printf '%s\n' "${SMARTCD_CLEAN_LOG_OPT}" | __smartcd::col_n 2 )${colr_reset}'".
+	printf '%b\n' "${colr214}WARNING:${colr_reset} Do not try to clean the log file while piping, as it can clean it without the user's consent!" 1>&2
+	printf '%b\n' "To clean the log file run either '${colr82}${SMARTCD_COMMAND} $( printf '%s\n' "${SMARTCD_CLEAN_LOG_OPT}" | __smartcd::col_n 1 )${colr_reset}' or '${colr82}${SMARTCD_COMMAND} $( printf '%s\n' "${SMARTCD_CLEAN_LOG_OPT}" | __smartcd::col_n 2 )${colr_reset}'".
 }
 
 __smartcd::base_dir_info() {
