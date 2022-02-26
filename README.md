@@ -80,6 +80,7 @@ I started by making `smartcd` remember the last 20 unique visited paths using th
 ## Requirements
 
 - [Fzf](https://github.com/junegunn/fzf)
+- [Git](https://git-scm.com/)
 
 Tested on [Zsh](https://www.zsh.org/) & [Bash](https://www.gnu.org/software/bash/).
 
