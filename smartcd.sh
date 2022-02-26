@@ -66,7 +66,7 @@ __smartcd__() {
 	# ---------------------------------------------------------------------------------------------------------------------
 
 	if [[ ! -t 0 ]]; then
-		local piped_value && piped_value=$( read_pipe | fzf --select-1 --exit-0 )
+		local piped_value && piped_value=$( __smartcd::read_pipe | fzf --select-1 --exit-0 )
 		if [[ -z ${piped_value} ]]; then
 			printf '%s\n' "Nothing piped to smartcd!"
 			return 1
