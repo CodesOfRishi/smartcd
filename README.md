@@ -1,4 +1,4 @@
-> [!NOTE]
+> [!TIP]
 > Experience [Navita](https://github.com/CodesOfRishi/navita), a better choice for directory navigation than SmartCd.
 
 <div align="center">
